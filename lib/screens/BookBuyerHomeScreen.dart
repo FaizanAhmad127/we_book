@@ -1,11 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:we_book/UIs/GoogleMapsUI.dart';
-import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:location/location.dart';
 import 'package:we_book/constants.dart';
+import 'package:we_book/UIs/BookPopUpUI.dart';
 
 class BookBuyerHomeScreen extends StatefulWidget {
   @override
@@ -15,6 +14,7 @@ class BookBuyerHomeScreen extends StatefulWidget {
 class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   @override
   void initState() {}
+  bool showPopUp = false;
 
   Set<Marker> myMarkers = {};
   List<double> lat = [
@@ -36,57 +36,65 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return GoogleMapsUI(
-      bookMarkers: myMarkers,
-      mySearchFieldAndButton: Positioned(
-        top: 10,
-        left: 8,
-        right: 8,
-        child: Row(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.63,
-              height: MediaQuery.of(context).size.width * 0.13,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-              ),
-              child: TextField(
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                    hintText: "Enter Book Name",
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    border: InputBorder.none),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.02,
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.06,
-              width: MediaQuery.of(context).size.width * 0.3,
-              child: RaisedButton(
-                elevation: 3,
-                onPressed: () {
-                  setState(() {
-                    bookMarker();
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+        bookMarkers: myMarkers,
+        mySearchFieldAndButton: Positioned(
+          top: 10,
+          left: 8,
+          right: 8,
+          child: Row(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.63,
+                height: MediaQuery.of(context).size.width * 0.13,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
                 ),
-                color: purpleColor,
-                child: Text(
-                  "SEARCH",
-                  style: TextStyle(
-                      color: Colors.white, fontFamily: "Source Sans Pro"),
+                child: TextField(
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                      hintText: "Enter Book Name",
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      border: InputBorder.none),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: RaisedButton(
+                  elevation: 3,
+                  onPressed: () {
+                    setState(() {
+                      bookMarker();
+                    });
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: purpleColor,
+                  child: Text(
+                    "SEARCH",
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: "Source Sans Pro"),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+        myPopUp: showPopUp == true
+            ? Positioned(
+                top: 20,
+                bottom: 20,
+                right: 20,
+                left: 20,
+                child: BookPopUpUI(),
+              )
+            : Container());
   }
 
   void bookMarker() async {
@@ -101,14 +109,20 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
 
     for (int i = 0; i < lat.length; i++) {
       myMarkers.add(Marker(
-          markerId: MarkerId("bookicon $i"),
-          position: LatLng(lat[i], long[i]),
-          rotation: 0,
-          draggable: false,
-          zIndex: 2,
-          flat: true,
-          anchor: Offset(0.5, 0.5),
-          icon: BitmapDescriptor.fromBytes(imageData)));
+        markerId: MarkerId("bookicon $i"),
+        position: LatLng(lat[i], long[i]),
+        rotation: 0,
+        draggable: false,
+        zIndex: 2,
+        flat: true,
+        anchor: Offset(0.5, 0.5),
+        icon: BitmapDescriptor.fromBytes(imageData),
+        onTap: () {
+          setState(() {
+            showPopUp = true;
+          });
+        },
+      ));
     }
   }
 

@@ -9,9 +9,11 @@ import 'package:location/location.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 
 class GoogleMapsUI extends StatefulWidget {
-  GoogleMapsUI({Key key, this.mySearchFieldAndButton, this.bookMarkers})
+  GoogleMapsUI(
+      {Key key, this.mySearchFieldAndButton, this.bookMarkers, this.myPopUp})
       : super(key: key);
   Widget mySearchFieldAndButton;
+  Widget myPopUp;
   Set<Marker> bookMarkers = {};
 
   @override
@@ -125,6 +127,7 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
                 }),
           ),
           widget.mySearchFieldAndButton,
+          widget.myPopUp,
         ],
       ),
     );
