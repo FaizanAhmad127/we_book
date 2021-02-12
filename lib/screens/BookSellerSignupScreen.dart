@@ -48,6 +48,7 @@ class BookSellerSignupScreen extends StatelessWidget {
                         outsideText: 'Email',
                         hintText: 'abc@gmail.com',
                         icon: Icons.email,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       TextFieldWidget(
                         outsideText: 'Shop Address',

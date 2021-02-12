@@ -1,12 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/constants.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:we_book/screens/BookBuyerHomeScreen.dart';
 
 class BookPopUpUI extends StatelessWidget {
+  BookPopUpUI(this._controller);
+  StreamController<bool> _controller;
+
+  void dispose() {
+    _controller.close();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[100],
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -27,23 +41,20 @@ class BookPopUpUI extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
+                  height: MediaQuery.of(context).size.height * 0.14,
+                  width: MediaQuery.of(context).size.width * 0.25,
                   child: Image(
                     image: AssetImage("images/bookicon.png"),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.05,
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.15,
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.49,
                   child: Center(
-                    child: Text(
+                    child: AutoSizeText(
                       "Rich Dad Poor Dad",
                       style: TextStyle(
                         color: purpleColor,
@@ -63,7 +74,7 @@ class BookPopUpUI extends StatelessWidget {
               thickness: 2,
               color: purpleColor,
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Row(
               children: [
                 Container(
@@ -81,22 +92,26 @@ class BookPopUpUI extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.05,
                 ),
                 Container(
-                  child: Text(
-                    "Robert Kioski",
-                    style: TextStyle(
-                      color: purpleColor,
-                      fontFamily: "Source Sans Pro",
-                      fontSize: 20,
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  width: MediaQuery.of(context).size.width * 0.46,
+                  child: Center(
+                    child: AutoSizeText(
+                      "Robert Kioski",
+                      style: TextStyle(
+                        color: purpleColor,
+                        fontFamily: "Source Sans Pro",
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Row(
               children: [
                 Container(
-                  child: Text(
+                  child: AutoSizeText(
                     "Price:",
                     style: TextStyle(
                       color: purpleColor,
@@ -110,7 +125,9 @@ class BookPopUpUI extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.05,
                 ),
                 Container(
-                  child: Text(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                  width: MediaQuery.of(context).size.width * 0.49,
+                  child: AutoSizeText(
                     " 1000/-",
                     style: TextStyle(
                       color: purpleColor,
@@ -125,7 +142,7 @@ class BookPopUpUI extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  child: Text(
+                  child: AutoSizeText(
                     "Shop Name:",
                     style: TextStyle(
                       color: purpleColor,
@@ -140,9 +157,9 @@ class BookPopUpUI extends StatelessWidget {
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.07,
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.49,
                   child: Center(
-                    child: Text(
+                    child: AutoSizeText(
                       " Faisal Book Depot",
                       style: TextStyle(
                         color: purpleColor,
@@ -158,7 +175,7 @@ class BookPopUpUI extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  child: Text(
+                  child: AutoSizeText(
                     "Shop Address:",
                     style: TextStyle(
                       color: purpleColor,
@@ -175,7 +192,7 @@ class BookPopUpUI extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.1,
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: Center(
-                    child: Text(
+                    child: AutoSizeText(
                       " Street 2, Saddar bazar, Peshawar.",
                       style: TextStyle(
                         color: purpleColor,
@@ -187,13 +204,15 @@ class BookPopUpUI extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.08),
             Container(
               height: MediaQuery.of(context).size.height * 0.08,
               width: MediaQuery.of(context).size.width * 0.7,
               child: RaisedButton(
                 elevation: 3,
-                onPressed: () {},
+                onPressed: () {
+                  _controller.add(true);
+                },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),

@@ -6,14 +6,19 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:location/location.dart';
-import 'package:we_book/UIs/PurpleRoundedButton.dart';
+import 'package:we_book/screens/BookBuyerBottomNavigationBar.dart';
 
 class GoogleMapsUI extends StatefulWidget {
   GoogleMapsUI(
-      {Key key, this.mySearchFieldAndButton, this.bookMarkers, this.myPopUp})
+      {Key key,
+      this.mySearchFieldAndButton,
+      this.bookMarkers,
+      this.myPopUp,
+      this.myQRCode})
       : super(key: key);
   Widget mySearchFieldAndButton;
   Widget myPopUp;
+  Widget myQRCode;
   Set<Marker> bookMarkers = {};
 
   @override
@@ -77,7 +82,7 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
         if (_controller != null) {
           _controller.animateCamera(CameraUpdate.newCameraPosition(
               new CameraPosition(
-                  bearing: 192.8334901395799,
+                  bearing: 0,
                   target: LatLng(newLocalData.latitude, newLocalData.longitude),
                   tilt: 0,
                   zoom: 15.00)));
@@ -128,8 +133,10 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
           ),
           widget.mySearchFieldAndButton,
           widget.myPopUp,
+          widget.myQRCode,
         ],
       ),
+      bottomNavigationBar: BookBuyerBottomNavigationBar(),
     );
   }
 }

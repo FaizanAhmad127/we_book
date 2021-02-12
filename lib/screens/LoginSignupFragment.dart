@@ -1,10 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:we_book/constants.dart';
-import 'package:we_book/screens/BookBuyerLoginScreen.dart';
-import 'package:we_book/screens/BookSellerLoginScreen.dart';
-import 'BookBuyerLoginScreen.dart';
 import 'package:screen/screen.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 
@@ -52,7 +47,9 @@ class LoginSignUpFragment extends StatelessWidget {
                     child: Text(
                       "BOOK BUYER",
                       style: TextStyle(
-                          color: Colors.white, fontFamily: "Source Sans Pro"),
+                          color: Colors.white,
+                          fontFamily: "Source Sans Pro",
+                          fontSize: 19),
                     ),
                   ),
                 ),
@@ -74,7 +71,9 @@ class LoginSignUpFragment extends StatelessWidget {
                     child: Text(
                       "BOOK SELLER",
                       style: TextStyle(
-                          color: Colors.white, fontFamily: "Source Sans Pro"),
+                          color: Colors.white,
+                          fontFamily: "Source Sans Pro",
+                          fontSize: 19),
                     ),
                   ),
                 ),

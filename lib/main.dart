@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_book/screens/BookBuyerProfile.dart';
 import 'package:we_book/screens/BookBuyerSignupScreen.dart';
 import 'package:we_book/screens/BookSellerLoginScreen.dart';
 import 'package:we_book/screens/BookBuyerLoginScreen.dart';
@@ -6,8 +7,11 @@ import 'package:we_book/screens/LoginSignupFragment.dart';
 import 'package:we_book/screens/BookSellerSignupScreen.dart';
 import 'screens/BookBuyerHomeScreen.dart';
 import 'UIs/GoogleMapsUI.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -34,6 +38,7 @@ class MyApp extends StatelessWidget {
           "BookSellerSignupScreen": (context) => BookSellerSignupScreen(),
           "BookBuyerHomeScreen": (context) => BookBuyerHomeScreen(),
           "GoogleMapsUI": (context) => GoogleMapsUI(),
+          "BookBuyerProfile": (context) => BookBuyerProfile(),
         },
       ),
     );
