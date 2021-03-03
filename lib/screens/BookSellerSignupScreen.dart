@@ -1,4 +1,6 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:we_book/Models/FirebaseEmailPasswordSignup.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -51,7 +53,7 @@ class BookSellerSignupScreen extends StatelessWidget {
                         keyboardType: TextInputType.emailAddress,
                       ),
                       TextFieldWidget(
-                        outsideText: 'Shop Address',
+                        outsideText: 'Shop Name',
                         hintText: 'Faisal Book Shop',
                         icon: Icons.book,
                       ),
@@ -105,7 +107,17 @@ class BookSellerSignupScreen extends StatelessWidget {
                           buttonText: "SIGN UP",
                           buttonHeight: 0.065,
                           buttonWidth: 0.8,
-                          onPressed: () {},
+                          onPressed: () async {
+                            String result = await FirebaseEmailPasswordSignup()
+                                .registration(
+                                    "martialsmart127@gmail.com", "12345678");
+                            if (result == "Success") {
+                              Navigator.pushNamed(
+                                  context, "BookSellerLoginScreen");
+                            } else if (result == "Failure") {
+                              BotToast.showText(text: "Failed to signup");
+                            }
+                          },
                         ),
                       ),
                       SizedBox(

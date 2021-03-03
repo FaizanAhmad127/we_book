@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:we_book/UIs/AppBarNormalUI.dart';
+import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:we_book/screens/BookBuyerBottomNavigationBar.dart';
 
@@ -31,9 +31,22 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
   Marker marker;
   Circle circle;
   GoogleMapController _controller;
+  static double latitude = 34.0060495, longitude = 71.5179581;
+
+  @override
+  void initState() {
+    super.initState();
+    loc();
+  }
+
+  void loc() async {
+    LocationData location = await _locationTracker.getLocation();
+    latitude = location.latitude;
+    longitude = location.longitude;
+  }
 
   static final CameraPosition initialLocation = CameraPosition(
-    target: LatLng(34.0060495, 71.5179581),
+    target: LatLng(latitude, longitude),
     zoom: 14.4746,
   );
 
@@ -79,13 +92,15 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
 
       _locationSubscription =
           _locationTracker.onLocationChanged.listen((newLocalData) {
+        latitude = newLocalData.latitude;
+        longitude = newLocalData.longitude;
         if (_controller != null) {
-          _controller.animateCamera(CameraUpdate.newCameraPosition(
-              new CameraPosition(
-                  bearing: 0,
-                  target: LatLng(newLocalData.latitude, newLocalData.longitude),
-                  tilt: 0,
-                  zoom: 15.00)));
+          // _controller.animateCamera(CameraUpdate.newCameraPosition(
+          //     new CameraPosition(
+          //         bearing: 0,
+          //         target: LatLng(newLocalData.latitude, newLocalData.longitude),
+          //         tilt: 0,
+          //         zoom: 15.00)));
           updateMarkerAndCircle(newLocalData, imageData);
         }
       });
@@ -106,37 +121,44 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarNormalUI().myAppBar(),
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          GoogleMap(
-            zoomControlsEnabled: false,
-            mapType: MapType.hybrid,
-            initialCameraPosition: initialLocation,
-            markers:
-                Set.of((widget.bookMarkers != null) ? widget.bookMarkers : []),
-            circles: Set.of((circle != null) ? [circle] : []),
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-            },
-          ),
-          Positioned(
-            right: 10,
-            bottom: 10,
-            child: FloatingActionButton(
-                child: Icon(Icons.location_searching),
-                onPressed: () {
-                  getCurrentLocation();
-                }),
-          ),
-          widget.mySearchFieldAndButton,
-          widget.myPopUp,
-          widget.myQRCode,
-        ],
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            GoogleMap(
+              zoomControlsEnabled: false,
+              mapType: MapType.terrain,
+              initialCameraPosition: initialLocation,
+              markers: Set.of(
+                  (widget.bookMarkers != null) ? widget.bookMarkers : []),
+              circles: Set.of((circle != null) ? [circle] : []),
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+              },
+            ),
+            Positioned(
+              right: 10,
+              bottom: 10,
+              child: FloatingActionButton(
+                  child: Icon(Icons.location_searching),
+                  onPressed: () {
+                    getCurrentLocation();
+                    _controller.animateCamera(CameraUpdate.newCameraPosition(
+                        new CameraPosition(
+                            bearing: 0,
+                            target: LatLng(latitude, longitude),
+                            tilt: 0,
+                            zoom: 15.00)));
+                  }),
+            ),
+            widget.mySearchFieldAndButton,
+            widget.myPopUp,
+            widget.myQRCode,
+          ],
+        ),
+        bottomNavigationBar: BookBuyerBottomNavigationBar(),
       ),
-      bottomNavigationBar: BookBuyerBottomNavigationBar(),
     );
   }
 }

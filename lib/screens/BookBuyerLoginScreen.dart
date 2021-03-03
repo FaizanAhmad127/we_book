@@ -1,26 +1,60 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:we_book/Models/FirebaseEmailPasswordLogin.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
+import 'package:bot_toast/bot_toast.dart';
 
-class BookBuyerLoginScreen extends StatelessWidget {
+StreamController<String> emailStreamController =
+    StreamController<String>.broadcast();
+StreamController<String> passwordStreamController =
+    StreamController<String>.broadcast();
+
+class BookBuyerLoginScreen extends StatefulWidget {
+  @override
+  _BookBuyerLoginScreenState createState() => _BookBuyerLoginScreenState();
+}
+
+class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
+  String email = "", password = "";
+  bool obscureText = true;
+  Color color = Colors.grey;
+  @override
+  void initState() {
+    super.initState();
+    emailStreamController.stream.listen((value) {
+      email = value;
+    });
+    passwordStreamController.stream.listen((value) {
+      password = value;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print(
+        "dispossssssssssssssssssssssssssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddead");
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double screenWitdh = size.width;
+    double screenWidth = size.width;
     double screenHeight = size.height;
     return Scaffold(
       appBar: AppBarNormalUI().myAppBar(),
       body: SafeArea(
           child: Padding(
               padding: EdgeInsets.fromLTRB(
-                  screenWitdh * 0.1025,
-                  screenWitdh * 0.0769,
-                  screenWitdh * 0.0769,
-                  screenWitdh * 0.051),
+                  screenWidth * 0.1025,
+                  screenWidth * 0.0769,
+                  screenWidth * 0.0769,
+                  screenWidth * 0.051),
               child: Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -44,12 +78,29 @@ class BookBuyerLoginScreen extends StatelessWidget {
                         hintText: 'abc@gmail.com',
                         icon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
+                        streamController: emailStreamController,
                       ),
                       TextFieldWidget(
                         outsideText: 'Password',
                         hintText: 'Password',
                         icon: Icons.enhanced_encryption,
-                        obscureText: true,
+                        obscureText: obscureText,
+                        streamController: passwordStreamController,
+                        suffixIcon: IconButton(
+                          color: color,
+                          icon: Icon(Icons.remove_red_eye),
+                          onPressed: () {
+                            setState(() {
+                              if (obscureText == false) {
+                                obscureText = true;
+                                color = Colors.grey;
+                              } else if (obscureText == true) {
+                                obscureText = false;
+                                color = Colors.blue;
+                              }
+                            });
+                          },
+                        ),
                       ),
                       SizedBox(
                         width: 0,
@@ -72,13 +123,23 @@ class BookBuyerLoginScreen extends StatelessWidget {
                       ),
                       Center(
                         child: PurpleRoundButton(
-                          buttonText: "LOGIN",
-                          buttonHeight: 0.065,
-                          buttonWidth: 0.8,
-                          onPressed: () {
-                            Navigator.pushNamed(context, "BookBuyerHomeScreen");
-                          },
-                        ),
+                            buttonText: "LOGIN",
+                            buttonHeight: 0.065,
+                            buttonWidth: 0.8,
+                            onPressed: () async {
+                              BotToast.showLoading();
+                              print("email: $email  and password: $password ");
+                              String result = await FirebaseEmailPasswordLogin()
+                                  .login(email: email, password: password);
+                              if (result == "Success") {
+                                Navigator.pushNamed(
+                                    context, "BookBuyerHomeScreen");
+                              } else if (result == "Failure") {
+                                BotToast.showText(text: "Invalid Creditials");
+                                print("Failed to login");
+                              }
+                              BotToast.closeAllLoading();
+                            }),
                       ),
                       SizedBox(
                         width: 0,
@@ -111,7 +172,7 @@ class BookBuyerLoginScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: screenWitdh * 0.05,
+                        height: screenWidth * 0.05,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +184,7 @@ class BookBuyerLoginScreen extends StatelessWidget {
                             backgroundColor: Colors.white,
                           ),
                           SizedBox(
-                            width: screenWitdh * 0.1,
+                            width: screenWidth * 0.1,
                           ),
                           CircleAvatar(
                             child: GestureDetector(),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "876350444524",
+    "project_id": "we-book-304011",
+    "storage_bucket": "we-book-304011.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876350444524:android:f82a4a5261fabbbb7be6c9",
+        "android_client_info": {
+          "package_name": "com.faizanahmad.we_book"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876350444524-52v07ta4f8q8iiv1p90efr9cviondrpn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.faizanahmad.we_book",
+            "certificate_hash": "fc2cbdfb30e9093a0eef0423c83225e0e939c64f"
+          }
+        },
+        {
+          "client_id": "876350444524-5f9jmkb6klrn9aeva9eolecvl667fpde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByWNvW78pMZjNsG5LZVhr9MIFtQOxG9kk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876350444524-5f9jmkb6klrn9aeva9eolecvl667fpde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

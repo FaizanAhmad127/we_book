@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'file:///D:/Flutter_Apps/we_book/lib/Models/FirebaseEmailPasswordSignup.dart';
 import 'package:we_book/constants.dart';
 import 'package:screen/screen.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginSignUpFragment extends StatelessWidget {
+  User user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     Screen.keepOn(true);
@@ -21,59 +24,81 @@ class LoginSignUpFragment extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Center(
-                  child: Text(
-                    "Who Are You?",
-                    style: TextStyle(
-                        color: purpleColor,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.2,
-                        fontFamily: "Source Sans Pro"),
-                  ),
-                ),
-                Container(
-                  height: screenHeight * 0.2,
-                  width: screenWitdh * 0.8,
-                  child: RaisedButton(
-                    elevation: 3,
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'BookBuyerLoginScreen');
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    color: purpleColor,
+                Expanded(
+                  flex: 3,
+                  child: Center(
                     child: Text(
-                      "BOOK BUYER",
+                      "Who Are You?",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "Source Sans Pro",
-                          fontSize: 19),
+                          color: purpleColor,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -0.2,
+                          fontFamily: "Source Sans Pro"),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: screenWitdh * 0.05,
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                      //height: screenHeight * 0.05,
+                      ),
                 ),
-                Container(
-                  height: screenHeight * 0.2,
-                  width: screenWitdh * 0.8,
-                  child: RaisedButton(
-                    elevation: 3,
-                    onPressed: () {
-                      Navigator.pushNamed(context, "BookSellerLoginScreen");
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    height: screenHeight * 0.2,
+                    width: screenWitdh * 0.8,
+                    child: RaisedButton(
+                      elevation: 3,
+                      onPressed: () {
+                        if (user != null) {
+                          Navigator.pushNamed(context, 'BookBuyerHomeScreen');
+                        } else {
+                          Navigator.pushNamed(context, 'BookBuyerLoginScreen');
+                        }
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      color: purpleColor,
+                      child: Text(
+                        "BOOK BUYER",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Source Sans Pro",
+                            fontSize: 19),
+                      ),
                     ),
-                    color: purpleColor,
-                    child: Text(
-                      "BOOK SELLER",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "Source Sans Pro",
-                          fontSize: 19),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                      //height: screenHeight * 0.05,
+                      ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    height: screenHeight * 0.2,
+                    width: screenWitdh * 0.8,
+                    child: RaisedButton(
+                      elevation: 3,
+                      onPressed: () {
+                        Navigator.pushNamed(context, "BookSellerLoginScreen");
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      color: purpleColor,
+                      child: Text(
+                        "BOOK SELLER",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Source Sans Pro",
+                            fontSize: 19),
+                      ),
                     ),
                   ),
                 ),

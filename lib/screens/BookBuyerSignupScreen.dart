@@ -1,4 +1,6 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:we_book/Models/FirebaseEmailPasswordSignup.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -8,14 +10,14 @@ class BookBuyerSignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double screenWitdh = size.width;
+    double screenWidth = size.width;
     double screenHeight = size.height;
     return Scaffold(
       appBar: AppBarNormalUI().myAppBar(),
       body: SafeArea(
           child: Padding(
-              padding: EdgeInsets.fromLTRB(screenWitdh * 0.1025,
-                  screenWitdh * 0.07, screenWitdh * 0.0769, screenWitdh * 0.03),
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.1025,
+                  screenWidth * 0.07, screenWidth * 0.0769, screenWidth * 0.03),
               child: Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -68,11 +70,22 @@ class BookBuyerSignupScreen extends StatelessWidget {
                       ),
                       Center(
                         child: PurpleRoundButton(
-                          buttonText: "SIGN UP",
-                          buttonHeight: 0.065,
-                          buttonWidth: 0.8,
-                          onPressed: () {},
-                        ),
+                            buttonText: "SIGN UP",
+                            buttonHeight: 0.065,
+                            buttonWidth: 0.8,
+                            onPressed: () async {
+                              String result =
+                                  await FirebaseEmailPasswordSignup()
+                                      .registration(
+                                          "faizanahmad.imsc@gmail.com",
+                                          "12345678");
+                              if (result == "Success") {
+                                Navigator.pushNamed(
+                                    context, "BookBuyerLoginScreen");
+                              } else if (result == "Failure") {
+                                BotToast.showText(text: "Failed to signup");
+                              }
+                            }),
                       ),
                       SizedBox(
                         width: 0,
@@ -102,7 +115,7 @@ class BookBuyerSignupScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: screenWitdh * 0.05,
+                        height: screenWidth * 0.05,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +127,7 @@ class BookBuyerSignupScreen extends StatelessWidget {
                             backgroundColor: Colors.white,
                           ),
                           SizedBox(
-                            width: screenWitdh * 0.1,
+                            width: screenWidth * 0.1,
                           ),
                           CircleAvatar(
                             child: GestureDetector(),

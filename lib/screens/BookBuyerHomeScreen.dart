@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreen.dart';
 import 'package:we_book/UIs/GoogleMapsUI.dart';
 import 'package:location/location.dart';
 import 'package:we_book/UIs/QRCodeUI.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/BookPopUpUI.dart';
-
-StreamController<bool> _controller = StreamController<bool>.broadcast();
+import 'package:provider/provider.dart';
 
 class BookBuyerHomeScreen extends StatefulWidget {
   @override
@@ -19,9 +20,6 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.stream.listen((value) {
-      isQRCodeShown(value);
-    });
   }
 
   void dispose() {
@@ -29,8 +27,6 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   }
 
   bool showPopUp = false;
-  bool showQRCode = false;
-
   Set<Marker> myMarkers = {};
   List<double> lat = [
     34.0085425,
@@ -50,68 +46,103 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return GoogleMapsUI(
-      bookMarkers: myMarkers,
-      mySearchFieldAndButton: Positioned(
-        top: 10,
-        left: 8,
-        right: 8,
-        child: Row(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.63,
-              height: MediaQuery.of(context).size.width * 0.13,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-              ),
-              child: TextField(
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                    hintText: "Enter Book Name",
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    border: InputBorder.none),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.02,
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.06,
-              width: MediaQuery.of(context).size.width * 0.3,
-              child: RaisedButton(
-                elevation: 3,
-                onPressed: () {
-                  bookMarker();
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                color: purpleColor,
-                child: Text(
-                  "SEARCH",
-                  style: TextStyle(
-                      color: Colors.white, fontFamily: "Source Sans Pro"),
-                ),
-              ),
-            ),
-          ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => OpenQRCodeScreen(),
+          lazy: false,
         ),
-      ),
-      myPopUp: showPopUp == true
-          ? Positioned(
+        ChangeNotifierProvider(
+          create: (context) => OpenPopUpBookCN(),
+          lazy: false,
+        )
+      ],
+      child: GoogleMapsUI(
+        bookMarkers: myMarkers,
+        mySearchFieldAndButton: Positioned(
+          top: MediaQuery.of(context).size.height * 0.03,
+          left: MediaQuery.of(context).size.width * 0.02,
+          right: MediaQuery.of(context).size.width * 0.02,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  // width: MediaQuery.of(context).size.width * 0.63,
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.grey,
+                  ),
+                  child: TextField(
+                    textInputAction: TextInputAction.search,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    decoration: InputDecoration(
+                        hintText: "Enter Book Name",
+                        filled: true,
+                        fillColor: Colors.transparent,
+                        border: InputBorder.none),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  // width: MediaQuery.of(context).size.width * 0.3,
+                  child: RaisedButton(
+                    elevation: 3,
+                    onPressed: () {
+                      bookMarker();
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    color: purpleColor,
+                    child: Text(
+                      "SEARCH",
+                      style: TextStyle(
+                          color: Colors.white, fontFamily: "Source Sans Pro"),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        myPopUp:
+            Consumer<OpenPopUpBookCN>(builder: (context, openPopUpBookCN, _) {
+          if (openPopUpBookCN.popUpStatus == true || showPopUp == true) {
+            showPopUp = false;
+            return Positioned(
               top: 10,
               bottom: 20,
               right: 20,
               left: 20,
-              child: BookPopUpUI(_controller),
-            )
-          : Container(),
-      myQRCode: showQRCode == true
-          ? Positioned(
-              top: 20, bottom: 20, right: 20, left: 20, child: QRCodeUI())
-          : Container(),
+              child: BookPopUpUI(), //_controller),
+            );
+          } else {
+            return Container();
+          }
+        }),
+
+        myQRCode:
+            Consumer<OpenQRCodeScreen>(builder: (context, openQRCodeScreen, _) {
+          return openQRCodeScreen.qrStatus == true
+              ? Positioned(
+                  top: 20, bottom: 20, right: 20, left: 20, child: QRCodeUI())
+              : Container();
+        }),
+        // myQRCode: OpenQRCodeScreen.qrStatus == true
+        //     ? Positioned(
+        //         top: 20, bottom: 20, right: 20, left: 20, child: QRCodeUI())
+        //     : Container(),
+      ),
     );
   }
 
@@ -149,13 +180,5 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
     ByteData byteData =
         await DefaultAssetBundle.of(context).load("images/bookicon.png");
     return byteData.buffer.asUint8List();
-  }
-
-  void isQRCodeShown(bool value) {
-    showQRCode = value;
-    if (!mounted) {
-      return;
-    } //to avoid the error of "calling setState() after dispose()".
-    setState(() {});
   }
 }

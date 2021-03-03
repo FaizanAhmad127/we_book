@@ -1,6 +1,8 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/screens/BookBuyerProfile.dart';
 import 'package:we_book/screens/BookBuyerSignupScreen.dart';
+import 'package:we_book/screens/BookSellerHomeScreen.dart';
 import 'package:we_book/screens/BookSellerLoginScreen.dart';
 import 'package:we_book/screens/BookBuyerLoginScreen.dart';
 import 'package:we_book/screens/LoginSignupFragment.dart';
@@ -8,6 +10,7 @@ import 'package:we_book/screens/BookSellerSignupScreen.dart';
 import 'screens/BookBuyerHomeScreen.dart';
 import 'UIs/GoogleMapsUI.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +21,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Future<FirebaseApp> firebaseApp = Firebase.initializeApp();
     return GestureDetector(
       behavior: HitTestBehavior
           .opaque, //Opaque targets can be hit by hit tests, causing them to both receive events within their bounds and prevent targets visually behind them from also receiving events.
@@ -29,7 +33,23 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         showPerformanceOverlay: false,
-        initialRoute: "LoginSignupFragment",
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
+        home: FutureBuilder(
+          future: firebaseApp,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              print(" You have an error ${snapshot.error.toString()}");
+              return Text("Something went Wrong!");
+            } else if (snapshot.hasData) {
+              return BookSellerHomeScreen();
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
         routes: {
           "LoginSignupFragment": (context) => LoginSignUpFragment(),
           "BookBuyerLoginScreen": (context) => BookBuyerLoginScreen(),
@@ -39,6 +59,7 @@ class MyApp extends StatelessWidget {
           "BookBuyerHomeScreen": (context) => BookBuyerHomeScreen(),
           "GoogleMapsUI": (context) => GoogleMapsUI(),
           "BookBuyerProfile": (context) => BookBuyerProfile(),
+          "BookSellerHomeScreen": (context) => BookSellerHomeScreen(),
         },
       ),
     );

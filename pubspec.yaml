@@ -26,11 +26,17 @@ dependencies:
 
   cupertino_icons: ^0.1.3
   screen: ^0.0.5
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
   google_maps_flutter: ^1.2.0
   location: ^3.0.2
   auto_size_text: ^2.1.0
   qr_flutter: ^3.2.0
   ff_navigation_bar: ^0.1.4
+  firebase_database: ^6.0.0
+  bot_toast: ^3.0.5
+  provider: ^4.3.3
+  font_awesome_flutter: ^8.11.0
 
 dev_dependencies:
   flutter_test:

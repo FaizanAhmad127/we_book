@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>876350444524-58jik9uuuma118i94955ugdjfp8dvvdf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.876350444524-58jik9uuuma118i94955ugdjfp8dvvdf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>876350444524-52v07ta4f8q8iiv1p90efr9cviondrpn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC-FDEUFZWiPkk2g4nYADSCtqzlnJ--KpM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>876350444524</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.faizanahmad.weBook</string>
+	<key>PROJECT_ID</key>
+	<string>we-book-304011</string>
+	<key>STORAGE_BUCKET</key>
+	<string>we-book-304011.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:876350444524:ios:8f0cdaa4ec9bc1927be6c9</string>
+</dict>
+</plist>

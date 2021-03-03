@@ -1,0 +1,229 @@
+8:32:25 PM: Executing task 'signingReport'...
+
+Executing tasks: [signingReport] in project D:\Flutter_Apps\we_book\android
+
+
+> Task :app:signingReport
+Variant: debugUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: releaseUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debug
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: release
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: profile
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: profileUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+
+> Task :flutter_plugin_android_lifecycle:signingReport
+Variant: debugUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: profileUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: releaseUnitTest
+Config: none
+----------
+
+> Task :google_maps_flutter:signingReport
+Variant: profileUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debugUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: releaseUnitTest
+Config: none
+----------
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+
+> Task :location:signingReport
+Variant: releaseUnitTest
+Config: none
+----------
+Variant: debugUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: profileUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+
+> Task :location_web:signingReport
+Variant: releaseUnitTest
+Config: none
+----------
+Variant: profileUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debugUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+
+> Task :screen:signingReport
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: releaseUnitTest
+Config: none
+----------
+Variant: debugUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
+Variant: profileUnitTest
+Config: debug
+Store: C:\Users\faiza\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 86:82:61:6C:92:13:16:2B:0B:18:75:CD:8B:E1:F3:6D
+SHA1: FC:2C:BD:FB:30:E9:09:3A:0E:EF:04:23:C8:32:25:E0:E9:39:C6:4F
+SHA-256: 2C:40:3B:A6:7A:DA:0D:06:26:2E:B7:80:CC:12:71:75:E1:E9:BD:20:6C:47:23:2A:C4:CD:A2:E8:65:D1:05:4D
+Valid until: Saturday, December 25, 2049
+----------
