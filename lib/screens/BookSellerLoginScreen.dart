@@ -128,7 +128,7 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                                 .login(email: email, password: password);
                             if (result == "Success") {
                               Navigator.pushNamed(
-                                  context, "BookBuyerHomeScreen");
+                                  context, "BookSellerHomeScreen");
                             } else if (result == "Failure") {
                               BotToast.showText(text: "Invalid Creditials");
                               print("Failed to login");

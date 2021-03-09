@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class BottomNavBarCN with ChangeNotifier {
+class BBBottomNavBarCN with ChangeNotifier {
   bool homeScreen = true;
   bool profileScreen = false;
 

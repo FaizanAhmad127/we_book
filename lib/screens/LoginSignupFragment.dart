@@ -9,7 +9,7 @@ class LoginSignUpFragment extends StatelessWidget {
   User user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    Screen.keepOn(true);
+    //Screen.keepOn(true);
     // Screen.setBrightness(0.5);
 
     Size size = MediaQuery.of(context).size;

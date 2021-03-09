@@ -1,5 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:screen/screen.dart';
+import 'package:we_book/screens/BookBuyerHomeScreen.dart';
 import 'package:we_book/screens/BookBuyerProfile.dart';
 import 'package:we_book/screens/BookBuyerSignupScreen.dart';
 import 'package:we_book/screens/BookSellerHomeScreen.dart';
@@ -7,7 +9,7 @@ import 'package:we_book/screens/BookSellerLoginScreen.dart';
 import 'package:we_book/screens/BookBuyerLoginScreen.dart';
 import 'package:we_book/screens/LoginSignupFragment.dart';
 import 'package:we_book/screens/BookSellerSignupScreen.dart';
-import 'screens/BookBuyerHomeScreen.dart';
+import 'screens/BookBuyerDashBoard.dart';
 import 'UIs/GoogleMapsUI.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> firebaseApp = Firebase.initializeApp();
+    Screen.keepOn(true);
     return GestureDetector(
       behavior: HitTestBehavior
           .opaque, //Opaque targets can be hit by hit tests, causing them to both receive events within their bounds and prevent targets visually behind them from also receiving events.
@@ -56,7 +59,7 @@ class MyApp extends StatelessWidget {
           "BookBuyerSignupScreen": (context) => BookBuyerSignupScreen(),
           "BookSellerLoginScreen": (context) => BookSellerLoginScreen(),
           "BookSellerSignupScreen": (context) => BookSellerSignupScreen(),
-          "BookBuyerHomeScreen": (context) => BookBuyerHomeScreen(),
+          "BookBuyerHomeScreen": (context) => BookBuyerDashBoard(),
           "GoogleMapsUI": (context) => GoogleMapsUI(),
           "BookBuyerProfile": (context) => BookBuyerProfile(),
           "BookSellerHomeScreen": (context) => BookSellerHomeScreen(),

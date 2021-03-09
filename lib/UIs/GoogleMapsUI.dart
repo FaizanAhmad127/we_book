@@ -121,44 +121,38 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            GoogleMap(
-              zoomControlsEnabled: false,
-              mapType: MapType.terrain,
-              initialCameraPosition: initialLocation,
-              markers: Set.of(
-                  (widget.bookMarkers != null) ? widget.bookMarkers : []),
-              circles: Set.of((circle != null) ? [circle] : []),
-              onMapCreated: (GoogleMapController controller) {
-                _controller = controller;
-              },
-            ),
-            Positioned(
-              right: 10,
-              bottom: 10,
-              child: FloatingActionButton(
-                  child: Icon(Icons.location_searching),
-                  onPressed: () {
-                    getCurrentLocation();
-                    _controller.animateCamera(CameraUpdate.newCameraPosition(
-                        new CameraPosition(
-                            bearing: 0,
-                            target: LatLng(latitude, longitude),
-                            tilt: 0,
-                            zoom: 15.00)));
-                  }),
-            ),
-            widget.mySearchFieldAndButton,
-            widget.myPopUp,
-            widget.myQRCode,
-          ],
+    return Stack(
+      children: [
+        GoogleMap(
+          zoomControlsEnabled: false,
+          mapType: MapType.terrain,
+          initialCameraPosition: initialLocation,
+          markers:
+              Set.of((widget.bookMarkers != null) ? widget.bookMarkers : []),
+          circles: Set.of((circle != null) ? [circle] : []),
+          onMapCreated: (GoogleMapController controller) {
+            _controller = controller;
+          },
         ),
-        bottomNavigationBar: BookBuyerBottomNavigationBar(),
-      ),
+        Positioned(
+          right: 10,
+          bottom: 10,
+          child: FloatingActionButton(
+              child: Icon(Icons.location_searching),
+              onPressed: () {
+                getCurrentLocation();
+                _controller.animateCamera(CameraUpdate.newCameraPosition(
+                    new CameraPosition(
+                        bearing: 0,
+                        target: LatLng(latitude, longitude),
+                        tilt: 0,
+                        zoom: 15.00)));
+              }),
+        ),
+        widget.mySearchFieldAndButton,
+        widget.myPopUp,
+        widget.myQRCode,
+      ],
     );
   }
 }

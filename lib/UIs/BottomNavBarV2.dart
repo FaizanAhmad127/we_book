@@ -1,7 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:we_book/Provider%20ChangeNotifiers/BottomNavBarCN.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/BSBottomNavBarCN.dart';
+import 'package:we_book/constants.dart';
 
 class BottomNavBarV2 extends StatefulWidget {
   @override
@@ -35,7 +37,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
               Center(
                 heightFactor: 0.6,
                 child: FloatingActionButton(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: purpleColor,
                     child: FaIcon(FontAwesomeIcons.qrcode),
                     elevation: 0.1,
                     onPressed: () {}),
@@ -46,55 +48,116 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.home,
-                        color: currentIndex == 0
-                            ? Colors.orange
-                            : Colors.grey.shade400,
-                      ),
-                      onPressed: () {
-                        setBottomBarIndex(0);
-                        Provider.of<BottomNavBarCN>(context, listen: false)
-                            .setHomeScreen = true;
-                      },
-                      splashColor: Colors.white,
-                    ),
-                    IconButton(
-                        icon: Icon(
-                          Icons.restaurant_menu,
-                          color: currentIndex == 1
-                              ? Colors.orange
-                              : Colors.grey.shade400,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.home,
+                            color:
+                                currentIndex == 0 ? purpleColor : Colors.white,
+                          ),
+                          onPressed: () {
+                            setBottomBarIndex(0);
+                            Provider.of<BSBottomNavBarCN>(context,
+                                    listen: false)
+                                .setHomeScreen = true;
+                          },
+                          splashColor: Colors.white,
                         ),
-                        onPressed: () {
-                          setBottomBarIndex(1);
-                        }),
+                        AutoSizeText(
+                          "HOME",
+                          minFontSize: 8,
+                          maxFontSize: 12,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.restaurant_menu,
+                              color: currentIndex == 1
+                                  ? purpleColor
+                                  : Colors.white,
+                            ),
+                            onPressed: () {
+                              setBottomBarIndex(1);
+                            }),
+                        AutoSizeText(
+                          "RESTAURANT",
+                          minFontSize: 8,
+                          maxFontSize: 12,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                     Container(
                       width: size.width * 0.20,
                     ),
-                    IconButton(
-                        icon: Icon(
-                          Icons.bookmark,
-                          color: currentIndex == 2
-                              ? Colors.orange
-                              : Colors.grey.shade400,
-                        ),
-                        onPressed: () {
-                          setBottomBarIndex(2);
-                        }),
-                    IconButton(
-                        icon: FaIcon(
-                          FontAwesomeIcons.user,
-                          color: currentIndex == 3
-                              ? Colors.orange
-                              : Colors.grey.shade400,
-                        ),
-                        onPressed: () {
-                          setBottomBarIndex(3);
-                          Provider.of<BottomNavBarCN>(context, listen: false)
-                              .setProfileScreen = true;
-                        }),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.bookmark,
+                              color: currentIndex == 2
+                                  ? purpleColor
+                                  : Colors.white,
+                            ),
+                            onPressed: () {
+                              setBottomBarIndex(2);
+                            }),
+                        AutoSizeText(
+                          "SAVE",
+                          minFontSize: 8,
+                          maxFontSize: 12,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: currentIndex == 3
+                                  ? purpleColor
+                                  : Colors.white,
+                            ),
+                            onPressed: () {
+                              setBottomBarIndex(3);
+                              Provider.of<BSBottomNavBarCN>(context,
+                                      listen: false)
+                                  .setProfileScreen = true;
+                            }),
+                        AutoSizeText(
+                          "PROFILE",
+                          minFontSize: 8,
+                          maxFontSize: 12,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               )
@@ -110,7 +173,7 @@ class BNBCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = new Paint()
-      ..color = Colors.white
+      ..color = Colors.lightGreen
       ..style = PaintingStyle.fill;
 
     Path path = Path();
