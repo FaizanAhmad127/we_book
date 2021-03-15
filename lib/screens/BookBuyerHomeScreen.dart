@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BBBottomNavBarCN.dart';
@@ -19,7 +20,7 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
       child: ChangeNotifierProvider(
           create: (context) => BBBottomNavBarCN(),
           child: Scaffold(
-            //resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             bottomNavigationBar: BookBuyerBottomNavigationBar(),
             body: Consumer<BBBottomNavBarCN>(
                 builder: (context, bottomNavBarCN, _) {

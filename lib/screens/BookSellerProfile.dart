@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_book/screens/BookBuyerProfile.dart';
 
 class BookSellerProfile extends StatefulWidget {
   @override
@@ -8,10 +9,6 @@ class BookSellerProfile extends StatefulWidget {
 class _BookSellerProfileState extends State<BookSellerProfile> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("PROFILE"),
-      ),
-    );
+    return BookBuyerProfile();
   }
 }

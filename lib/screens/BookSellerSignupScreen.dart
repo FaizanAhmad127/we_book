@@ -84,7 +84,9 @@ class BookSellerSignupScreen extends StatelessWidget {
                           width: screenWitdh * 0.8,
                           child: RaisedButton(
                             elevation: 3,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, "GetSellerLocation");
+                            },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),

@@ -16,13 +16,13 @@ class PurpleRoundButton extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * buttonHeight,
       width: MediaQuery.of(context).size.width * buttonWidth,
-      child: FloatingActionButton(
+      child: RaisedButton(
         elevation: 3,
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        backgroundColor: purpleColor,
+        color: purpleColor,
         child: Text(
           buttonText,
           style: TextStyle(color: Colors.white, fontFamily: "Source Sans Pro"),

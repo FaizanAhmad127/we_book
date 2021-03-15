@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
-import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreen.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreenCN.dart';
 import 'package:we_book/UIs/GoogleMapsUI.dart';
 import 'package:location/location.dart';
 import 'package:we_book/UIs/QRCodeUI.dart';
@@ -49,7 +49,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => OpenQRCodeScreen(),
+          create: (context) => OpenQRCodeScreenCN(),
           lazy: false,
         ),
         ChangeNotifierProvider(
@@ -131,8 +131,8 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
           }
         }),
 
-        myQRCode:
-            Consumer<OpenQRCodeScreen>(builder: (context, openQRCodeScreen, _) {
+        myQRCode: Consumer<OpenQRCodeScreenCN>(
+            builder: (context, openQRCodeScreen, _) {
           return openQRCodeScreen.qrStatus == true
               ? Positioned(
                   top: 20, bottom: 20, right: 20, left: 20, child: QRCodeUI())

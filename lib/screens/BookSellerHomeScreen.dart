@@ -5,6 +5,7 @@ import 'package:we_book/UIs/BottomNavBarV2.dart';
 import 'package:we_book/screens/BookSellerProfile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'BSShopDetailsScreen.dart';
 import 'BookSellerDashBoard.dart';
 
 class BookSellerHomeScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
           create: (context) => BSBottomNavBarCN(),
           child: Scaffold(
             backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: true,
             bottomNavigationBar: BottomNavBarV2(),
             body: Consumer<BSBottomNavBarCN>(
                 builder: (context, bottomNavBarCN, _) {
@@ -28,6 +30,8 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
                 return BookSellerDashBoard();
               } else if (bottomNavBarCN.getProfileScreen == true) {
                 return BookSellerProfile();
+              } else if (bottomNavBarCN.getShopScreen == true) {
+                return BSShopDetailsScreen();
               } else {
                 return Container();
               }

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class OpenQRCodeScreen with ChangeNotifier {
+class OpenQRCodeScreenCN with ChangeNotifier {
   bool showQRCode = false;
   bool get qrStatus => showQRCode;
   set qrStatus(bool qr) {

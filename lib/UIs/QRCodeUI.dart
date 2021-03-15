@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
-import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreen.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreenCN.dart';
 import 'package:we_book/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class QRCodeUI extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Provider.of<OpenQRCodeScreen>(context, listen: false)
+                  Provider.of<OpenQRCodeScreenCN>(context, listen: false)
                       .qrStatus = false;
                   Provider.of<OpenPopUpBookCN>(context, listen: false)
                       .popUpStatus = false;

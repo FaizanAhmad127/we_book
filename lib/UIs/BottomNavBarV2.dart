@@ -40,7 +40,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     backgroundColor: purpleColor,
                     child: FaIcon(FontAwesomeIcons.qrcode),
                     elevation: 0.1,
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "BSQRScanner");
+                    }),
               ),
               Container(
                 width: size.width,
@@ -82,7 +84,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       children: [
                         IconButton(
                             icon: Icon(
-                              Icons.restaurant_menu,
+                              FontAwesomeIcons.commentDollar,
                               color: currentIndex == 1
                                   ? purpleColor
                                   : Colors.white,
@@ -91,7 +93,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                               setBottomBarIndex(1);
                             }),
                         AutoSizeText(
-                          "RESTAURANT",
+                          "TRANSACTIONS",
                           minFontSize: 8,
                           maxFontSize: 12,
                           maxLines: 1,
@@ -110,16 +112,19 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       children: [
                         IconButton(
                             icon: Icon(
-                              Icons.bookmark,
+                              FontAwesomeIcons.warehouse,
                               color: currentIndex == 2
                                   ? purpleColor
                                   : Colors.white,
                             ),
                             onPressed: () {
                               setBottomBarIndex(2);
+                              Provider.of<BSBottomNavBarCN>(context,
+                                      listen: false)
+                                  .setShopScreen = true;
                             }),
                         AutoSizeText(
-                          "SAVE",
+                          "MY SHOP",
                           minFontSize: 8,
                           maxFontSize: 12,
                           maxLines: 1,
@@ -173,7 +178,7 @@ class BNBCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = new Paint()
-      ..color = Colors.lightGreen
+      ..color = Colors.grey
       ..style = PaintingStyle.fill;
 
     Path path = Path();

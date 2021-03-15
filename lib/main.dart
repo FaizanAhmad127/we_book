@@ -1,15 +1,17 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
+import 'package:we_book/UIs/BSQRScanner.dart';
+import 'package:we_book/UIs/GetSellerLocation.dart';
 import 'package:we_book/screens/BookBuyerHomeScreen.dart';
 import 'package:we_book/screens/BookBuyerProfile.dart';
 import 'package:we_book/screens/BookBuyerSignupScreen.dart';
 import 'package:we_book/screens/BookSellerHomeScreen.dart';
 import 'package:we_book/screens/BookSellerLoginScreen.dart';
 import 'package:we_book/screens/BookBuyerLoginScreen.dart';
+import 'package:we_book/screens/CheckInBooks.dart';
 import 'package:we_book/screens/LoginSignupFragment.dart';
 import 'package:we_book/screens/BookSellerSignupScreen.dart';
-import 'screens/BookBuyerDashBoard.dart';
 import 'UIs/GoogleMapsUI.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -59,10 +61,13 @@ class MyApp extends StatelessWidget {
           "BookBuyerSignupScreen": (context) => BookBuyerSignupScreen(),
           "BookSellerLoginScreen": (context) => BookSellerLoginScreen(),
           "BookSellerSignupScreen": (context) => BookSellerSignupScreen(),
-          "BookBuyerHomeScreen": (context) => BookBuyerDashBoard(),
+          "BookBuyerHomeScreen": (context) => BookBuyerHomeScreen(),
           "GoogleMapsUI": (context) => GoogleMapsUI(),
           "BookBuyerProfile": (context) => BookBuyerProfile(),
           "BookSellerHomeScreen": (context) => BookSellerHomeScreen(),
+          "BSQRScanner": (context) => BSQRScanner(),
+          "GetSellerLocation": (context) => GetSellerLocation(),
+          "CheckInBooks": (context) => CheckInBooks(),
         },
       ),
     );

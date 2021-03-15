@@ -236,31 +236,36 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
                   children: [
                     Row(
                       children: [
-                        DashBoardItem("Check In"),
+                        DashBoardItem(
+                          text: "Check In",
+                          onTap: () {
+                            Navigator.pushNamed(context, "CheckInBooks");
+                          },
+                        ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem("Check Out"),
+                        DashBoardItem(text: "Check Out"),
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     Row(
                       children: [
-                        DashBoardItem("Books"),
+                        DashBoardItem(text: "Books"),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem("Sales"),
+                        DashBoardItem(text: "Sales"),
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     Row(
                       children: [
-                        DashBoardItem("Out Of Stock"),
+                        DashBoardItem(text: "Out Of Stock"),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem("Recommendations"),
+                        DashBoardItem(text: "Recommendations"),
                       ],
                     ),
                   ],
@@ -273,37 +278,39 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
 }
 
 class DashBoardItem extends StatelessWidget {
-  DashBoardItem(
-    this.text,
-  );
+  DashBoardItem({this.text, this.onTap});
   String text;
+  Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.1,
-        height: MediaQuery.of(context).size.height * 0.1,
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 10)],
-          borderRadius: BorderRadius.circular(5),
-          color: purpleColor,
-        ),
-        child: Center(
-          child: AutoSizeText(
-            text,
-            minFontSize: 12,
-            maxFontSize: 20,
-            maxLines: 1,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Source Sans Pro",
+      child: GestureDetector(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.1,
+          height: MediaQuery.of(context).size.height * 0.1,
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 10)],
+            borderRadius: BorderRadius.circular(5),
+            color: purpleColor,
+          ),
+          child: Center(
+            child: AutoSizeText(
+              text,
+              minFontSize: 12,
+              maxFontSize: 20,
+              maxLines: 1,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Source Sans Pro",
+              ),
             ),
           ),
         ),
+        onTap: onTap,
       ),
     );
   }

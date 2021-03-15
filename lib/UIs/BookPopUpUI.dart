@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
-import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreen.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreenCN.dart';
 import 'package:we_book/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
@@ -261,7 +261,7 @@ class BookPopUpUI extends StatelessWidget {
                 child: RaisedButton(
                   elevation: 3,
                   onPressed: () {
-                    Provider.of<OpenQRCodeScreen>(context, listen: false)
+                    Provider.of<OpenQRCodeScreenCN>(context, listen: false)
                         .qrStatus = true;
                     //_controller.add(true);
                   },
