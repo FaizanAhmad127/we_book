@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 import 'package:we_book/UIs/BSQRScanner.dart';
 import 'package:we_book/UIs/GetSellerLocation.dart';
+import 'package:we_book/screens/BSBooksEdit.dart';
+import 'package:we_book/screens/BSBooksView.dart';
+import 'package:we_book/screens/BSCheckOutManually.dart';
+import 'package:we_book/screens/BSOutOfStockBooks.dart';
+import 'package:we_book/screens/BSSales.dart';
 import 'package:we_book/screens/BookBuyerHomeScreen.dart';
 import 'package:we_book/screens/BookBuyerProfile.dart';
 import 'package:we_book/screens/BookBuyerSignupScreen.dart';
@@ -68,6 +73,11 @@ class MyApp extends StatelessWidget {
           "BSQRScanner": (context) => BSQRScanner(),
           "GetSellerLocation": (context) => GetSellerLocation(),
           "CheckInBooks": (context) => CheckInBooks(),
+          "BSCheckOutManually": (context) => BSCheckOutManually(),
+          "BSBooksView": (context) => BSBooksView(),
+          "BSBooksEdit": (context) => BSBooksEdit(),
+          "BSOutOfStockBooks": (context) => BSOutOfStockBooks(),
+          "BSSales": (context) => BSSales(),
         },
       ),
     );

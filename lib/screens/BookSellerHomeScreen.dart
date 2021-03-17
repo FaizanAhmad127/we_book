@@ -6,6 +6,7 @@ import 'package:we_book/screens/BookSellerProfile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'BSShopDetailsScreen.dart';
+import 'BSTransactionScreen.dart';
 import 'BookSellerDashBoard.dart';
 
 class BookSellerHomeScreen extends StatefulWidget {
@@ -32,6 +33,8 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
                 return BookSellerProfile();
               } else if (bottomNavBarCN.getShopScreen == true) {
                 return BSShopDetailsScreen();
+              } else if (bottomNavBarCN.getTransactionScreen == true) {
+                return BSTransactionScreen();
               } else {
                 return Container();
               }

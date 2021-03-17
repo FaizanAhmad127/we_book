@@ -13,7 +13,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
   double topItem = 0;
   List<Widget> items = [];
   void getListViewItems() {
-    List<dynamic> responseList = booksData;
+    List<dynamic> responseList = booksRecomendationData;
     List<Widget> widgetItemsList = [];
     responseList.forEach((post) {
       widgetItemsList.add(Padding(
@@ -245,27 +245,47 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem(text: "Check Out"),
+                        DashBoardItem(
+                          text: "Check Out",
+                          onTap: () {
+                            Navigator.pushNamed(context, "BSCheckOutManually");
+                          },
+                        ),
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     Row(
                       children: [
-                        DashBoardItem(text: "Books"),
+                        DashBoardItem(
+                          text: "Books",
+                          onTap: () {
+                            Navigator.pushNamed(context, "BSBooksView");
+                          },
+                        ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem(text: "Sales"),
+                        DashBoardItem(
+                          text: "Sales",
+                          onTap: () {
+                            Navigator.pushNamed(context, "BSSales");
+                          },
+                        ),
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     Row(
                       children: [
-                        DashBoardItem(text: "Out Of Stock"),
+                        DashBoardItem(
+                          text: "Out Of Stock",
+                          onTap: () {
+                            Navigator.pushNamed(context, "BSOutOfStockBooks");
+                          },
+                        ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem(text: "Recommendations"),
+                        DashBoardItem(text: "Reviews/Rating"),
                       ],
                     ),
                   ],

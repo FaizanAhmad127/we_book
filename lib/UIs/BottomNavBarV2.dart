@@ -91,6 +91,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                             ),
                             onPressed: () {
                               setBottomBarIndex(1);
+                              Provider.of<BSBottomNavBarCN>(context,
+                                      listen: false)
+                                  .setTransactionScreen = true;
                             }),
                         AutoSizeText(
                           "TRANSACTIONS",

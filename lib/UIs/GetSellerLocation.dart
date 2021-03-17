@@ -85,7 +85,9 @@ class _GetSellerLocationState extends State<GetSellerLocation> {
                 buttonText: "SAVE LOCATION",
                 buttonHeight: 0.08,
                 buttonWidth: 0.3,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               )),
           Positioned(
               top: 20,

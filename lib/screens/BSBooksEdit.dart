@@ -5,12 +5,52 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
 
-class CheckInBooks extends StatefulWidget {
+class BSBooksEdit extends StatefulWidget {
+  String imagePath,
+      BookName,
+      AuthorName,
+      BookEdition,
+      InitialPrice,
+      FinalPrice,
+      Quantity,
+      ShelfName;
+  BSBooksEdit(
+      {this.imagePath,
+      this.BookName,
+      this.AuthorName,
+      this.BookEdition,
+      this.InitialPrice,
+      this.FinalPrice,
+      this.Quantity,
+      this.ShelfName});
   @override
-  _CheckInBooksState createState() => _CheckInBooksState();
+  _BSBooksEditState createState() => _BSBooksEditState();
 }
 
-class _CheckInBooksState extends State<CheckInBooks> {
+class _BSBooksEditState extends State<BSBooksEdit> {
+  TextEditingController bookNameController,
+      authorNameController,
+      bookEditionController,
+      initialPriceController,
+      finalPriceController,
+      quantityController,
+      shelfNameController;
+  String imagePath;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bookNameController = TextEditingController(text: widget.BookName);
+    authorNameController = TextEditingController(text: widget.AuthorName);
+    bookEditionController = TextEditingController(text: widget.BookEdition);
+    initialPriceController = TextEditingController(text: widget.InitialPrice);
+    finalPriceController = TextEditingController(text: widget.FinalPrice);
+    quantityController = TextEditingController(text: widget.Quantity);
+    shelfNameController = TextEditingController(text: widget.ShelfName);
+    imagePath = widget.imagePath;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,18 +69,13 @@ class _CheckInBooksState extends State<CheckInBooks> {
                       child: Row(
                         children: [
                           Expanded(
-                            flex: 2,
+                            flex: 1,
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                               ),
-                              child: Center(
-                                child: AutoSizeText(
-                                  "Image",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                              child: Image.asset(
+                                "images/$imagePath",
                               ),
                             ),
                           ),
@@ -86,18 +121,21 @@ class _CheckInBooksState extends State<CheckInBooks> {
                   child: MyCardTextField(
                     outsideText: "Book Name",
                     prefixIcon: FontAwesomeIcons.book,
+                    textEditingController: bookNameController,
                   ),
                 ),
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Author Name",
                     prefixIcon: FontAwesomeIcons.user,
+                    textEditingController: authorNameController,
                   ),
                 ),
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Book Edition",
                     prefixIcon: FontAwesomeIcons.sortNumericDown,
+                    textEditingController: bookEditionController,
                   ),
                 ),
                 Expanded(
@@ -105,6 +143,7 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     outsideText: "Initial Book Price",
                     keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.fileInvoiceDollar,
+                    textEditingController: initialPriceController,
                   ),
                 ),
                 Expanded(
@@ -112,6 +151,7 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     outsideText: "Final Book Price",
                     keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.fileInvoiceDollar,
+                    textEditingController: finalPriceController,
                   ),
                 ),
                 Expanded(
@@ -119,12 +159,14 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     outsideText: "Quantity",
                     keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.sort,
+                    textEditingController: quantityController,
                   ),
                 ),
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Shelf Name/Number",
                     prefixIcon: FontAwesomeIcons.slidersH,
+                    textEditingController: shelfNameController,
                   ),
                 ),
                 SizedBox(
@@ -135,7 +177,9 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     buttonHeight: 0.2,
                     buttonWidth: 0.5,
                     buttonText: "SAVE",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
                 SizedBox(
@@ -152,11 +196,11 @@ class _CheckInBooksState extends State<CheckInBooks> {
 
 class MyCardTextField extends StatefulWidget {
   MyCardTextField(
-      {this.shopNameController,
+      {this.textEditingController,
       this.outsideText = "",
       this.keyboardType = TextInputType.text,
       this.prefixIcon});
-  TextEditingController shopNameController;
+  TextEditingController textEditingController;
   String outsideText;
   TextInputType keyboardType;
   IconData prefixIcon;
@@ -166,6 +210,7 @@ class MyCardTextField extends StatefulWidget {
 }
 
 class _MyCardTextFieldState extends State<MyCardTextField> {
+  bool isEnabled = false;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -210,13 +255,25 @@ class _MyCardTextFieldState extends State<MyCardTextField> {
                       child: TextField(
                         decoration: InputDecoration(),
                         maxLines: 1,
-                        controller: widget.shopNameController,
+                        controller: widget.textEditingController,
                         keyboardType: widget.keyboardType,
                         obscureText: false,
+                        enabled: isEnabled,
                       )),
                 ],
               ),
             ),
+            Expanded(
+                child: IconButton(
+              icon: Icon(FontAwesomeIcons.edit),
+              iconSize: 20,
+              color: purpleColor,
+              onPressed: () {
+                setState(() {
+                  isEnabled ? isEnabled = false : isEnabled = true;
+                });
+              },
+            ))
           ],
         ),
       ),

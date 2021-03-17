@@ -31,7 +31,7 @@ class _MyAwesomeTextFieldState extends State<MyAwesomeTextField> {
                 widget.outsideText,
                 maxLines: 1,
                 maxFontSize: 16,
-                minFontSize: 12,
+                minFontSize: 6,
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: "Source Sans Pro",

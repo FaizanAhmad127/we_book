@@ -1,9 +1,12 @@
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:we_book/Models/UploadDownloadImage.dart';
+import 'package:we_book/Models/UploadProfileData.dart';
 import 'package:we_book/UIs/MyAwesomeTextField.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
@@ -21,6 +24,9 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
       city = "Peshawar",
       country = "Pakistan",
       phoneNumber = "03221234567";
+  String uid, profilePictureURL;
+  var profileDataClassObject = UploadProfileData();
+
   TextEditingController fullNameController =
       TextEditingController(text: fullName);
   TextEditingController emailController = TextEditingController(text: email);
@@ -31,6 +37,22 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
       TextEditingController(text: country);
   TextEditingController phoneNumberController =
       TextEditingController(text: phoneNumber);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var firebaseAuth = FirebaseAuth.instance;
+    uid = firebaseAuth.currentUser.uid;
+    profileDataClassObject =
+        UploadProfileData(userCategory: "Book Seller", uid: uid);
+    getProfilePictureURL();
+  }
+
+  getProfilePictureURL() async {
+    profilePictureURL = await profileDataClassObject.getPictureURL();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +99,47 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(5),
               child: Row(
                 children: [
                   Expanded(
                     flex: 1,
                     child: CircleAvatar(
-                      radius: 40,
-                      backgroundImage: AssetImage("images/profileicon.jpg"),
+                      radius: 30,
+                      backgroundImage: profilePictureURL == "error" ||
+                              profilePictureURL == null
+                          ? AssetImage("images/noimage.JPG")
+                          : NetworkImage(profilePictureURL),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            bottom: 0,
+                            top: 35.5,
+                            left: 15,
+                            child: IconButton(
+                              iconSize: 20,
+                              color: Colors.white,
+                              icon: Icon(Icons.cloud_upload_sharp),
+                              onPressed: () async {
+                                if (uid == null) {
+                                  BotToast.showText(
+                                      text: "User is not registered/ Uid NULL");
+                                } else {
+                                  profilePictureURL =
+                                      await UploadDownloadImage().uploadImage(
+                                          "Book Sellers/$uid",
+                                          "profilePicture");
+                                  if (profilePictureURL != null) {
+                                    profileDataClassObject.updatePictureURL(
+                                        url: profilePictureURL);
+                                  }
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -162,7 +217,22 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
               buttonText: "SAVE",
               buttonWidth: 0.7,
               buttonHeight: 0.02,
-              onPressed: () {},
+              onPressed: () {
+                fullName = fullNameController.text;
+                email = emailController.text;
+                address = addressController.text;
+                city = cityController.text;
+                country = countryController.text;
+                phoneNumber = phoneNumberController.text;
+                profileDataClassObject.insertDataToDatabase(
+                  fullName: fullName,
+                  emailAddress: email,
+                  physicalAddress: address,
+                  city: city,
+                  country: country,
+                  phoneNumber: phoneNumber,
+                );
+              },
             )),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.008,
