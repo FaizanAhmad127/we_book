@@ -12,6 +12,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
   ScrollController listViewController = ScrollController();
   double topItem = 0;
   List<Widget> items = [];
+
   void getListViewItems() {
     List<dynamic> responseList = booksRecomendationData;
     List<Widget> widgetItemsList = [];
@@ -86,7 +87,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
     getListViewItems();
     listViewController.addListener(() {
       double value = listViewController.offset / 320;
-      print(listViewController.offset);
+      //print(listViewController.offset);
       setState(() {
         topItem = value;
       });

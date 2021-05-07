@@ -9,6 +9,8 @@ import 'package:we_book/UIs/TextFieldWidget.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:bot_toast/bot_toast.dart';
 
+//CREATE STREAMS THAT OTHER CAN LISTEN TO, SO THESE STREAMS ARE USED
+// TO LISTEN TO DATA INPUT IN TEXTFIELDS IN TextFieldWidget.dart file.
 StreamController<String> emailStreamController =
     StreamController<String>.broadcast();
 StreamController<String> passwordStreamController =
@@ -37,8 +39,8 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
   @override
   void dispose() {
     super.dispose();
-    print(
-        "dispossssssssssssssssssssssssssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddead");
+    emailStreamController.close();
+    passwordStreamController.close();
   }
 
   @override
@@ -108,7 +110,7 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                       ),
                       Container(
                         height: 20,
-                        width: MediaQuery.of(context).size.width,
+                        width: screenWidth,
                         child: Text(
                           "Forgot Password?",
                           textAlign: TextAlign.end,
@@ -136,7 +138,6 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                                     context, "BookBuyerHomeScreen");
                               } else if (result == "Failure") {
                                 BotToast.showText(text: "Invalid Creditials");
-                                print("Failed to login");
                               }
                               BotToast.closeAllLoading();
                             }),

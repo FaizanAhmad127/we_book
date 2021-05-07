@@ -87,6 +87,11 @@ class LoginSignUpFragment extends StatelessWidget {
                       elevation: 3,
                       onPressed: () {
                         Navigator.pushNamed(context, "BookSellerLoginScreen");
+                        if (user != null) {
+                          Navigator.pushNamed(context, 'BookSellerHomeScreen');
+                        } else {
+                          Navigator.pushNamed(context, 'BookSellerLoginScreen');
+                        }
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),

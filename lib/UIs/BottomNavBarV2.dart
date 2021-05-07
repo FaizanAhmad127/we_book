@@ -73,6 +73,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           maxFontSize: 12,
                           maxLines: 1,
                           style: TextStyle(
+                              color: currentIndex == 0
+                                  ? purpleColor
+                                  : Colors.white,
                               fontSize: 12,
                               letterSpacing: 0,
                               fontWeight: FontWeight.bold),
@@ -101,6 +104,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           maxFontSize: 12,
                           maxLines: 1,
                           style: TextStyle(
+                              color: currentIndex == 1
+                                  ? purpleColor
+                                  : Colors.white,
                               fontSize: 12,
                               letterSpacing: 0,
                               fontWeight: FontWeight.bold),
@@ -132,6 +138,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           maxFontSize: 12,
                           maxLines: 1,
                           style: TextStyle(
+                              color: currentIndex == 2
+                                  ? purpleColor
+                                  : Colors.white,
                               fontSize: 12,
                               letterSpacing: 0,
                               fontWeight: FontWeight.bold),
@@ -140,15 +149,18 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        IconButton(
-                            icon: FaIcon(
-                              FontAwesomeIcons.user,
-                              color: currentIndex == 3
-                                  ? purpleColor
-                                  : Colors.white,
+                        GestureDetector(
+                            child: Padding(
+                              padding: EdgeInsets.all(7),
+                              child: CircleAvatar(
+                                radius: 17,
+                                backgroundImage:
+                                    AssetImage("images/profileicon.jpg"),
+                              ),
                             ),
-                            onPressed: () {
+                            onTap: () {
                               setBottomBarIndex(3);
                               Provider.of<BSBottomNavBarCN>(context,
                                       listen: false)
@@ -160,6 +172,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           maxFontSize: 12,
                           maxLines: 1,
                           style: TextStyle(
+                              color: currentIndex == 3
+                                  ? purpleColor
+                                  : Colors.white,
                               fontSize: 12,
                               letterSpacing: 0,
                               fontWeight: FontWeight.bold),

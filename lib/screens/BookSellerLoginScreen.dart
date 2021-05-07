@@ -122,6 +122,7 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                           buttonHeight: 0.065,
                           buttonWidth: 0.8,
                           onPressed: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
                             BotToast.showLoading();
                             print("email: $email  and password: $password ");
                             String result = await FirebaseEmailPasswordLogin()

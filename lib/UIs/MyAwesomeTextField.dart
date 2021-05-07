@@ -16,7 +16,19 @@ class MyAwesomeTextField extends StatefulWidget {
 }
 
 class _MyAwesomeTextFieldState extends State<MyAwesomeTextField> {
-  bool readOnly = false;
+  String insideText;
+  bool firstTime;
+  @override
+  void initState() {
+    super.initState();
+    firstTime = true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -41,25 +53,36 @@ class _MyAwesomeTextFieldState extends State<MyAwesomeTextField> {
               ),
             ),
             Positioned(
-                top: 25,
+                top: 29,
+                bottom: 5,
                 left: 20,
                 right: 20,
                 child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
                   maxLines: 1,
                   controller: widget.shopNameController,
                   keyboardType: widget.keyboardType,
                   obscureText: false,
-                  enabled: readOnly,
+                  showCursor: true,
+                  onTap: () {
+                    if (firstTime == true) {
+                      insideText = widget.shopNameController.text;
+                      firstTime = false;
+                    }
+                  },
                 )),
             Positioned(
-                top: 25,
+                top: 30,
                 right: 20,
+                bottom: 6,
                 child: IconButton(
-                  icon: Icon(FontAwesomeIcons.solidEdit),
+                  alignment: Alignment.centerRight,
+                  iconSize: 15,
+                  icon: Icon(FontAwesomeIcons.undo),
                   onPressed: () {
-                    setState(() {
-                      readOnly = readOnly == true ? false : true;
-                    });
+                    widget.shopNameController.text = insideText;
                   },
                 ))
           ],

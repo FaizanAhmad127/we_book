@@ -9,7 +9,6 @@ import 'package:we_book/screens/BSCheckOutManually.dart';
 import 'package:we_book/screens/BSOutOfStockBooks.dart';
 import 'package:we_book/screens/BSSales.dart';
 import 'package:we_book/screens/BookBuyerHomeScreen.dart';
-import 'package:we_book/screens/BookBuyerProfile.dart';
 import 'package:we_book/screens/BookBuyerSignupScreen.dart';
 import 'package:we_book/screens/BookSellerHomeScreen.dart';
 import 'package:we_book/screens/BookSellerLoginScreen.dart';
@@ -22,7 +21,8 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding
+      .ensureInitialized(); //Returns an instance of the WidgetsBinding... you need it to access flutter engine from flutter framework. see flutter architecture for more.
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> firebaseApp = Firebase.initializeApp();
-    Screen.keepOn(true);
+    Screen.keepOn(
+        true); // it will keep the screen light on till the app is not on foreground.
     return GestureDetector(
       behavior: HitTestBehavior
           .opaque, //Opaque targets can be hit by hit tests, causing them to both receive events within their bounds and prevent targets visually behind them from also receiving events.
@@ -41,21 +42,26 @@ class MyApp extends StatelessWidget {
         print("Tapped, main.dart");
       },
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        showPerformanceOverlay: false,
-        builder: BotToastInit(),
-        navigatorObservers: [BotToastNavigatorObserver()],
+        debugShowCheckedModeBanner:
+            false, //remove the yellow debug line from top right corner of an app
+        showPerformanceOverlay: false, // remove the performance overlay
+        builder: BotToastInit(), //initialize the toast so we can use it.
+        navigatorObservers: [
+          BotToastNavigatorObserver()
+        ], // toast observer is created now we can observe for toast in other dart classes
         home: FutureBuilder(
+          //Creates a widget that builds itself based on the latest snapshot of interaction with a Future. the builder must not be null.
           future: firebaseApp,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               print(" You have an error ${snapshot.error.toString()}");
               return Text("Something went Wrong!");
             } else if (snapshot.hasData) {
-              return BookSellerHomeScreen();
+              return LoginSignUpFragment();
             } else {
               return Center(
-                child: CircularProgressIndicator(),
+                child:
+                    CircularProgressIndicator(), // shows the progress indicator until the app won't get the firebase snapshot.
               );
             }
           },
@@ -68,7 +74,6 @@ class MyApp extends StatelessWidget {
           "BookSellerSignupScreen": (context) => BookSellerSignupScreen(),
           "BookBuyerHomeScreen": (context) => BookBuyerHomeScreen(),
           "GoogleMapsUI": (context) => GoogleMapsUI(),
-          "BookBuyerProfile": (context) => BookBuyerProfile(),
           "BookSellerHomeScreen": (context) => BookSellerHomeScreen(),
           "BSQRScanner": (context) => BSQRScanner(),
           "GetSellerLocation": (context) => GetSellerLocation(),

@@ -30,7 +30,7 @@ class QRCodeUI extends StatelessWidget {
                   // Navigator.popAndPushNamed(context, "BookBuyerHomeScreen");
                 },
                 child: Container(
-                  child: Icon(Icons.exit_to_app),
+                  child: Icon(Icons.cancel),
                 ),
               ),
               Expanded(

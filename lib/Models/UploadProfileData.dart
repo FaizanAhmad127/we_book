@@ -1,6 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
+import 'package:we_book/Models/RetrieveProfileData.dart';
 
 class UploadProfileData {
   var firebaseDatabaseReference = FirebaseDatabase().reference();
@@ -10,7 +10,7 @@ class UploadProfileData {
     this.uid,
   });
 
-  Future<String> insertDataToDatabase(
+  Future insertDataToDatabase(
       {String fullName,
       String emailAddress,
       String physicalAddress,
@@ -31,6 +31,9 @@ class UploadProfileData {
     }).catchError((Object error) {
       BotToast.showText(text: "Data not saved/Error");
     });
+    print("UploadProfileData.dart");
+    await RetrieveProfileData(userCategory: userCategory, uid: uid)
+        .getProfileData();
   }
 
   Future updatePictureURL({String url}) async {
@@ -43,17 +46,5 @@ class UploadProfileData {
     }).catchError((Object error) {
       BotToast.showText(text: "Picture not saved/Error");
     });
-  }
-
-  Future<String> getPictureURL() async {
-    DataSnapshot snapshot = await firebaseDatabaseReference
-        .child("$userCategory/$uid/Profile Details/profilePicture")
-        .once()
-        .whenComplete(() {
-      print("got picture url");
-    }).catchError((Object error) {
-      print("failed to get picture url");
-    });
-    return snapshot == null ? "error" : snapshot.value;
   }
 }

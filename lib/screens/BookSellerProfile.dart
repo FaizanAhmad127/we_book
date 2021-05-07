@@ -9,6 +9,6 @@ class BookSellerProfile extends StatefulWidget {
 class _BookSellerProfileState extends State<BookSellerProfile> {
   @override
   Widget build(BuildContext context) {
-    return BookBuyerProfile();
+    return BookBuyerProfile("Book Seller");
   }
 }

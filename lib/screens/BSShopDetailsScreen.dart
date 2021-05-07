@@ -32,135 +32,141 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Card(
-            margin: EdgeInsets.all(10),
-            elevation: 10,
-            color: Colors.white,
-            shadowColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
+    return SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height - 80,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Card(
+                margin: EdgeInsets.all(10),
+                elevation: 10,
+                color: Colors.white,
+                shadowColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        child: AutoSizeText(
-                          "FAISAL BOOK DEPOT",
-                          maxLines: 1,
-                          maxFontSize: 20,
-                          minFontSize: 12,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: AutoSizeText(
+                              "FAISAL BOOK DEPOT",
+                              maxLines: 1,
+                              maxFontSize: 20,
+                              minFontSize: 12,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                              ),
+                            ),
+                            fit: FlexFit.loose,
                           ),
-                        ),
-                        fit: FlexFit.loose,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02,
+                          ),
+                          Flexible(
+                            child: AutoSizeText(
+                              "Shop 3, Saddar Rd, Pesahwar",
+                              maxFontSize: 16,
+                              minFontSize: 12,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                            fit: FlexFit.loose,
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
+                        width: MediaQuery.of(context).size.width * 0.1,
                       ),
-                      Flexible(
-                        child: AutoSizeText(
-                          "Shop 3, Saddar Rd, Pesahwar",
-                          maxFontSize: 16,
-                          minFontSize: 12,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        fit: FlexFit.loose,
-                      ),
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundImage:
+                            AssetImage("images/faisalbookdepot.jpg"),
+                      )
                     ],
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
+                ),
+              ),
+            ),
+            Divider(
+              height: 2,
+              thickness: 2,
+              color: purpleColor,
+              indent: 0,
+              endIndent: 0,
+            ),
+            Expanded(
+                flex: 2,
+                child: MyAwesomeTextField(
+                  shopNameController: shopNameController,
+                  outsideText: "Shop Name",
+                )),
+            Expanded(
+                flex: 2,
+                child: MyAwesomeTextField(
+                  shopNameController: shopAddressController,
+                  outsideText: "Shop Address",
+                )),
+            Expanded(
+                flex: 2,
+                child: MyAwesomeTextField(
+                  shopNameController: shopCityController,
+                  outsideText: "City",
+                )),
+            Expanded(
+                flex: 2,
+                child: MyAwesomeTextField(
+                  shopNameController: shopCountryController,
+                  outsideText: "Country",
+                )),
+            Expanded(
+                flex: 2,
+                child: MyAwesomeTextField(
+                  shopNameController: shopPhoneNumberController,
+                  outsideText: "Shop Phone Number",
+                  keyboardType: TextInputType.phone,
+                )),
+            Expanded(
+                flex: 1,
+                child: PurpleRoundButton(
+                  buttonText: "SAVE",
+                  buttonWidth: 0.7,
+                  buttonHeight: 0.02,
+                  onPressed: () {},
+                )),
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: GestureDetector(
+                child: AutoSizeText(
+                  "Want to View/Change shop location?",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontFamily: "Source Sans Pro",
                   ),
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage("images/faisalbookdepot.jpg"),
-                  )
-                ],
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, "GetSellerLocation");
+                },
               ),
-            ),
-          ),
+            )),
+            Expanded(flex: 1, child: Container()),
+          ],
         ),
-        Divider(
-          height: 2,
-          thickness: 2,
-          color: purpleColor,
-          indent: 0,
-          endIndent: 0,
-        ),
-        Expanded(
-            flex: 2,
-            child: MyAwesomeTextField(
-              shopNameController: shopNameController,
-              outsideText: "Shop Name",
-            )),
-        Expanded(
-            flex: 2,
-            child: MyAwesomeTextField(
-              shopNameController: shopAddressController,
-              outsideText: "Shop Address",
-            )),
-        Expanded(
-            flex: 2,
-            child: MyAwesomeTextField(
-              shopNameController: shopCityController,
-              outsideText: "City",
-            )),
-        Expanded(
-            flex: 2,
-            child: MyAwesomeTextField(
-              shopNameController: shopCountryController,
-              outsideText: "Country",
-            )),
-        Expanded(
-            flex: 2,
-            child: MyAwesomeTextField(
-              shopNameController: shopPhoneNumberController,
-              outsideText: "Shop Phone Number",
-              keyboardType: TextInputType.phone,
-            )),
-        Expanded(
-            flex: 1,
-            child: PurpleRoundButton(
-              buttonText: "SAVE",
-              buttonWidth: 0.7,
-              buttonHeight: 0.02,
-              onPressed: () {},
-            )),
-        Expanded(
-            child: Padding(
-          padding: EdgeInsets.only(top: 10),
-          child: GestureDetector(
-            child: AutoSizeText(
-              "Want to View/Change shop location?",
-              style: TextStyle(
-                color: Colors.blue,
-                fontFamily: "Source Sans Pro",
-              ),
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, "GetSellerLocation");
-            },
-          ),
-        )),
-        Expanded(flex: 1, child: Container()),
-      ],
+      ),
     );
   }
 }
