@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:we_book/UIs/MyAwesomeTextField.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
-import 'package:we_book/UIs/TextFieldWidget.dart';
 import 'package:we_book/constants.dart';
-import 'package:we_book/screens/BookBuyerProfile.dart';
 
 class BSShopDetailsScreen extends StatefulWidget {
   @override

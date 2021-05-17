@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:we_book/screens/BookBuyerProfile.dart';
+import 'package:we_book/Screens/CommonScreens/UserProfile.dart';
 
 class BookSellerProfile extends StatefulWidget {
   @override
@@ -9,6 +9,6 @@ class BookSellerProfile extends StatefulWidget {
 class _BookSellerProfileState extends State<BookSellerProfile> {
   @override
   Widget build(BuildContext context) {
-    return BookBuyerProfile("Book Seller");
+    return UserProfile("Book Seller");
   }
 }

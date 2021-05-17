@@ -12,6 +12,7 @@ class PreloadProfileData {
 
     var uid = firebaseAuth.currentUser.uid;
     var userCategory = sharedPreferences.getString("userCategory");
+    print("user category is $userCategory and uid is $uid");
 
     retrieveProfileDataClassObject =
         RetrieveProfileData(userCategory: userCategory, uid: uid);

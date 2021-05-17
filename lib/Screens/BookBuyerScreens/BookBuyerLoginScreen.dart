@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/Models/FirebaseEmailPasswordLogin.dart';
+import 'package:we_book/Models/FirebaseFacebookSignIn.dart';
+import 'package:we_book/Models/FirebaseGoogleSignIn.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -39,8 +42,8 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
   @override
   void dispose() {
     super.dispose();
-    emailStreamController.close();
-    passwordStreamController.close();
+    // emailStreamController.close();
+    // passwordStreamController.close();
   }
 
   @override
@@ -178,20 +181,38 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          CircleAvatar(
-                            child: GestureDetector(),
-                            backgroundImage:
-                                AssetImage("images/facebookicon.png"),
-                            backgroundColor: Colors.white,
+                          GestureDetector(
+                            onTap: () async {
+                              String status = await FirebaseFacebookSignIn()
+                                  .signInWithFacebook();
+                              if (status == "Success") {
+                                Navigator.popAndPushNamed(
+                                    context, "BookBuyerHomeScreen");
+                              }
+                            },
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("images/facebookicon.png"),
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                           SizedBox(
                             width: screenWidth * 0.1,
                           ),
-                          CircleAvatar(
-                            child: GestureDetector(),
-                            backgroundImage:
-                                AssetImage("images/googleicon.png"),
-                            backgroundColor: Colors.white,
+                          GestureDetector(
+                            onTap: () async {
+                              String status =
+                                  await FirebaseGoogleSignIn().signIn();
+                              if (status == "Success") {
+                                Navigator.popAndPushNamed(
+                                    context, "BookBuyerHomeScreen");
+                              }
+                            },
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("images/googleicon.png"),
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                         ],
                       ),
@@ -211,7 +232,7 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(
+                              Navigator.popAndPushNamed(
                                   context, "BookBuyerSignupScreen");
                             },
                             child: Text(

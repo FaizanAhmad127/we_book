@@ -46,6 +46,8 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
   ];
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -60,16 +62,16 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
       child: GoogleMapsUI(
         bookMarkers: myMarkers,
         mySearchFieldAndButton: Positioned(
-          top: MediaQuery.of(context).size.height * 0.03,
-          left: MediaQuery.of(context).size.width * 0.02,
-          right: MediaQuery.of(context).size.width * 0.02,
+          top: screenHeight * 0.03,
+          left: screenWidth * 0.02,
+          right: screenWidth * 0.02,
           child: Row(
             children: [
               Expanded(
                 flex: 4,
                 child: Container(
                   // width: MediaQuery.of(context).size.width * 0.63,
-                  height: MediaQuery.of(context).size.height * 0.06,
+                  height: screenHeight * 0.06,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     color: Colors.grey,
@@ -88,22 +90,24 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: screenWidth * 0.02,
               ),
               Expanded(
                 flex: 2,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.06,
+                  height: screenHeight * 0.06,
                   // width: MediaQuery.of(context).size.width * 0.3,
-                  child: RaisedButton(
-                    elevation: 3,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(3),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      )),
+                      backgroundColor: MaterialStateProperty.all(purpleColor),
+                    ),
                     onPressed: () {
                       bookMarker();
                     },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    color: purpleColor,
                     child: Text(
                       "SEARCH",
                       style: TextStyle(
@@ -118,6 +122,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
         myPopUp:
             Consumer<OpenPopUpBookCN>(builder: (context, openPopUpBookCN, _) {
           if (openPopUpBookCN.popUpStatus == true || showPopUp == true) {
+            //showPopUp will be true using provider in BookPopUpUI.dart
             showPopUp = false;
             return Positioned(
               top: 10,
@@ -130,7 +135,6 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
             return Container();
           }
         }),
-
         myQRCode: Consumer<OpenQRCodeScreenCN>(
             builder: (context, openQRCodeScreen, _) {
           return openQRCodeScreen.qrStatus == true
@@ -138,10 +142,6 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
                   top: 20, bottom: 20, right: 20, left: 20, child: QRCodeUI())
               : Container();
         }),
-        // myQRCode: OpenQRCodeScreen.qrStatus == true
-        //     ? Positioned(
-        //         top: 20, bottom: 20, right: 20, left: 20, child: QRCodeUI())
-        //     : Container(),
       ),
     );
   }
@@ -154,7 +154,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
   }
 
   void updateMarker(LocationData locationData, Uint8List imageData) {
-    var latlng = LatLng(locationData.latitude, locationData.longitude);
+    //var latlng = LatLng(locationData.latitude, locationData.longitude);
 
     for (int i = 0; i < lat.length; i++) {
       myMarkers.add(Marker(

@@ -1,12 +1,41 @@
+import 'dart:async';
+
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:we_book/Models/FirebaseEmailPasswordSignup.dart';
-import 'package:we_book/UIs/AppBarNormalUI.dart';
+import 'package:we_book/Models/FirebaseEmailPasswordLogin.dart';
 import 'package:we_book/constants.dart';
+import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 
-class BookBuyerSignupScreen extends StatelessWidget {
+StreamController<String> emailStreamController =
+    StreamController<String>.broadcast();
+StreamController<String> passwordStreamController =
+    StreamController<String>.broadcast();
+
+class BookSellerLoginScreen extends StatefulWidget {
+  @override
+  _BookSellerLoginScreenState createState() => _BookSellerLoginScreenState();
+}
+
+class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
+  bool obscureText = true;
+  Color color = Colors.grey;
+  String email = "", password = "";
+
+  @override
+  void initState() {
+    super.initState();
+    emailStreamController.stream.listen((value) {
+      email = value;
+    });
+    passwordStreamController.stream.listen((value) {
+      password = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -16,8 +45,11 @@ class BookBuyerSignupScreen extends StatelessWidget {
       appBar: AppBarNormalUI().myAppBar(),
       body: SafeArea(
           child: Padding(
-              padding: EdgeInsets.fromLTRB(screenWidth * 0.1025,
-                  screenWidth * 0.07, screenWidth * 0.0769, screenWidth * 0.03),
+              padding: EdgeInsets.fromLTRB(
+                  screenWidth * 0.1025,
+                  screenWidth * 0.0769,
+                  screenWidth * 0.0769,
+                  screenWidth * 0.051),
               child: Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -27,74 +59,96 @@ class BookBuyerSignupScreen extends StatelessWidget {
                     children: <Widget>[
                       Center(
                         child: Text(
-                          "Sign Up here",
+                          "Login here",
                           style: TextStyle(
                               color: purpleColor,
-                              fontSize: 20,
+                              fontSize: 30,
                               fontWeight: FontWeight.bold,
                               letterSpacing: -0.2,
                               fontFamily: "Source Sans Pro"),
                         ),
                       ),
                       TextFieldWidget(
-                        outsideText: 'Full Name',
-                        hintText: 'Anthony Hofstad',
-                        icon: Icons.account_box,
-                      ),
-                      TextFieldWidget(
-                        outsideText: 'Phone Number',
-                        hintText: '+923021234567',
-                        icon: Icons.phone,
-                      ),
-                      TextFieldWidget(
                         outsideText: 'Email',
                         hintText: 'abc@gmail.com',
                         icon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
+                        streamController: emailStreamController,
                       ),
                       TextFieldWidget(
                         outsideText: 'Password',
                         hintText: 'Password',
                         icon: Icons.enhanced_encryption,
-                        obscureText: true,
-                      ),
-                      TextFieldWidget(
-                        outsideText: 'Confirm Password',
-                        hintText: 'Confirm Password',
-                        icon: Icons.lock,
-                        obscureText: true,
+                        obscureText: obscureText,
+                        streamController: passwordStreamController,
+                        suffixIcon: IconButton(
+                          color: color,
+                          icon: Icon(Icons.remove_red_eye),
+                          onPressed: () {
+                            setState(() {
+                              if (obscureText == false) {
+                                obscureText = true;
+                                color = Colors.grey;
+                              } else if (obscureText == true) {
+                                obscureText = false;
+                                color = Colors.blue;
+                              }
+                            });
+                          },
+                        ),
                       ),
                       SizedBox(
                         width: 0,
-                        height: screenHeight * 0.05,
+                        height: screenHeight * 0.01,
+                      ),
+                      Container(
+                        height: 20,
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          "Forgot Password?",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            color: purpleColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 0,
+                        height: screenHeight * 0.07,
                       ),
                       Center(
                         child: PurpleRoundButton(
-                            buttonText: "SIGN UP",
-                            buttonHeight: 0.065,
-                            buttonWidth: 0.8,
-                            onPressed: () async {
-                              String result =
-                                  await FirebaseEmailPasswordSignup()
-                                      .registration(
-                                          "faizanahmad.imsc@gmail.com",
-                                          "12345678");
-                              if (result == "Success") {
-                                Navigator.pushNamed(
-                                    context, "BookBuyerLoginScreen");
-                              } else if (result == "Failure") {
-                                BotToast.showText(text: "Failed to signup");
-                              }
-                            }),
+                          buttonText: "LOGIN",
+                          buttonHeight: 0.065,
+                          buttonWidth: 0.8,
+                          onPressed: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            BotToast.showLoading();
+                            print("email: $email  and password: $password ");
+                            String result = await FirebaseEmailPasswordLogin()
+                                .login(email: email, password: password);
+                            if (result == "Success") {
+                              Navigator.popAndPushNamed(
+                                  context, "BookSellerHomeScreen");
+                            } else if (result == "Failure") {
+                              BotToast.showText(text: "Invalid Creditials");
+                              print("Failed to login");
+                            }
+                            BotToast.closeAllLoading();
+                          },
+                        ),
                       ),
                       SizedBox(
                         width: 0,
-                        height: screenHeight * 0.04,
+                        height: screenHeight * 0.07,
                       ),
                       Stack(
                         children: <Widget>[
                           Divider(
+                            indent: 0,
+                            endIndent: 0,
                             height: 50,
+                            thickness: 1,
                             color: purpleColor,
                           ),
                           Center(
@@ -110,7 +164,7 @@ class BookBuyerSignupScreen extends StatelessWidget {
                       ),
                       Center(
                         child: Text(
-                          "Sign Up with",
+                          "Login with",
                           style: TextStyle(color: purpleColor),
                         ),
                       ),
@@ -144,7 +198,7 @@ class BookBuyerSignupScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            "Already have an Account? ",
+                            "Don't have an Account? ",
                             style: TextStyle(
                                 color: purpleColor,
                                 fontSize: 15,
@@ -153,11 +207,11 @@ class BookBuyerSignupScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, 'BookBuyerLoginScreen');
+                              Navigator.popAndPushNamed(
+                                  context, "BookSellerSignupScreen");
                             },
                             child: Text(
-                              "Log In ",
+                              "Sign Up ",
                               style: TextStyle(
                                   color: purpleColor,
                                   fontSize: 17,

@@ -14,7 +14,8 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
   List<Widget> items = [];
 
   void getListViewItems() {
-    List<dynamic> responseList = booksRecomendationData;
+    List<dynamic> responseList =
+        booksRecomendationData; //list of maps and each map contains key value pairs
     List<Widget> widgetItemsList = [];
     responseList.forEach((post) {
       widgetItemsList.add(Padding(
@@ -22,7 +23,11 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
         child: Container(
           width: 300,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(3),
+                bottomLeft: Radius.circular(3),
+                bottomRight: Radius.circular(20)),
             color: Colors.white,
           ),
           child: Padding(
@@ -86,8 +91,12 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
     super.initState();
     getListViewItems();
     listViewController.addListener(() {
-      double value = listViewController.offset / 320;
-      //print(listViewController.offset);
+      double value = listViewController.offset /
+          320; //320 is the width of each item/widget
+      // in the list, so this formula will give the width of each upcoming item when scrolling.
+
+      //TODO implement consumer here
+
       setState(() {
         topItem = value;
       });
@@ -102,65 +111,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
       children: [
         Expanded(
           flex: 4,
-          child: Card(
-            margin: EdgeInsets.all(10),
-            elevation: 10,
-            color: Colors.white,
-            shadowColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: AutoSizeText(
-                          "GOOD EVENING",
-                          maxFontSize: 20,
-                          minFontSize: 12,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                        fit: FlexFit.loose,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                      Flexible(
-                        child: AutoSizeText(
-                          "FAIZAN AHMAD",
-                          maxFontSize: 16,
-                          minFontSize: 12,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        fit: FlexFit.loose,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
-                  ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage("images/profileicon.jpg"),
-                  )
-                ],
-              ),
-            ),
-          ),
+          child: GreetingCard(),
         ),
         Expanded(flex: 1, child: Container()),
         Expanded(
@@ -313,7 +264,11 @@ class DashBoardItem extends StatelessWidget {
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 10)],
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(3),
+                bottomLeft: Radius.circular(3),
+                bottomRight: Radius.circular(10)),
             color: purpleColor,
           ),
           child: Center(
@@ -332,6 +287,71 @@ class DashBoardItem extends StatelessWidget {
           ),
         ),
         onTap: onTap,
+      ),
+    );
+  }
+}
+
+class GreetingCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(10),
+      elevation: 10,
+      color: Colors.white,
+      shadowColor: Colors.black,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.black, width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: AutoSizeText(
+                    "GOOD EVENING",
+                    maxFontSize: 20,
+                    minFontSize: 12,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  fit: FlexFit.loose, // it will use the minimum space available
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                Flexible(
+                  child: AutoSizeText(
+                    "FAIZAN AHMAD",
+                    maxFontSize: 16,
+                    minFontSize: 12,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  fit: FlexFit.loose, // it will use the minimum space available
+                ),
+              ],
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.1,
+            ),
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage("images/profileicon.jpg"),
+            )
+          ],
+        ),
       ),
     );
   }

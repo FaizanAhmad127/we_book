@@ -3,13 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/PreLoad/PreloadProfileData.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BSBottomNavBarCN.dart';
+import 'package:we_book/Screens/BookSellerScreens/BookSellerDashBoard.dart';
 import 'package:we_book/UIs/BottomNavBarV2.dart';
-import 'package:we_book/screens/BookSellerProfile.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'BSShopDetailsScreen.dart';
 import 'BSTransactionScreen.dart';
-import 'BookSellerDashBoard.dart';
+import 'BookSellerProfile.dart';
 
 class BookSellerHomeScreen extends StatefulWidget {
   @override

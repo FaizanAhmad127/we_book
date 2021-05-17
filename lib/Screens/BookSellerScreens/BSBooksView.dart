@@ -3,9 +3,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:we_book/UIs/PurpleRoundedButton.dart';
+import 'package:we_book/Screens/BookSellerScreens/BSBooksEdit.dart';
 import 'package:we_book/constants.dart';
-import 'package:we_book/screens/BSBooksEdit.dart';
 
 class BSBooksView extends StatefulWidget {
   @override

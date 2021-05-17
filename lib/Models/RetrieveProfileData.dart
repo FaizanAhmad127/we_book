@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RetrieveProfileData {
   SharedPreferences sharedPreferences;
   var firebaseDatabaseReference = FirebaseDatabase().reference();
+
   String fullName = "fullName",
       emailAddress = "abc@gmail.com",
       physicalAddress = "123 Street",
@@ -21,7 +22,6 @@ class RetrieveProfileData {
     DataSnapshot snapshot = await firebaseDatabaseReference
         .child("$userCategory/$uid/Profile Details")
         .once();
-    print("$userCategory     $uid");
     //try catch if nothing is in snapshot
     try {
       fullName = snapshot.value["fullName"];
@@ -51,7 +51,6 @@ class RetrieveProfileData {
         .catchError((Object error) {
       print(error.toString());
     });
-    print("Snapshot value: ${snapshot.value}");
     if (snapshot.value == null) {
       sharedPreferences.setString("profilePictureURL", "nothing");
     } else {

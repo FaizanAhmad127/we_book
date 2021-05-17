@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/PreLoad/PreloadProfileData.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BBBottomNavBarCN.dart';
-import 'package:we_book/screens/BookBuyerDashBoard.dart';
-import 'package:we_book/screens/BookBuyerProfile.dart';
+import 'package:we_book/Screens/BookBuyerScreens/BookBuyerDashBoard.dart';
+import 'package:we_book/Screens/BookBuyerScreens/BookBuyerProfile.dart';
+import 'package:we_book/Screens/CommonScreens/UserProfile.dart';
 
 import 'BookBuyerBottomNavigationBar.dart';
 
@@ -35,7 +36,7 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
               if (bottomNavBarCN.getHomeScreen == true) {
                 return BookBuyerDashBoard();
               } else if (bottomNavBarCN.getProfileScreen == true) {
-                return BookBuyerProfile("Book Buyer");
+                return BookBuyerProfile();
               } else {
                 return Container();
               }

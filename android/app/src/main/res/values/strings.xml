@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finder app</string>
+    <string name="facebook_app_id">399212577778841</string>
+    <string name="fb_login_protocol_scheme">fb399212577778841</string>
+</resources>

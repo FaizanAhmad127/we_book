@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:we_book/Models/FirebaseFacebookSignIn.dart';
+import 'package:we_book/Models/FirebaseGoogleSignIn.dart';
 import 'package:we_book/Models/RetrieveProfileData.dart';
 import 'package:we_book/Models/UploadDownloadImage.dart';
 import 'package:we_book/Models/UploadProfileData.dart';
@@ -14,14 +16,14 @@ import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class BookBuyerProfile extends StatefulWidget {
+class UserProfile extends StatefulWidget {
   String category;
-  BookBuyerProfile(this.category);
+  UserProfile(this.category);
   @override
-  _BookBuyerProfileState createState() => _BookBuyerProfileState();
+  _UserProfileState createState() => _UserProfileState();
 }
 
-class _BookBuyerProfileState extends State<BookBuyerProfile> {
+class _UserProfileState extends State<UserProfile> {
   String fullName,
       email,
       address,
@@ -32,6 +34,7 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
       profilePictureURL = "nothing";
   var uploadProfileDataClassObject;
   var retrieveProfileDataClassObject;
+  SharedPreferences sharedPreferences;
   var uploadDownloadImage;
   bool isAvatarTapped = false;
 
@@ -58,7 +61,7 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
 
   Future setTextFieldData() async {
     print("SetTextFieldDAta");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
     profilePictureURL = sharedPreferences.getString("profilePictureURL");
     fullName = sharedPreferences.getString("fullName");
     email = sharedPreferences.getString("emailAddress");
@@ -90,9 +93,15 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                        onTap: () {
-                          FirebaseAuth.instance.signOut().whenComplete(() {
-                            Navigator.pushNamed(context, "LoginSignupFragment");
+                        onTap: () async {
+                          await FirebaseGoogleSignIn().signOut();
+                          await FirebaseFacebookSignIn().facebookSignOut();
+                          await FirebaseAuth.instance
+                              .signOut()
+                              .whenComplete(() {
+                            sharedPreferences.clear();
+                            Navigator.popAndPushNamed(
+                                context, "LoginSignupFragment");
                           });
                         },
                         child: Row(
@@ -139,7 +148,8 @@ class _BookBuyerProfileState extends State<BookBuyerProfile> {
                           },
                           child: CircleAvatar(
                             radius: 40,
-                            backgroundImage: profilePictureURL == "nothing"
+                            backgroundImage: profilePictureURL == "nothing" ||
+                                    profilePictureURL == null
                                 ? AssetImage("images/noimage.JPG")
                                 : NetworkImage(profilePictureURL),
                             child: isAvatarTapped != true

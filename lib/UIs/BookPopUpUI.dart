@@ -33,7 +33,6 @@ class BookPopUpUI extends StatelessWidget {
                     onTap: () {
                       Provider.of<OpenPopUpBookCN>(context, listen: false)
                           .popUpStatus = false;
-                      // Navigator.popAndPushNamed(context, "BookBuyerHomeScreen");
                     },
                     child: Container(
                       child: Icon(Icons.cancel),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_book/Models/FirebaseGoogleSignIn.dart';
 import 'file:///D:/Flutter_Apps/we_book/lib/Models/FirebaseEmailPasswordSignup.dart';
 import 'package:we_book/constants.dart';
 import 'package:screen/screen.dart';
@@ -7,11 +8,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginSignUpFragment extends StatelessWidget {
   User user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     //Screen.keepOn(true);
     // Screen.setBrightness(0.5);
-
     Size size = MediaQuery.of(context).size;
     double screenWitdh = size.width;
     double screenHeight = size.height;
@@ -86,7 +87,6 @@ class LoginSignUpFragment extends StatelessWidget {
                     child: RaisedButton(
                       elevation: 3,
                       onPressed: () {
-                        Navigator.pushNamed(context, "BookSellerLoginScreen");
                         if (user != null) {
                           Navigator.pushNamed(context, 'BookSellerHomeScreen');
                         } else {
