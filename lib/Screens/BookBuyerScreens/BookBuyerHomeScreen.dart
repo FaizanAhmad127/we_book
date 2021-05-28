@@ -26,28 +26,27 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ChangeNotifierProvider(
-          create: (context) => BBBottomNavBarCN(),
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            bottomNavigationBar: BookBuyerBottomNavigationBar(),
-            body: Consumer<BBBottomNavBarCN>(
-                builder: (context, bottomNavBarCN, _) {
-              if (bottomNavBarCN.getHomeScreen == true) {
-                return BookBuyerDashBoard();
-              } else if (bottomNavBarCN.getProfileScreen == true) {
-                return BookBuyerProfile();
-              } else {
-                return Container();
-              }
-            }),
-          )),
-    );
+        child: ChangeNotifierProvider(
+      create: (context) => BBBottomNavBarCN(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        bottomNavigationBar: BookBuyerBottomNavigationBar(),
+        body: Consumer<BBBottomNavBarCN>(builder: (context, bottomNavBarCN, _) {
+          if (bottomNavBarCN.getHomeScreen == true) {
+            return BookBuyerDashBoard();
+          } else if (bottomNavBarCN.getProfileScreen == true) {
+            return BookBuyerProfile();
+          } else {
+            return Container();
+          }
+        }),
+      ),
+    ));
   }
 }
 
-void setSharedPreferences() async {
+Future setSharedPreferences() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sharedPreferences.setString("userCategory", "Book Buyer");
-  PreloadProfileData().getReadyProfileData();
+  await PreloadProfileData().getReadyProfileData();
 }

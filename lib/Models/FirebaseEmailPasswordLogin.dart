@@ -1,4 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:we_book/constants.dart';
 
 class FirebaseEmailPasswordLogin {
   UserCredential userCredential;
@@ -19,5 +22,19 @@ class FirebaseEmailPasswordLogin {
       return "Failure";
     }
     return "Success";
+  }
+
+  Future<String> resetPassword(
+      {@required String email, @required BuildContext context}) async {
+    String result = "";
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email)
+          .whenComplete(() => result = "Success");
+    } catch (e) {
+      BotToast.showText(text: "error in resetting password $e");
+      result = "Failure";
+    }
+    return result;
   }
 }

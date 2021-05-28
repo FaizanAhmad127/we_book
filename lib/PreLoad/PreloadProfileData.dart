@@ -1,12 +1,14 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Models/RetrieveProfileData.dart';
+import 'package:we_book/Services/LocationService.dart';
 
 class PreloadProfileData {
   SharedPreferences sharedPreferences;
   RetrieveProfileData retrieveProfileDataClassObject;
 
-  void getReadyProfileData() async {
+  Future getReadyProfileData() async {
     var firebaseAuth = FirebaseAuth.instance;
     sharedPreferences = await SharedPreferences.getInstance();
 
@@ -16,7 +18,7 @@ class PreloadProfileData {
 
     retrieveProfileDataClassObject =
         RetrieveProfileData(userCategory: userCategory, uid: uid);
-    retrieveProfileDataClassObject.getProfileData();
-    retrieveProfileDataClassObject.getPictureURL();
+    await retrieveProfileDataClassObject.getProfileData();
+    await retrieveProfileDataClassObject.getPictureURL();
   }
 }

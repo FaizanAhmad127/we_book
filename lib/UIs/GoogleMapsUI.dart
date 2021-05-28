@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
-
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:we_book/Services/LocationService.dart';
 
 class GoogleMapsUI extends StatefulWidget {
   GoogleMapsUI(
@@ -29,18 +31,13 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
   Marker marker;
   Circle circle;
   GoogleMapController _controller;
-  static double latitude = 34.0060495, longitude = 71.5179581;
+  static double latitude, longitude;
 
   @override
   void initState() {
     super.initState();
-    loc();
-  }
-
-  void loc() async {
-    LocationData location = await _locationTracker.getLocation();
-    latitude = location.latitude;
-    longitude = location.longitude;
+    latitude = 34.0043534;
+    longitude = 71.5181241;
   }
 
   static final CameraPosition initialLocation = CameraPosition(
@@ -48,9 +45,8 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
     zoom: 14.4746,
   );
 
-  Future<Uint8List> getMarker() async {
-    ByteData byteData =
-        await DefaultAssetBundle.of(context).load("images/personicon.png");
+  Future<Uint8List> getMarker(String imagePath) async {
+    ByteData byteData = await DefaultAssetBundle.of(context).load(imagePath);
     return byteData.buffer.asUint8List();
   }
 
@@ -79,9 +75,8 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
 
   void getCurrentLocation() async {
     try {
-      Uint8List imageData = await getMarker();
+      Uint8List imageData = await getMarker("images/personicon.png");
       var location = await _locationTracker.getLocation();
-
       updateMarkerAndCircle(location, imageData);
 
       if (_locationSubscription != null) {
@@ -93,12 +88,6 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
         latitude = newLocalData.latitude;
         longitude = newLocalData.longitude;
         if (_controller != null) {
-          // _controller.animateCamera(CameraUpdate.newCameraPosition(
-          //     new CameraPosition(
-          //         bearing: 0,
-          //         target: LatLng(newLocalData.latitude, newLocalData.longitude),
-          //         tilt: 0,
-          //         zoom: 15.00)));
           updateMarkerAndCircle(newLocalData, imageData);
         }
       });

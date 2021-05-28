@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreenCN.dart';
 import 'package:we_book/UIs/GoogleMapsUI.dart';
-import 'package:location/location.dart';
 import 'package:we_book/UIs/QRCodeUI.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/BookPopUpUI.dart';
@@ -57,7 +57,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
         ChangeNotifierProvider(
           create: (context) => OpenPopUpBookCN(),
           lazy: false,
-        )
+        ),
       ],
       child: GoogleMapsUI(
         bookMarkers: myMarkers,
@@ -106,7 +106,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
                       backgroundColor: MaterialStateProperty.all(purpleColor),
                     ),
                     onPressed: () {
-                      bookMarker();
+                      updateMarker();
                     },
                     child: Text(
                       "SEARCH",
@@ -146,15 +146,9 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
     );
   }
 
-  void bookMarker() async {
-    Location location = Location();
-    var locationData = await location.getLocation();
+  Future updateMarker() async {
+    BotToast.showLoading();
     Uint8List imageData = await getMarker();
-    updateMarker(locationData, imageData);
-  }
-
-  void updateMarker(LocationData locationData, Uint8List imageData) {
-    //var latlng = LatLng(locationData.latitude, locationData.longitude);
 
     for (int i = 0; i < lat.length; i++) {
       myMarkers.add(Marker(
@@ -173,6 +167,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
         },
       ));
     }
+    BotToast.closeAllLoading();
     setState(() {});
   }
 

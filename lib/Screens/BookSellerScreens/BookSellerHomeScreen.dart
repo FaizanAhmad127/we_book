@@ -52,7 +52,7 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
   }
 }
 
-void setSharedPreferences() async {
+Future setSharedPreferences() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sharedPreferences.setString("userCategory", "Book Seller");
   PreloadProfileData().getReadyProfileData();
