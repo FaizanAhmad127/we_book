@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -197,30 +197,36 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: RaisedButton(
-                      child: AutoSizeText(
-                        "Clear Filter",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: purpleColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: purpleColor,
+                    ),
+                    child: AutoSizeText(
+                      "Clear Filter",
+                      style: TextStyle(color: Colors.white),
+                    ),
                       onPressed: () {
                         setState(() {
                           isPicked = false;
                           getListViewItems();
                         });
-                      }),
+                      }
+                  ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: RaisedButton(
-                      child: AutoSizeText(
-                        "Filter By Date",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: purpleColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: purpleColor,
+                    ),
+                    child: AutoSizeText(
+                      "Filter By Date",
+                      style: TextStyle(color: Colors.white),
+                    ),
                       onPressed: () {
                         pickDate();
-                      }),
+                      }
+                  )
                 )
               ],
             )),

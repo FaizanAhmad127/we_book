@@ -44,10 +44,19 @@ dependencies:
   shared_preferences: ^2.0.5
   google_sign_in: ^5.0.3
   flutter_facebook_auth: ^3.3.3+1
+  flutter_native_splash: ^1.2.0 #https://www.youtube.com/watch?v=8ME8Czqc-Oc do watch it first
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: images/splashimage.png
+  android: true
+  ios: true
+  android_gravity: fill
+  ios_content_mode: scaleAspectfill
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

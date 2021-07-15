@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
@@ -72,14 +73,16 @@ class QRCodeUI extends StatelessWidget {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.08,
                     width: MediaQuery.of(context).size.width * 0.7,
-                    child: RaisedButton(
-                      elevation: 3,
-                      onPressed: () {},
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 3,
+                        primary: purpleColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
-                      color: purpleColor,
-                      child: Text(
+                      onPressed: () {},
+                      child: AutoSizeText(
                         "Save QR Code",
                         style: TextStyle(
                             fontSize: 20,

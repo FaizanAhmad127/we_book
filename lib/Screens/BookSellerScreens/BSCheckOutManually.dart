@@ -148,13 +148,15 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                               ),
                             ),
                             Expanded(
-                              child: RaisedButton(
-                                color: purpleColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(5),
-                                        bottomLeft: Radius.circular(5))),
-                                elevation: 10,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 10,
+                                  primary: purpleColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5),
+                                          bottomLeft: Radius.circular(5))),
+                                ),
                                 child: AutoSizeText(
                                   "CHECK OUT",
                                   minFontSize: 8,
@@ -215,12 +217,15 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                         ),
                                         actions: [
                                           Center(
-                                            child: RaisedButton(
-                                                child: Text(
-                                                  "Check Out",
-                                                ),
-                                                color: purpleColor,
-                                                onPressed: () {}),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: purpleColor,
+                                              ),
+                                              child: Text(
+                                                "Check Out",
+                                              ),
+                                              onPressed: () {},
+                                            ),
                                           )
                                         ],
                                       ),

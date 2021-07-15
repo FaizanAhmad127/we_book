@@ -257,17 +257,19 @@ class BookPopUpUI extends StatelessWidget {
               Container(
                 height: MediaQuery.of(context).size.height * 0.08,
                 width: MediaQuery.of(context).size.width * 0.7,
-                child: RaisedButton(
-                  elevation: 3,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 3,
+                    primary: purpleColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                   onPressed: () {
                     Provider.of<OpenQRCodeScreenCN>(context, listen: false)
                         .qrStatus = true;
                     //_controller.add(true);
                   },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: purpleColor,
                   child: AutoSizeText(
                     "Generate QR Code",
                     maxFontSize: 20,

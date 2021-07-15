@@ -50,8 +50,14 @@ class LoginSignUpFragment extends StatelessWidget {
                   child: Container(
                     height: screenHeight * 0.2,
                     width: screenWitdh * 0.8,
-                    child: RaisedButton(
-                      elevation: 3,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 3,
+                        primary: purpleColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
                       onPressed: () {
                         if (user != null) {
                           Navigator.pushNamed(context, 'BookBuyerHomeScreen');
@@ -59,10 +65,6 @@ class LoginSignUpFragment extends StatelessWidget {
                           Navigator.pushNamed(context, 'BookBuyerLoginScreen');
                         }
                       },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      color: purpleColor,
                       child: Text(
                         "BOOK BUYER",
                         style: TextStyle(
@@ -84,8 +86,14 @@ class LoginSignUpFragment extends StatelessWidget {
                   child: Container(
                     height: screenHeight * 0.2,
                     width: screenWitdh * 0.8,
-                    child: RaisedButton(
-                      elevation: 3,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 3,
+                        primary: purpleColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
                       onPressed: () {
                         if (user != null) {
                           Navigator.pushNamed(context, 'BookSellerHomeScreen');
@@ -93,12 +101,8 @@ class LoginSignUpFragment extends StatelessWidget {
                           Navigator.pushNamed(context, 'BookSellerLoginScreen');
                         }
                       },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      color: purpleColor,
                       child: Text(
-                        "BOOK SELLER",
+                        "BOOK BUYER",
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: "Source Sans Pro",

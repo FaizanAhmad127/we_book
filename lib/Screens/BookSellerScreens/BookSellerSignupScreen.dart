@@ -82,16 +82,17 @@ class BookSellerSignupScreen extends StatelessWidget {
                         child: Container(
                           height: screenHeight * 0.065,
                           width: screenWitdh * 0.8,
-                          child: RaisedButton(
-                            elevation: 3,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 3,
+                              primary: purpleColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.pushNamed(context, "GetSellerLocation");
                             },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            color: purpleColor,
-                            textColor: Colors.white,
                             child: Text(
                               "Fetch Location (Optional)",
                               style: TextStyle(

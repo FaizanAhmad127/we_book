@@ -226,12 +226,17 @@ class _BSBooksViewState extends State<BSBooksView> {
                             ),
                             actions: [
                               Center(
-                                child: RaisedButton(
-                                    child: Text(
-                                      "Delete",
-                                    ),
-                                    color: purpleColor,
-                                    onPressed: () {}),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: purpleColor,
+                                  ),
+                          child: Text(
+                                  "Delete",
+                                ),
+                                  onPressed: (){
+
+                                  },
+                                ),
                               )
                             ],
                           ),

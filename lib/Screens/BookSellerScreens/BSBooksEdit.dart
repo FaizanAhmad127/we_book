@@ -94,11 +94,13 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                                     )),
                                 Expanded(
                                   flex: 1,
-                                  child: RaisedButton(
-                                    color: purpleColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: purpleColor,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
                                     child: AutoSizeText(
                                       "Upload",
                                       style: TextStyle(

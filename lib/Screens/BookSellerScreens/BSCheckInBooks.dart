@@ -59,11 +59,13 @@ class _CheckInBooksState extends State<CheckInBooks> {
                                     )),
                                 Expanded(
                                   flex: 1,
-                                  child: RaisedButton(
-                                    color: purpleColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: purpleColor,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
                                     child: AutoSizeText(
                                       "Upload",
                                       style: TextStyle(
