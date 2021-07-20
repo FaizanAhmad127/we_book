@@ -38,7 +38,8 @@ class RetrieveProfileData {
       sharedPreferences.setString("country", country);
       sharedPreferences.setString("phoneNumber", phoneNumber);
     } catch (e) {
-      BotToast.showText(text: "Something wrong in RetrieveProfileData.dart");
+      print("Something wrong in RetrieveProfileData.dart $e");
+      BotToast.showText(text: "Something wrong in RetrieveProfileData.dart $e");
     }
   }
 

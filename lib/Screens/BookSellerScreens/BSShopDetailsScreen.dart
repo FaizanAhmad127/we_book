@@ -1,31 +1,79 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:we_book/Models/PictureManagement/UploadDownloadImage.dart';
+import 'package:we_book/Models/ShopDetails/FirebaseRetrieveShopDetails.dart';
+import 'package:we_book/Models/ShopDetails/FirebaseUploadShopDetails.dart';
 import 'package:we_book/UIs/MyAwesomeTextField.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
 
 class BSShopDetailsScreen extends StatefulWidget {
+  BSShopDetailsScreen();
   @override
   _BSShopDetailsScreenState createState() => _BSShopDetailsScreenState();
 }
 
 class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
-  static String shopName = "Faisal Book Depot";
-  static String shopAddress = "Shop 3, Saddar Rd, Peshawar";
-  static String shopCity = "Peshawar";
-  static String shopCountry = "Pakistan";
-  static String shopPhoneNumber = "03021234567";
+  String shopName = "",
+      shopAddress = "Shop 3, Saddar Rd, Peshawar",
+      shopCity = "Peshawar",
+      shopCountry = "Pakistan",
+      shopPhoneNumber = "03021234567",
+      uid = "",
+      shopPictureURL = "nothing";
 
-  TextEditingController shopNameController =
-      TextEditingController(text: shopName);
-  TextEditingController shopAddressController =
-      TextEditingController(text: shopAddress);
-  TextEditingController shopCityController =
-      TextEditingController(text: shopCity);
-  TextEditingController shopCountryController =
-      TextEditingController(text: shopCountry);
-  TextEditingController shopPhoneNumberController =
-      TextEditingController(text: shopPhoneNumber);
+  FirebaseUploadShopDetails firebaseUploadShopDetails;
+  FirebaseRetrieveShopDetails firebaseRetrieveShopDetails;
+  SharedPreferences sharedPreferences;
+  UploadDownloadImage uploadDownloadImage;
+  bool isAvatarTapped = false;
+
+  TextEditingController shopNameController,
+      shopAddressController,
+      shopCityController,
+      shopCountryController,
+      shopPhoneNumberController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    var firebaseAuth = FirebaseAuth.instance;
+    uid = firebaseAuth.currentUser.uid;
+    uploadDownloadImage = UploadDownloadImage();
+    firebaseUploadShopDetails = FirebaseUploadShopDetails(uid: uid);
+    firebaseRetrieveShopDetails = FirebaseRetrieveShopDetails(uid: uid);
+    setTextFieldData();
+  }
+
+  Future setTextFieldData() async {
+    print("SetTextFieldDAta");
+    sharedPreferences = await SharedPreferences.getInstance();
+    shopPictureURL = sharedPreferences.getString("shopPictureURL");
+    shopName = sharedPreferences.getString("shopName");
+    shopAddress = sharedPreferences.getString("shopAddress");
+    shopCity = sharedPreferences.getString("shopCity");
+    shopCountry = sharedPreferences.getString("shopCountry");
+    shopPhoneNumber = sharedPreferences.getString("shopPhoneNumber");
+    shopNameController = TextEditingController(text: shopName);
+    shopAddressController = TextEditingController(text: shopAddress);
+    shopCityController = TextEditingController(text: shopCity);
+    shopCountryController = TextEditingController(text: shopCountry);
+    shopPhoneNumberController = TextEditingController(text: shopPhoneNumber);
+    setState(() {});
+  }
+
+  ImageProvider checkUrl(String url) {
+    try {
+      return NetworkImage(url);
+    } catch (e) {
+      return AssetImage("images/faisalbookdepot.jpg");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +103,7 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
                         children: [
                           Flexible(
                             child: AutoSizeText(
-                              "FAISAL BOOK DEPOT",
+                              shopName == null ? "Shop Name" : shopName,
                               maxLines: 1,
                               maxFontSize: 20,
                               minFontSize: 12,
@@ -72,7 +120,9 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
                           ),
                           Flexible(
                             child: AutoSizeText(
-                              "Shop 3, Saddar Rd, Pesahwar",
+                              shopAddress == null
+                                  ? "Shop Address"
+                                  : shopAddress,
                               maxFontSize: 16,
                               minFontSize: 12,
                               textAlign: TextAlign.start,
@@ -88,11 +138,71 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.1,
                       ),
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage:
-                            AssetImage("images/faisalbookdepot.jpg"),
-                      )
+                      GestureDetector(
+                        onTap: () {
+                          if (isAvatarTapped == true) {
+                            isAvatarTapped = false;
+                          } else {
+                            isAvatarTapped = true;
+                          }
+                          setState(() {});
+                        },
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundImage: shopPictureURL == "nothing" ||
+                                  shopPictureURL == null
+                              ? AssetImage("images/faisalbookdepot.jpg")
+                              : checkUrl(shopPictureURL),
+                          child: isAvatarTapped != true
+                              ? Container()
+                              : IconButton(
+                                  alignment: Alignment.bottomCenter,
+                                  tooltip: "Change Shop Picture",
+                                  iconSize: 20,
+                                  color: Colors.white,
+                                  icon: Icon(Icons.cloud_upload_sharp),
+                                  onPressed: () async {
+                                    isAvatarTapped = false;
+                                    String saveUrl =
+                                        shopPictureURL; //save the url and use it if user don't select anything from gallery
+                                    if (uid == null) {
+                                      BotToast.showText(
+                                          text:
+                                              "User is not registered/ Uid NULL");
+                                    } else {
+                                      print("Book Seller/$uid");
+                                      try {
+                                        shopPictureURL =
+                                            await uploadDownloadImage // user will pick the image now...
+                                                .imagePicker(
+                                                    //this method will also store the image in firebase storage and return the url of an image
+                                                    "Book Seller/$uid/Shop Details",
+                                                    "shopPicture");
+                                      } catch (e) {
+                                        shopPictureURL = "nothing";
+                                      }
+
+                                      if (shopPictureURL != "nothing") {
+                                        //if image is successfully picked
+                                        BotToast.showLoading();
+                                        await firebaseUploadShopDetails
+                                            .updateShopPictureURL(
+                                                url:
+                                                    shopPictureURL) // upload the image url to firebase realtime database
+                                            .then((value) =>
+                                                firebaseRetrieveShopDetails
+                                                    .getPictureURL()); //this method will now get the picture url and show image on defined part of a screen
+
+                                        BotToast.closeAllLoading();
+                                      } else {
+                                        shopPictureURL = saveUrl;
+                                      }
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -142,7 +252,25 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
                   buttonText: "SAVE",
                   buttonWidth: 0.7,
                   buttonHeight: 0.02,
-                  onPressed: () {},
+                  onPressed: () async {
+                    String status = "";
+                    shopName = shopNameController.text;
+                    shopAddress = shopAddressController.text;
+                    shopCity = shopCityController.text;
+                    shopCountry = shopCountryController.text;
+                    shopPhoneNumber = shopPhoneNumberController.text;
+                    status = await firebaseUploadShopDetails.insertShopDetails(
+                      shopName: shopName,
+                      shopAddress: shopAddress,
+                      shopCity: shopCity,
+                      shopCountry: shopCountry,
+                      shopPhoneNumber: shopPhoneNumber,
+                    );
+                    if (status == "Success") {
+                      await firebaseRetrieveShopDetails.getProfileData();
+                    }
+                    setTextFieldData();
+                  },
                 )),
             Expanded(
                 child: Padding(

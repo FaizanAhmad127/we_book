@@ -6,18 +6,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:we_book/Models/FirebaseFacebookSignIn.dart';
-import 'package:we_book/Models/FirebaseGoogleSignIn.dart';
-import 'package:we_book/Models/RetrieveProfileData.dart';
-import 'package:we_book/Models/UploadDownloadImage.dart';
-import 'package:we_book/Models/UploadProfileData.dart';
+import 'package:we_book/Models/Authentications/FirebaseFacebookSignIn.dart';
+import 'package:we_book/Models/Authentications/FirebaseGoogleSignIn.dart';
+import 'package:we_book/Models/UserProfileDetails/RetrieveProfileData.dart';
+import 'package:we_book/Models/PictureManagement/UploadDownloadImage.dart';
+import 'package:we_book/Models/UserProfileDetails/UploadProfileData.dart';
 import 'package:we_book/UIs/MyAwesomeTextField.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserProfile extends StatefulWidget {
-  String category;
+  final String category;
   UserProfile(this.category);
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -76,6 +76,14 @@ class _UserProfileState extends State<UserProfile> {
     countryController = TextEditingController(text: country);
     phoneNumberController = TextEditingController(text: phoneNumber);
     setState(() {});
+  }
+
+  ImageProvider checkUrl(String url) {
+    try {
+      return NetworkImage(url);
+    } catch (e) {
+      return AssetImage("images/noimage.JPG");
+    }
   }
 
   @override
@@ -151,7 +159,7 @@ class _UserProfileState extends State<UserProfile> {
                             backgroundImage: profilePictureURL == "nothing" ||
                                     profilePictureURL == null
                                 ? AssetImage("images/noimage.JPG")
-                                : NetworkImage(profilePictureURL),
+                                : checkUrl(profilePictureURL),
                             child: isAvatarTapped != true
                                 ? Container()
                                 : IconButton(
@@ -161,30 +169,42 @@ class _UserProfileState extends State<UserProfile> {
                                     color: Colors.white,
                                     icon: Icon(Icons.cloud_upload_sharp),
                                     onPressed: () async {
+                                      isAvatarTapped = false;
+                                      String saveUrl =
+                                          profilePictureURL; //save the url and use it if user don't select anything from gallery
                                       if (uid == null) {
                                         BotToast.showText(
                                             text:
                                                 "User is not registered/ Uid NULL");
                                       } else {
                                         print("${widget.category}/$uid");
-                                        String url = profilePictureURL =
-                                            await uploadDownloadImage // use will pick the image now...
-                                                .imagePicker(
-                                                    //this method will also store the image in firebase storage and return the url of an image
-                                                    "${widget.category}/$uid",
-                                                    "profilePicture");
-                                        if (url != "nothing") {
+                                        try {
+                                          profilePictureURL =
+                                              await uploadDownloadImage // user will pick the image now...
+                                                  .imagePicker(
+                                                      //this method will also store the image in firebase storage and return the url of an image
+                                                      "${widget.category}/$uid",
+                                                      "profilePicture");
+                                        } catch (e) {
+                                          profilePictureURL = "nothing";
+                                        }
+
+                                        if (profilePictureURL != "nothing") {
                                           //if image is successfully picked
+                                          BotToast.showLoading();
                                           await uploadProfileDataClassObject
                                               .updatePictureURL(
                                                   url:
-                                                      url) // upload the image url to firebase realtime database
+                                                      profilePictureURL) // upload the image url to firebase realtime database
                                               .then((value) =>
                                                   retrieveProfileDataClassObject //this method will now get the picture url and show image on defined part of a screen
                                                       .getPictureURL());
+                                          BotToast.closeAllLoading();
+                                        } else {
+                                          profilePictureURL = saveUrl;
                                         }
-                                        setState(() {});
                                       }
+                                      setState(() {});
                                     },
                                   ),
                           ),
@@ -266,13 +286,15 @@ class _UserProfileState extends State<UserProfile> {
                   buttonWidth: 0.7,
                   buttonHeight: 0.02,
                   onPressed: () async {
+                    String status = "";
                     fullName = fullNameController.text;
                     email = emailController.text;
                     address = addressController.text;
                     city = cityController.text;
                     country = countryController.text;
                     phoneNumber = phoneNumberController.text;
-                    await uploadProfileDataClassObject.insertDataToDatabase(
+                    status =
+                        await uploadProfileDataClassObject.insertDataToDatabase(
                       fullName: fullName,
                       emailAddress: email,
                       physicalAddress: address,
@@ -280,6 +302,11 @@ class _UserProfileState extends State<UserProfile> {
                       country: country,
                       phoneNumber: phoneNumber,
                     );
+                    if (status == "Success") {
+                      await RetrieveProfileData(
+                              userCategory: widget.category, uid: uid)
+                          .getProfileData();
+                    }
                     setTextFieldData();
                   },
                 )),

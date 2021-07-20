@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BBBottomNavBarCN.dart';
 import 'package:we_book/constants.dart';
 
 class BookBuyerBottomNavigationBar extends StatefulWidget {
+  final String fullName;
+  BookBuyerBottomNavigationBar({this.fullName});
   @override
   _BookBuyerBottomNavigationBarState createState() =>
       _BookBuyerBottomNavigationBarState();
@@ -14,6 +17,11 @@ class BookBuyerBottomNavigationBar extends StatefulWidget {
 class _BookBuyerBottomNavigationBarState
     extends State<BookBuyerBottomNavigationBar> {
   int selectedIndex;
+
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FFNavigationBar(
@@ -49,7 +57,7 @@ class _BookBuyerBottomNavigationBarState
         ),
         FFNavigationBarItem(
           iconData: Icons.account_circle,
-          label: 'Faizan',
+          label: widget.fullName == null ? "Profile" : widget.fullName,
         ),
       ],
     );

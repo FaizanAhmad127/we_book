@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,5 +56,6 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
 Future setSharedPreferences() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sharedPreferences.setString("userCategory", "Book Seller");
-  PreloadProfileData().getReadyProfileData();
+  await PreloadProfileData().getReadyProfileData();
+  BotToast.closeAllLoading();
 }

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:we_book/Models/FirebaseGoogleSignIn.dart';
-import 'file:///D:/Flutter_Apps/we_book/lib/Models/FirebaseEmailPasswordSignup.dart';
 import 'package:we_book/constants.dart';
-import 'package:screen/screen.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -102,7 +99,7 @@ class LoginSignUpFragment extends StatelessWidget {
                         }
                       },
                       child: Text(
-                        "BOOK BUYER",
+                        "BOOK SELLER",
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: "Source Sans Pro",

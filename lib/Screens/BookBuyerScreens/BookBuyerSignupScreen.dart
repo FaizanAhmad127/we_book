@@ -1,12 +1,86 @@
+import 'dart:async';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:we_book/Models/FirebaseEmailPasswordSignup.dart';
+import 'package:flutter/widgets.dart';
+import 'package:we_book/Models/Authentications/FirebaseEmailPasswordSignup.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 
-class BookBuyerSignupScreen extends StatelessWidget {
+StreamController<String> fullNameStreamController =
+    StreamController<String>.broadcast();
+StreamController<String> phoneNumberStreamController =
+    StreamController<String>.broadcast();
+StreamController<String> emailStreamController =
+    StreamController<String>.broadcast();
+StreamController<String> passwordStreamController =
+    StreamController<String>.broadcast();
+StreamController<String> confirmPasswordStreamController =
+    StreamController<String>.broadcast();
+
+class BookBuyerSignupScreen extends StatefulWidget {
+  @override
+  _BookBuyerSignupScreenState createState() => _BookBuyerSignupScreenState();
+}
+
+class _BookBuyerSignupScreenState extends State<BookBuyerSignupScreen> {
+  String fullName = "",
+      phoneNumber = "",
+      email = "",
+      password = "",
+      confirmPassword = "";
+
+  void initState() {
+    super.initState();
+    fullNameStreamController.stream.listen((value) {
+      fullName = value;
+    });
+    phoneNumberStreamController.stream.listen((value) {
+      phoneNumber = value;
+    });
+    emailStreamController.stream.listen((value) {
+      email = value;
+    });
+    passwordStreamController.stream.listen((value) {
+      password = value;
+    });
+    confirmPasswordStreamController.stream.listen((value) {
+      confirmPassword = value;
+    });
+  }
+
+  String validateTextFields(String fulName, String phoneNumber, String email,
+      String password, String confirmPassword) {
+    String status;
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+    if (fullName.isNotEmpty &&
+        phoneNumber.isNotEmpty &&
+        email.isNotEmpty &&
+        password.isNotEmpty &&
+        confirmPassword.isNotEmpty) {
+      if (emailValid == true) {
+        if (password == confirmPassword) {
+          status = "Success";
+        } else {
+          BotToast.showText(text: "Both passwords are not similar");
+          status = "Failure";
+        }
+      } else {
+        BotToast.showText(text: "Email pattern is wrong");
+        status = "Failure";
+      }
+    } else {
+      BotToast.showText(text: "One of the field is empty");
+      status = "Failure";
+    }
+
+    return status;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,29 +114,35 @@ class BookBuyerSignupScreen extends StatelessWidget {
                         outsideText: 'Full Name',
                         hintText: 'Anthony Hofstad',
                         icon: Icons.account_box,
+                        streamController: fullNameStreamController,
                       ),
                       TextFieldWidget(
                         outsideText: 'Phone Number',
                         hintText: '+923021234567',
                         icon: Icons.phone,
+                        keyboardType: TextInputType.phone,
+                        streamController: phoneNumberStreamController,
                       ),
                       TextFieldWidget(
                         outsideText: 'Email',
                         hintText: 'abc@gmail.com',
                         icon: Icons.email,
                         keyboardType: TextInputType.emailAddress,
+                        streamController: emailStreamController,
                       ),
                       TextFieldWidget(
                         outsideText: 'Password',
                         hintText: 'Password',
                         icon: Icons.enhanced_encryption,
                         obscureText: true,
+                        streamController: passwordStreamController,
                       ),
                       TextFieldWidget(
                         outsideText: 'Confirm Password',
                         hintText: 'Confirm Password',
                         icon: Icons.lock,
                         obscureText: true,
+                        streamController: confirmPasswordStreamController,
                       ),
                       SizedBox(
                         width: 0,
@@ -74,16 +154,21 @@ class BookBuyerSignupScreen extends StatelessWidget {
                             buttonHeight: 0.065,
                             buttonWidth: 0.8,
                             onPressed: () async {
-                              String result =
-                                  await FirebaseEmailPasswordSignup()
-                                      .registration(
-                                          "faizanahmad.imsc@gmail.com",
-                                          "12345678");
-                              if (result == "Success") {
-                                Navigator.popAndPushNamed(
-                                    context, "BookBuyerLoginScreen");
-                              } else if (result == "Failure") {
-                                BotToast.showText(text: "Failed to signup");
+                              if (validateTextFields(fullName, phoneNumber,
+                                      email, password, confirmPassword) ==
+                                  "Success") {
+                                String result =
+                                    await FirebaseEmailPasswordSignup()
+                                        .registration(
+                                            fullName: fullName,
+                                            phoneNumber: phoneNumber,
+                                            email: email,
+                                            password: password,
+                                            userCategory: "Book Buyer");
+                                if (result == "Success") {
+                                  Navigator.popAndPushNamed(
+                                      context, "BookBuyerLoginScreen");
+                                }
                               }
                             }),
                       ),
@@ -153,7 +238,7 @@ class BookBuyerSignupScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(
+                              Navigator.pushReplacementNamed(
                                   context, 'BookBuyerLoginScreen');
                             },
                             child: Text(

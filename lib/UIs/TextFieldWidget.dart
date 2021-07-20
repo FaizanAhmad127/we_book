@@ -11,7 +11,7 @@ class TextFieldWidget extends StatelessWidget {
       this.obscureText = false,
       this.keyboardType,
       this.streamController,
-      this.textController,
+      // this.textController,
       this.suffixIcon});
   final String outsideText;
   final String hintText;
@@ -21,11 +21,11 @@ class TextFieldWidget extends StatelessWidget {
   var getValue = "";
   TextInputType keyboardType;
   StreamController<String> streamController;
-  TextEditingController textController;
+  // TextEditingController textController;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double screenWitdh = size.width;
+    //  double screenWitdh = size.width;
     double screenHeight = size.height;
 
     return Column(
@@ -50,7 +50,7 @@ class TextFieldWidget extends StatelessWidget {
             color: Colors.grey[300],
           ),
           child: TextField(
-            controller: textController,
+            // controller: textController,
             keyboardType: keyboardType,
             obscureText: obscureText,
             decoration: InputDecoration(

@@ -1,6 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:we_book/Models/RetrieveProfileData.dart';
+import 'package:we_book/Models/UserProfileDetails/RetrieveProfileData.dart';
 
 class UploadProfileData {
   var firebaseDatabaseReference = FirebaseDatabase().reference();
@@ -10,13 +10,14 @@ class UploadProfileData {
     this.uid,
   });
 
-  Future insertDataToDatabase(
-      {String fullName,
-      String emailAddress,
-      String physicalAddress,
-      String city,
-      String country,
-      String phoneNumber}) async {
+  Future<String> insertDataToDatabase(
+      {String fullName = "",
+      String emailAddress = "",
+      String physicalAddress = "",
+      String city = "",
+      String country = "",
+      String phoneNumber = ""}) async {
+    String status = "";
     await firebaseDatabaseReference
         .child("$userCategory/$uid/Profile Details")
         .update({
@@ -27,13 +28,14 @@ class UploadProfileData {
       "country": country,
       "phoneNumber": phoneNumber,
     }).whenComplete(() {
-      BotToast.showText(text: "Data Saved");
+      print("user data is saved");
+      status = "Success";
     }).catchError((Object error) {
-      BotToast.showText(text: "Data not saved/Error");
+      print("user Data not saved/Error");
+      status = "Failure";
     });
     print("UploadProfileData.dart");
-    await RetrieveProfileData(userCategory: userCategory, uid: uid)
-        .getProfileData();
+    return status;
   }
 
   Future updatePictureURL({String url}) async {

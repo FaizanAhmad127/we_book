@@ -44,6 +44,7 @@ class _GetSellerLocationState extends State<GetSellerLocation> {
       body: Stack(
         children: [
           GoogleMap(
+            myLocationEnabled: true,
             initialCameraPosition: initialLocation,
             onCameraMove: (cameraPosition) {
               currentLongitude = cameraPosition.target.longitude;

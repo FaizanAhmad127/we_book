@@ -2,10 +2,9 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:we_book/Models/FirebaseEmailPasswordLogin.dart';
-import 'package:we_book/Models/FirebaseFacebookSignIn.dart';
-import 'package:we_book/Models/FirebaseGoogleSignIn.dart';
+import 'package:we_book/Models/Authentications/FirebaseEmailPasswordLogin.dart';
+import 'package:we_book/Models/Authentications/FirebaseFacebookSignIn.dart';
+import 'package:we_book/Models/Authentications/FirebaseGoogleSignIn.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -224,17 +223,15 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                             buttonHeight: 0.065,
                             buttonWidth: 0.8,
                             onPressed: () async {
-                              BotToast.showLoading();
                               print("email: $email  and password: $password ");
                               String result = await FirebaseEmailPasswordLogin()
                                   .login(email: email, password: password);
                               if (result == "Success") {
-                                Navigator.pushNamed(
+                                Navigator.pushReplacementNamed(
                                     context, "BookBuyerHomeScreen");
                               } else if (result == "Failure") {
-                                BotToast.showText(text: "Invalid Creditials");
+                                BotToast.showText(text: "Invalid Credentials");
                               }
-                              BotToast.closeAllLoading();
                             }),
                       ),
                       SizedBox(
@@ -278,7 +275,7 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                               String status = await FirebaseFacebookSignIn()
                                   .signInWithFacebook();
                               if (status == "Success") {
-                                Navigator.popAndPushNamed(
+                                Navigator.pushNamed(
                                     context, "BookBuyerHomeScreen");
                               }
                             },

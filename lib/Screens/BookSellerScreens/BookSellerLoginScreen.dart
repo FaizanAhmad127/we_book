@@ -4,7 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:we_book/Models/FirebaseEmailPasswordLogin.dart';
+import 'package:we_book/Models/Authentications/FirebaseEmailPasswordLogin.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -133,8 +133,8 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                             } else if (result == "Failure") {
                               BotToast.showText(text: "Invalid Creditials");
                               print("Failed to login");
+                              BotToast.closeAllLoading();
                             }
-                            BotToast.closeAllLoading();
                           },
                         ),
                       ),
