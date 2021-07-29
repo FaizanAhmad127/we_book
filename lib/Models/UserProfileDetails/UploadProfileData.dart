@@ -11,12 +11,12 @@ class UploadProfileData {
   });
 
   Future<String> insertDataToDatabase(
-      {String fullName = "",
-      String emailAddress = "",
-      String physicalAddress = "",
-      String city = "",
-      String country = "",
-      String phoneNumber = ""}) async {
+      {String fullName = "Full Name",
+      String emailAddress = "Enter email address..",
+      String physicalAddress = "Enter you address..",
+      String city = "Enter your city name",
+      String country = "Enter your country name",
+      String phoneNumber = "Enter your phone number"}) async {
     String status = "";
     await firebaseDatabaseReference
         .child("$userCategory/$uid/Profile Details")

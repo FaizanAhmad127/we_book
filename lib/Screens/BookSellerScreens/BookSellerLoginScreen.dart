@@ -4,7 +4,11 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Models/Authentications/FirebaseEmailPasswordLogin.dart';
+import 'package:we_book/Models/Authentications/FirebaseFacebookSignIn.dart';
+import 'package:we_book/Models/Authentications/FirebaseGoogleSignIn.dart';
+import 'package:we_book/PreLoad/PreloadProfileData.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -34,6 +38,18 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
     passwordStreamController.stream.listen((value) {
       password = value;
     });
+  }
+
+  String validateTextFields({String email, String password}) {
+    String status = "";
+    if (email.isEmpty || password.isEmpty) {
+      status = "Failure";
+      BotToast.showText(
+          text: "One of the Fields are empty!", duration: Duration(seconds: 3));
+    } else {
+      status = "Success";
+    }
+    return status;
   }
 
   @override
@@ -122,18 +138,25 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                           buttonHeight: 0.065,
                           buttonWidth: 0.8,
                           onPressed: () async {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            BotToast.showLoading();
-                            print("email: $email  and password: $password ");
-                            String result = await FirebaseEmailPasswordLogin()
-                                .login(email: email, password: password);
-                            if (result == "Success") {
-                              Navigator.popAndPushNamed(
-                                  context, "BookSellerHomeScreen");
-                            } else if (result == "Failure") {
-                              BotToast.showText(text: "Invalid Creditials");
-                              print("Failed to login");
-                              BotToast.closeAllLoading();
+                            if (validateTextFields(
+                                    email: email, password: password) ==
+                                "Success") {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              BotToast.showLoading();
+                              print("email: $email  and password: $password ");
+                              String result = await FirebaseEmailPasswordLogin()
+                                  .login(
+                                      email: email,
+                                      password: password,
+                                      userCategory: "Book Seller");
+                              if (result == "Success") {
+                                Navigator.popAndPushNamed(
+                                    context, "BookSellerHomeScreen");
+                              } else if (result == "Failure") {
+                                BotToast.showText(text: "Invalid Credentials");
+                                print("Failed to login");
+                                BotToast.closeAllLoading();
+                              }
                             }
                           },
                         ),
@@ -174,20 +197,39 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          CircleAvatar(
-                            child: GestureDetector(),
-                            backgroundImage:
-                                AssetImage("images/facebookicon.png"),
-                            backgroundColor: Colors.white,
+                          GestureDetector(
+                            onTap: () async {
+                              String status = await FirebaseFacebookSignIn()
+                                  .signInWithFacebook(
+                                      userCategory: "Book Seller");
+                              if (status == "Success") {
+                                Navigator.pushNamed(
+                                    context, "BookSellerHomeScreen");
+                              }
+                            },
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("images/facebookicon.png"),
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                           SizedBox(
                             width: screenWidth * 0.1,
                           ),
-                          CircleAvatar(
-                            child: GestureDetector(),
-                            backgroundImage:
-                                AssetImage("images/googleicon.png"),
-                            backgroundColor: Colors.white,
+                          GestureDetector(
+                            onTap: () async {
+                              String status = await FirebaseGoogleSignIn()
+                                  .signIn(userCategory: "Book Seller");
+                              if (status == "Success") {
+                                Navigator.popAndPushNamed(
+                                    context, "BookSellerHomeScreen");
+                              }
+                            },
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("images/googleicon.png"),
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                         ],
                       ),

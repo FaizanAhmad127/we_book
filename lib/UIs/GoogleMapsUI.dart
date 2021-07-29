@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:we_book/Services/LocationService.dart';
 
 class GoogleMapsUI extends StatefulWidget {
   GoogleMapsUI(
@@ -16,9 +13,9 @@ class GoogleMapsUI extends StatefulWidget {
       this.myPopUp,
       this.myQRCode})
       : super(key: key);
-  Widget mySearchFieldAndButton;
-  Widget myPopUp;
-  Widget myQRCode;
+  final Widget mySearchFieldAndButton;
+  final Widget myPopUp;
+  final Widget myQRCode;
   Set<Marker> bookMarkers = {};
 
   @override

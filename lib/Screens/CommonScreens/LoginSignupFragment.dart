@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginSignUpFragment extends StatelessWidget {
-  User user = FirebaseAuth.instance.currentUser;
+  final User user = FirebaseAuth.instance.currentUser;
+
+  Future<String> findUserCategory() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString("userCategory");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +61,9 @@ class LoginSignUpFragment extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () {
-                        if (user != null) {
+                      onPressed: () async {
+                        if (user != null &&
+                            await findUserCategory() == "Book Buyer") {
                           Navigator.pushNamed(context, 'BookBuyerHomeScreen');
                         } else {
                           Navigator.pushNamed(context, 'BookBuyerLoginScreen');
@@ -91,8 +98,9 @@ class LoginSignUpFragment extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () {
-                        if (user != null) {
+                      onPressed: () async {
+                        if (user != null &&
+                            await findUserCategory() == "Book Seller") {
                           Navigator.pushNamed(context, 'BookSellerHomeScreen');
                         } else {
                           Navigator.pushNamed(context, 'BookSellerLoginScreen');

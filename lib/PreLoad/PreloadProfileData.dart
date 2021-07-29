@@ -20,8 +20,9 @@ class PreloadProfileData {
 
     retrieveProfileDataClassObject =
         RetrieveProfileData(userCategory: userCategory, uid: uid);
-    await retrieveProfileDataClassObject.getProfileData();
-    await retrieveProfileDataClassObject.getPictureURL();
+    await retrieveProfileDataClassObject
+        .getProfileData()
+        .then((value) => retrieveProfileDataClassObject.getPictureURL());
     if (userCategory == "Book Seller") {
       firebaseRetrieveShopDetails = FirebaseRetrieveShopDetails(uid: uid);
       await firebaseRetrieveShopDetails

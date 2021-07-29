@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:we_book/Models/UserProfileDetails/UploadProfileData.dart';
 
 import '../ShopDetails/FirebaseUploadShopDetails.dart';
@@ -7,6 +8,7 @@ import '../ShopDetails/FirebaseUploadShopDetails.dart';
 class FirebaseEmailPasswordSignup {
   UserCredential userCredential;
   UploadProfileData uploadProfileData;
+  DatabaseReference databaseReference;
 
   Future<String> registration(
       {String fullName,
@@ -31,18 +33,29 @@ class FirebaseEmailPasswordSignup {
             text: 'The account already exists for that email.',
             duration: Duration(seconds: 5));
       }
-      status = "Failure";
+      BotToast.closeAllLoading();
+      return "Failure";
     } catch (e) {
       print(e);
-      status = "Failure";
+      BotToast.closeAllLoading();
+      return "Failure";
     }
     uploadProfileData = UploadProfileData(
         userCategory: userCategory, uid: userCredential.user.uid);
     status = await uploadProfileData.insertDataToDatabase(
         fullName: fullName, phoneNumber: phoneNumber, emailAddress: email);
-    if (userCategory == "Book Seller") {
-      status = await FirebaseUploadShopDetails(uid: userCredential.user.uid)
-          .insertShopDetails(shopName: shopName, shopAddress: shopAddress);
+
+    if (status != "Failure") {
+      //to save the only email in separate node. it will help us during login to differentiate between type of users
+      databaseReference = FirebaseDatabase.instance.reference();
+      databaseReference
+          .child("User Emails/$userCategory")
+          .update({userCredential.user.uid: email});
+
+      if (userCategory == "Book Seller") {
+        status = await FirebaseUploadShopDetails(uid: userCredential.user.uid)
+            .insertShopDetails(shopName: shopName, shopAddress: shopAddress);
+      }
     }
     BotToast.closeAllLoading();
     return status;

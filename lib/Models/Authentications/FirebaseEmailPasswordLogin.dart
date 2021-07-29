@@ -1,15 +1,23 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/constants.dart';
 
 class FirebaseEmailPasswordLogin {
   UserCredential userCredential;
-  FirebaseEmailPasswordLogin();
-  Future<String> login({String email = "", String password = ""}) async {
+  DatabaseReference databaseReference;
+  Future<String> login(
+      {String email = "", String password = "", String userCategory}) async {
     try {
-      userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      if (await isEmailAlreadySignedUp(
+          userCategory: userCategory, email: email)) {
+        userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+      } else {
+        print("Email not registered");
+        return "Failure";
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -21,6 +29,7 @@ class FirebaseEmailPasswordLogin {
       print(e);
       return "Failure";
     }
+
     return "Success";
   }
 
@@ -36,5 +45,13 @@ class FirebaseEmailPasswordLogin {
       result = "Failure";
     }
     return result;
+  }
+
+  Future<bool> isEmailAlreadySignedUp(
+      {String userCategory, String email}) async {
+    databaseReference = FirebaseDatabase.instance.reference();
+    DataSnapshot snapshot =
+        await databaseReference.child("User Emails/$userCategory").once();
+    return snapshot.value.toString().contains(email);
   }
 }

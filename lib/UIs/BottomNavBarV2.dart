@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BSBottomNavBarCN.dart';
 import 'package:we_book/constants.dart';
 
@@ -12,11 +13,16 @@ class BottomNavBarV2 extends StatefulWidget {
 
 class _BottomNavBarV2State extends State<BottomNavBarV2> {
   int currentIndex = 0;
-
   setBottomBarIndex(index) {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -149,18 +155,15 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                            child: Padding(
-                              padding: EdgeInsets.all(7),
-                              child: CircleAvatar(
-                                radius: 17,
-                                backgroundImage:
-                                    AssetImage("images/profileicon.jpg"),
-                              ),
+                        IconButton(
+                            icon: Icon(
+                              FontAwesomeIcons.userAstronaut,
+                              color: currentIndex == 3
+                                  ? purpleColor
+                                  : Colors.white,
                             ),
-                            onTap: () {
+                            onPressed: () {
                               setBottomBarIndex(3);
                               Provider.of<BSBottomNavBarCN>(context,
                                       listen: false)

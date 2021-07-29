@@ -22,11 +22,21 @@ class FirebaseRetrieveShopDetails {
         .once();
     //try catch if nothing is in snapshot
     try {
-      shopName = snapshot.value["shopName"];
-      shopAddress = snapshot.value["shopAddress"];
-      shopCity = snapshot.value["shopCity"];
-      shopCountry = snapshot.value["shopCountry"];
-      shopPhoneNumber = snapshot.value["shopPhoneNumber"];
+      shopName = snapshot.value["shopName"] == null
+          ? shopName
+          : snapshot.value["shopName"];
+      shopAddress = snapshot.value["shopAddress"] == null
+          ? shopAddress
+          : snapshot.value["shopAddress"];
+      shopCity = snapshot.value["shopCity"] == null
+          ? shopCity
+          : snapshot.value["shopCity"];
+      shopCountry = snapshot.value["shopCountry"] == null
+          ? shopCountry
+          : snapshot.value["shopCountry"];
+      shopPhoneNumber = snapshot.value["shopPhoneNumber"] == null
+          ? shopPhoneNumber
+          : snapshot.value["shopPhoneNumber"];
 
       sharedPreferences.setString("shopName", shopName);
       sharedPreferences.setString("shopAddress", shopAddress);

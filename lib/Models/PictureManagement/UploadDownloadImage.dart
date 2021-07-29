@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,6 +32,7 @@ class UploadDownloadImage {
 
   Future<String> uploadImageToFirebaseStorage(
       File imageFile, String folderName, String imageName) async {
+    BotToast.showLoading();
     final _storage = FirebaseStorage.instance;
     var snapshot = await _storage
         .ref()
@@ -38,14 +40,17 @@ class UploadDownloadImage {
         .putFile(imageFile)
         .whenComplete(() => print("Picture Uploaded"))
         .catchError((Object error) {
+      BotToast.closeAllLoading();
       print("Picture NOT Uploaded");
     });
 
     var downloadUrl = await snapshot.ref.getDownloadURL();
     print("UploadDownloadImage.dart");
     if (downloadUrl == null) {
+      BotToast.closeAllLoading();
       return "nothing";
     } else {
+      BotToast.closeAllLoading();
       return downloadUrl;
     }
   }

@@ -47,6 +47,18 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
     // passwordStreamController.close();
   }
 
+  String validateTextFields({String email, String password}) {
+    String status = "";
+    if (email.isEmpty || password.isEmpty) {
+      status = "Failure";
+      BotToast.showText(
+          text: "One of the Fields are empty!", duration: Duration(seconds: 3));
+    } else {
+      status = "Success";
+    }
+    return status;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -223,14 +235,23 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                             buttonHeight: 0.065,
                             buttonWidth: 0.8,
                             onPressed: () async {
-                              print("email: $email  and password: $password ");
-                              String result = await FirebaseEmailPasswordLogin()
-                                  .login(email: email, password: password);
-                              if (result == "Success") {
-                                Navigator.pushReplacementNamed(
-                                    context, "BookBuyerHomeScreen");
-                              } else if (result == "Failure") {
-                                BotToast.showText(text: "Invalid Credentials");
+                              if (validateTextFields(
+                                      email: email, password: password) ==
+                                  "Success") {
+                                print(
+                                    "email: $email  and password: $password ");
+                                String result =
+                                    await FirebaseEmailPasswordLogin().login(
+                                        email: email,
+                                        password: password,
+                                        userCategory: "Book Buyer");
+                                if (result == "Success") {
+                                  Navigator.pushReplacementNamed(
+                                      context, "BookBuyerHomeScreen");
+                                } else if (result == "Failure") {
+                                  BotToast.showText(
+                                      text: "Invalid Credentials");
+                                }
                               }
                             }),
                       ),
@@ -273,7 +294,8 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                           GestureDetector(
                             onTap: () async {
                               String status = await FirebaseFacebookSignIn()
-                                  .signInWithFacebook();
+                                  .signInWithFacebook(
+                                      userCategory: "Book Buyer");
                               if (status == "Success") {
                                 Navigator.pushNamed(
                                     context, "BookBuyerHomeScreen");
@@ -290,8 +312,8 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              String status =
-                                  await FirebaseGoogleSignIn().signIn();
+                              String status = await FirebaseGoogleSignIn()
+                                  .signIn(userCategory: "Book Buyer");
                               if (status == "Success") {
                                 Navigator.popAndPushNamed(
                                     context, "BookBuyerHomeScreen");

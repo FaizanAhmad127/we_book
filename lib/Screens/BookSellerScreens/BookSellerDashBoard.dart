@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/constants.dart';
 
 class BookSellerDashBoard extends StatefulWidget {
@@ -292,7 +293,44 @@ class DashBoardItem extends StatelessWidget {
   }
 }
 
-class GreetingCard extends StatelessWidget {
+class GreetingCard extends StatefulWidget {
+  @override
+  _GreetingCardState createState() => _GreetingCardState();
+}
+
+class _GreetingCardState extends State<GreetingCard> {
+  String userName = "User Name";
+  String pictureUrl =
+      "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
+  String unKnownPictureUrl =
+      "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
+  Future getUserName() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    userName = sharedPreferences.getString("fullName");
+    setState(() {
+      print("username is $userName");
+      userName = userName == null ? "User Name" : userName;
+    });
+  }
+
+  Future getPictureUrl() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    pictureUrl = sharedPreferences.getString("profilePictureURL");
+    setState(() {
+      pictureUrl = pictureUrl == null || pictureUrl == "nothing"
+          ? unKnownPictureUrl
+          : pictureUrl;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserName();
+    getPictureUrl();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -330,7 +368,7 @@ class GreetingCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: AutoSizeText(
-                    "FAIZAN AHMAD",
+                    userName,
                     maxFontSize: 16,
                     minFontSize: 12,
                     textAlign: TextAlign.start,
@@ -348,7 +386,7 @@ class GreetingCard extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage("images/profileicon.jpg"),
+              backgroundImage: NetworkImage(pictureUrl),
             )
           ],
         ),

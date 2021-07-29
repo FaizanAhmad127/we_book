@@ -90,7 +90,7 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: MediaQuery.of(context).size.height - 80,
+        height: MediaQuery.of(context).size.height - 95,
         child: Column(
           children: [
             Expanded(

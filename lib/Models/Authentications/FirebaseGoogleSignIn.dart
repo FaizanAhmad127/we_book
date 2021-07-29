@@ -1,39 +1,91 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:we_book/Models/ShopDetails/FirebaseUploadShopDetails.dart';
+import 'package:we_book/Models/UserProfileDetails/UploadProfileData.dart';
 
 class FirebaseGoogleSignIn {
   final googleSignIn = GoogleSignIn();
   final firebaseAuth = FirebaseAuth.instance;
+  UserCredential userCredential;
+  DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
 
-  Future<String> signIn() async {
-    BotToast.showLoading();
-    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    BotToast.closeAllLoading();
-    if (googleSignInAccount == null) {
-      BotToast.showText(text: "UnAble to Sign in with Google");
-      return "Failure";
-    } else {
+  Future<String> signIn({String userCategory}) async {
+    String status;
+    try {
+      GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
       BotToast.showLoading();
-      final googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+      if (googleSignInAccount != null) {
+        //check if book buyer and seller are already registered.
+        bool bookBuyerEmail =
+            await isBookBuyerEmail(email: googleSignInAccount.email);
+        bool bookSellerEmail =
+            await isBookSellerEmail(email: googleSignInAccount.email);
+        //check whether user want to register as book buyer but the email is already registered with book seller
+        if (userCategory == "Book Buyer" && bookSellerEmail) {
+          BotToast.showText(text: "Email used for Book Seller Registration");
+          await signOut().whenComplete(() async {
+            await FirebaseAuth.instance.signOut().whenComplete(() {
+              BotToast.closeAllLoading();
+              return "Failure";
+            });
+          });
+        }
+        //check whether user want to register as book seller but the email is already registered with book buyer
+        else if (userCategory == "Book Seller" && bookBuyerEmail) {
+          BotToast.showText(text: "Email used for Book Buyer Registration");
+          await signOut().whenComplete(() async {
+            await FirebaseAuth.instance.signOut().whenComplete(() {
+              BotToast.closeAllLoading();
+              return "Failure";
+            });
+          });
+        } else {
+          final googleSignInAuthentication =
+              await googleSignInAccount.authentication;
 
-      final oAuthCredential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-      await firebaseAuth
-          .signInWithCredential(oAuthCredential)
-          .whenComplete(() {
+          final oAuthCredential = GoogleAuthProvider.credential(
+            accessToken: googleSignInAuthentication.accessToken,
+            idToken: googleSignInAuthentication.idToken,
+          );
+          userCredential = await firebaseAuth
+              .signInWithCredential(oAuthCredential)
+              .whenComplete(() {
             print("Successfully google signed in");
-          })
-          .catchError((e) => print("Error while google signin $e"))
-          .then((userCredentials) => print(userCredentials.user.displayName));
-      BotToast.closeAllLoading();
+            status = "Success";
+          }).catchError((e) {
+            BotToast.closeAllLoading();
+            status = "Failure";
+            print("Error in FirebaseGoogleSignIn.dart $e");
+          });
 
-      return "Success";
+          if (status == "Success") {
+            //if user is book buyer and the email is not registered as book buyer then we
+            // need to register plus insert data into the database and vise versa for book seller
+            if (userCategory == "Book Buyer" && bookBuyerEmail == false) {
+              status = await populateDatabase(
+                  userCategory: userCategory, userCredential: userCredential);
+            }
+            if (userCategory == "Book Seller" && bookSellerEmail == false) {
+              status = await populateDatabase(
+                  userCategory: userCategory, userCredential: userCredential);
+            }
+          }
+        }
+      } else if (googleSignInAccount == null) {
+        BotToast.showText(text: "UnAble to Sign in with Google");
+        BotToast.closeAllLoading();
+        return "Failure";
+      }
+    } catch (e) {
+      print("Exception in FirebaseGoogleSignIn.dart $e");
+      BotToast.closeAllLoading();
+      return "Failure";
     }
+    BotToast.closeAllLoading();
+    return status;
   }
 
   Future signOut() async {
@@ -45,5 +97,50 @@ class FirebaseGoogleSignIn {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<String> populateDatabase(
+      {String userCategory, UserCredential userCredential}) async {
+    UploadProfileData uploadProfileData;
+    var fullName = userCredential.user.displayName;
+    var phoneNumber = userCredential.user.phoneNumber;
+    var email = userCredential.user.email;
+    var shopName = "ABC Shop";
+    var shopAddress = "Street 123";
+    fullName ??= "ABC";
+    phoneNumber ??= "03021234567";
+    email ??= "abc@gmail.com";
+
+    String status;
+
+    uploadProfileData = UploadProfileData(
+        userCategory: userCategory, uid: userCredential.user.uid);
+    status = await uploadProfileData.insertDataToDatabase(
+        fullName: fullName, phoneNumber: phoneNumber, emailAddress: email);
+
+    if (status != "Failure") {
+      //to save the only email in separate node. it will help us during login to differentiate between type of users
+      databaseReference
+          .child("User Emails/$userCategory")
+          .update({userCredential.user.uid: email});
+
+      if (userCategory == "Book Seller") {
+        status = await FirebaseUploadShopDetails(uid: userCredential.user.uid)
+            .insertShopDetails(shopName: shopName, shopAddress: shopAddress);
+      }
+    }
+    return status;
+  }
+
+  Future<bool> isBookBuyerEmail({String email}) async {
+    DataSnapshot snapshot =
+        await databaseReference.child("User Emails/Book Buyer").once();
+    return snapshot.value.toString().contains(email);
+  }
+
+  Future<bool> isBookSellerEmail({String email}) async {
+    DataSnapshot snapshot =
+        await databaseReference.child("User Emails/Book Seller").once();
+    return snapshot.value.toString().contains(email);
   }
 }

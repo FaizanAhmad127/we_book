@@ -141,6 +141,7 @@ class _BookSellerSignupScreenState extends State<BookSellerSignupScreen> {
                       TextFieldWidget(
                         outsideText: 'Phone Number',
                         hintText: '+923021234567',
+                        keyboardType: TextInputType.phone,
                         icon: Icons.phone,
                         streamController: phoneNumberStreamController,
                       ),
@@ -234,6 +235,9 @@ class _BookSellerSignupScreenState extends State<BookSellerSignupScreen> {
                                           shopAddress: shopAddress,
                                           userCategory: "Book Seller");
                               if (result == "Success") {
+                                BotToast.showText(
+                                    text: "Successfully signed up",
+                                    duration: Duration(seconds: 3));
                                 Navigator.pushReplacementNamed(
                                     context, "BookSellerLoginScreen");
                               }

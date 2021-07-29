@@ -198,36 +198,33 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: purpleColor,
-                    ),
-                    child: AutoSizeText(
-                      "Clear Filter",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                      style: ElevatedButton.styleFrom(
+                        primary: purpleColor,
+                      ),
+                      child: AutoSizeText(
+                        "Clear Filter",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       onPressed: () {
                         setState(() {
                           isPicked = false;
                           getListViewItems();
                         });
-                      }
-                  ),
+                      }),
                 ),
                 Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: purpleColor,
-                    ),
-                    child: AutoSizeText(
-                      "Filter By Date",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                      onPressed: () {
-                        pickDate();
-                      }
-                  )
-                )
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: purpleColor,
+                        ),
+                        child: AutoSizeText(
+                          "Filter By Date",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          pickDate();
+                        }))
               ],
             )),
         Expanded(
@@ -253,14 +250,6 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                 );
               }),
         ),
-        Expanded(
-          flex: 1,
-          child: Opacity(
-              opacity: 0.3,
-              child: Container(
-                color: Colors.transparent,
-              )),
-        )
       ],
     );
   }

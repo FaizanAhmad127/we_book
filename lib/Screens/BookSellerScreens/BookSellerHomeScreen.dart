@@ -6,7 +6,6 @@ import 'package:we_book/PreLoad/PreloadProfileData.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BSBottomNavBarCN.dart';
 import 'package:we_book/Screens/BookSellerScreens/BookSellerDashBoard.dart';
 import 'package:we_book/UIs/BottomNavBarV2.dart';
-
 import 'BSShopDetailsScreen.dart';
 import 'BSTransactionScreen.dart';
 import 'BookSellerProfile.dart';
@@ -17,11 +16,26 @@ class BookSellerHomeScreen extends StatefulWidget {
 }
 
 class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
+  bool isPreLoadComplete = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     setSharedPreferences();
+  }
+
+  Future setSharedPreferences() async {
+    BotToast.showLoading();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("userCategory", "Book Seller");
+    await PreloadProfileData().getReadyProfileData().then((value) {
+      setState(() {
+        BotToast.closeAllLoading();
+        isPreLoadComplete = true;
+      });
+    });
   }
 
   @override
@@ -36,7 +50,7 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
             bottomNavigationBar: BottomNavBarV2(),
             body: Consumer<BSBottomNavBarCN>(
                 builder: (context, bottomNavBarCN, _) {
-              if (bottomNavBarCN.getHomeScreen == true) {
+              if (bottomNavBarCN.getHomeScreen == true && isPreLoadComplete) {
                 return BookSellerDashBoard();
               } else if (bottomNavBarCN.getProfileScreen == true) {
                 return BookSellerProfile();
@@ -51,11 +65,4 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
           )),
     );
   }
-}
-
-Future setSharedPreferences() async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  sharedPreferences.setString("userCategory", "Book Seller");
-  await PreloadProfileData().getReadyProfileData();
-  BotToast.closeAllLoading();
 }

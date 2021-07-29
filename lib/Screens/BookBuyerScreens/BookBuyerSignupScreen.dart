@@ -166,6 +166,9 @@ class _BookBuyerSignupScreenState extends State<BookBuyerSignupScreen> {
                                             password: password,
                                             userCategory: "Book Buyer");
                                 if (result == "Success") {
+                                  BotToast.showText(
+                                      text: "Successfully signed up",
+                                      duration: Duration(seconds: 3));
                                   Navigator.popAndPushNamed(
                                       context, "BookBuyerLoginScreen");
                                 }
