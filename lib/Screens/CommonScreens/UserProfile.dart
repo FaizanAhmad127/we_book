@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -181,10 +182,15 @@ class _UserProfileState extends State<UserProfile> {
                                         try {
                                           profilePictureURL =
                                               await uploadDownloadImage // user will pick the image now...
-                                                  .imagePicker(
-                                                      //this method will also store the image in firebase storage and return the url of an image
-                                                      "${widget.category}/$uid",
-                                                      "profilePicture");
+                                                  .imagePicker()
+                                                  .then((file) {
+                                            return uploadDownloadImage
+                                                .uploadImageToFirebaseStorage(
+                                                    file,
+                                                    "${widget.category}/$uid",
+                                                    "profilePicture");
+                                          }); //this method will also store the image in firebase storage and return the url of an image
+
                                         } catch (e) {
                                           profilePictureURL = "nothing";
                                         }

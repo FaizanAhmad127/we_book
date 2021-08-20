@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -174,10 +176,15 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
                                       try {
                                         shopPictureURL =
                                             await uploadDownloadImage // user will pick the image now...
-                                                .imagePicker(
-                                                    //this method will also store the image in firebase storage and return the url of an image
-                                                    "Book Seller/$uid/Shop Details",
-                                                    "shopPicture");
+                                                .imagePicker()
+                                                .then((file) {
+                                          return uploadDownloadImage
+                                              .uploadImageToFirebaseStorage(
+                                                  file,
+                                                  "Book Seller/$uid/Shop Details",
+                                                  "shopPicture");
+                                        }); //this method will also store the image in firebase storage and return the url of an image
+
                                       } catch (e) {
                                         shopPictureURL = "nothing";
                                       }

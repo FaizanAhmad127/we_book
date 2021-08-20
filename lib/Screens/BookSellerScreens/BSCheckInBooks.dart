@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:we_book/Models/Books%20Detail/Book.dart';
+import 'package:we_book/Models/PictureManagement/UploadDownloadImage.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
 
@@ -11,6 +17,68 @@ class CheckInBooks extends StatefulWidget {
 }
 
 class _CheckInBooksState extends State<CheckInBooks> {
+  FirebaseAuth firebaseAuth;
+  String uid;
+  File file;
+  Book bookClassObject;
+  String bookPushKey;
+  TextEditingController _bookNameTextEditingController,
+      _authorNameTextEditingController,
+      _bookEditionTextEditingController,
+      _initialBookPriceTextEditingController,
+      _finalBookPriceTextEditingController,
+      _bookQuantityTextEditingController,
+      _shelfNameTextEditingController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bookNameTextEditingController = TextEditingController();
+    _authorNameTextEditingController = TextEditingController();
+    _bookEditionTextEditingController = TextEditingController();
+    _initialBookPriceTextEditingController = TextEditingController();
+    _finalBookPriceTextEditingController = TextEditingController();
+    _bookQuantityTextEditingController = TextEditingController();
+    _shelfNameTextEditingController = TextEditingController();
+    firebaseAuth = FirebaseAuth.instance;
+    uid = firebaseAuth.currentUser.uid;
+    bookClassObject = Book();
+  }
+
+  String checkForEmptyTextFields() {
+    String status;
+    if (file == null) {
+      BotToast.showText(
+          text: "Please upload the image", duration: Duration(seconds: 3));
+      return "Failure";
+    }
+    if (_bookNameTextEditingController.text.isEmpty ||
+        _authorNameTextEditingController.text.isEmpty ||
+        _bookEditionTextEditingController.text.isEmpty ||
+        _initialBookPriceTextEditingController.text.isEmpty ||
+        _finalBookPriceTextEditingController.text.isEmpty ||
+        _bookQuantityTextEditingController.text.isEmpty ||
+        _shelfNameTextEditingController.text.isEmpty) {
+      BotToast.showText(
+          text: "One of the fields is empty", duration: Duration(seconds: 3));
+      status = "Failure";
+    } else {
+      status = "Success";
+    }
+    return status;
+  }
+
+  Future uploadBookImage() async {
+    try {
+      file = await UploadDownloadImage()
+          .imagePicker()
+          .whenComplete(() => setState(() {}));
+    } catch (e) {
+      print("Don't worry it's just an error BSCheckInBooks.dart");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,14 +102,16 @@ class _CheckInBooksState extends State<CheckInBooks> {
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                               ),
-                              child: Center(
-                                child: AutoSizeText(
-                                  "Image",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                              child: file == null
+                                  ? Center(
+                                      child: AutoSizeText(
+                                        "Image",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Image.file(file),
                             ),
                           ),
                           Expanded(
@@ -74,7 +144,9 @@ class _CheckInBooksState extends State<CheckInBooks> {
                                         fontFamily: "Source Sans Pro",
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      uploadBookImage();
+                                    },
                                   ),
                                 ),
                                 Expanded(child: Container()),
@@ -88,18 +160,21 @@ class _CheckInBooksState extends State<CheckInBooks> {
                   child: MyCardTextField(
                     outsideText: "Book Name",
                     prefixIcon: FontAwesomeIcons.book,
+                    textEditingController: _bookNameTextEditingController,
                   ),
                 ),
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Author Name",
                     prefixIcon: FontAwesomeIcons.user,
+                    textEditingController: _authorNameTextEditingController,
                   ),
                 ),
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Book Edition",
                     prefixIcon: FontAwesomeIcons.sortNumericDown,
+                    textEditingController: _bookEditionTextEditingController,
                   ),
                 ),
                 Expanded(
@@ -107,6 +182,8 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     outsideText: "Initial Book Price",
                     keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.fileInvoiceDollar,
+                    textEditingController:
+                        _initialBookPriceTextEditingController,
                   ),
                 ),
                 Expanded(
@@ -114,6 +191,7 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     outsideText: "Final Book Price",
                     keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.fileInvoiceDollar,
+                    textEditingController: _finalBookPriceTextEditingController,
                   ),
                 ),
                 Expanded(
@@ -121,12 +199,14 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     outsideText: "Quantity",
                     keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.sort,
+                    textEditingController: _bookQuantityTextEditingController,
                   ),
                 ),
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Shelf Name/Number",
                     prefixIcon: FontAwesomeIcons.slidersH,
+                    textEditingController: _shelfNameTextEditingController,
                   ),
                 ),
                 SizedBox(
@@ -137,7 +217,50 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     buttonHeight: 0.2,
                     buttonWidth: 0.5,
                     buttonText: "SAVE",
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (checkForEmptyTextFields() == "Success") {
+                        await bookClassObject
+                            .checkInBook(
+                                bookName: _bookNameTextEditingController.text,
+                                authorName:
+                                    _authorNameTextEditingController.text,
+                                bookEdition:
+                                    _bookEditionTextEditingController.text,
+                                initialBookPrice:
+                                    _initialBookPriceTextEditingController.text,
+                                finalBookPrice:
+                                    _finalBookPriceTextEditingController.text,
+                                bookQuantity:
+                                    _bookQuantityTextEditingController.text,
+                                bookShelf: _shelfNameTextEditingController.text)
+                            .then((bookPushKey) {
+                          if (bookPushKey != "Failure") {
+                            this.bookPushKey = bookPushKey;
+                            return UploadDownloadImage()
+                                .uploadImageToFirebaseStorage(file,
+                                    "Book Seller/$uid/Books", bookPushKey);
+                          }
+                        }).then((bookPictureUrl) {
+                          if (bookPictureUrl != "nothing") {
+                            return bookClassObject.updateBookPictureURL(
+                                url: bookPictureUrl,
+                                uid: uid,
+                                bookPushKey: bookPushKey);
+                          }
+                        }).then((status) {
+                          if (status == "Success") {
+                            BotToast.showText(text: "New Book Added");
+                            Navigator.pop(context);
+                          } else {
+                            BotToast.showText(
+                                text:
+                                    "Unable to upload book details BSCheckInBooks.dart");
+                            print(
+                                "Unable to upload book details BSCheckInBooks.dart");
+                          }
+                        });
+                      }
+                    },
                   ),
                 ),
                 SizedBox(
@@ -154,11 +277,11 @@ class _CheckInBooksState extends State<CheckInBooks> {
 
 class MyCardTextField extends StatefulWidget {
   MyCardTextField(
-      {this.shopNameController,
+      {this.textEditingController,
       this.outsideText = "",
       this.keyboardType = TextInputType.text,
       this.prefixIcon});
-  TextEditingController shopNameController;
+  TextEditingController textEditingController;
   String outsideText;
   TextInputType keyboardType;
   IconData prefixIcon;
@@ -212,7 +335,7 @@ class _MyCardTextFieldState extends State<MyCardTextField> {
                       child: TextField(
                         decoration: InputDecoration(),
                         maxLines: 1,
-                        controller: widget.shopNameController,
+                        controller: widget.textEditingController,
                         keyboardType: widget.keyboardType,
                         obscureText: false,
                       )),

@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:we_book/Models/Books%20Detail/Book.dart';
 import 'package:we_book/constants.dart';
 
 class BookSellerDashBoard extends StatefulWidget {
@@ -238,7 +240,14 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        DashBoardItem(text: "Reviews/Rating"),
+                        DashBoardItem(
+                          text: "Reviews/Rating",
+                          onTap: () {
+                            Book().getParentKeyOfBook(
+                                uid: FirebaseAuth.instance.currentUser.uid,
+                                bookName: "rich");
+                          },
+                        ),
                       ],
                     ),
                   ],

@@ -1,6 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:we_book/Models/UserProfileDetails/RetrieveProfileData.dart';
 
 class UploadProfileData {
   var firebaseDatabaseReference = FirebaseDatabase().reference();
