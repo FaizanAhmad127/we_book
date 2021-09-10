@@ -15,19 +15,25 @@ class PreloadProfileData {
     sharedPreferences = await SharedPreferences.getInstance();
 
     var uid = firebaseAuth.currentUser.uid;
-    var userCategory = sharedPreferences.getString("userCategory");
-    print("user category is $userCategory and uid is $uid");
+    if (uid != null) {
+      var userCategory = sharedPreferences.getString("userCategory");
+      print("user category is $userCategory and uid is $uid");
 
-    retrieveProfileDataClassObject =
-        RetrieveProfileData(userCategory: userCategory, uid: uid);
-    await retrieveProfileDataClassObject
-        .getProfileData()
-        .then((value) => retrieveProfileDataClassObject.getPictureURL());
-    if (userCategory == "Book Seller") {
-      firebaseRetrieveShopDetails = FirebaseRetrieveShopDetails(uid: uid);
-      await firebaseRetrieveShopDetails
+      retrieveProfileDataClassObject =
+          RetrieveProfileData(userCategory: userCategory, uid: uid);
+
+      await retrieveProfileDataClassObject
           .getProfileData()
-          .then((value) => firebaseRetrieveShopDetails.getPictureURL());
+          .then((value) => retrieveProfileDataClassObject.getPictureURL());
+          
+      if (userCategory == "Book Seller") {
+        firebaseRetrieveShopDetails = FirebaseRetrieveShopDetails(uid: uid);
+        await firebaseRetrieveShopDetails
+            .getProfileData()
+            .then((value) => firebaseRetrieveShopDetails.getPictureURL());
+      }
+    } else {
+      print("there's no current user, uid is null");
     }
   }
 }

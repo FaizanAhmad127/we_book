@@ -3,7 +3,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:we_book/UIs/PurpleRoundedButton.dart';
+import 'package:we_book/Models/Books%20Detail/Book.dart';
 import 'package:we_book/constants.dart';
 
 class BSCheckOutManually extends StatefulWidget {
@@ -17,8 +17,9 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
   double topItem = 0;
   String searchString = "";
   TextEditingController searchTextFieldController = TextEditingController();
+  Book book;
 
-  Widget listItem(dynamic post) {
+  Widget listItem(String key, dynamic post) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Container(
@@ -39,8 +40,8 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                 flex: 2,
                 child: Padding(
                   padding: EdgeInsets.all(7),
-                  child: Image.asset(
-                    "images/${post["Image"]}",
+                  child: Image.network(
+                    post["bookImage"],
                   ),
                 ),
               ),
@@ -55,7 +56,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                post["BookName"],
+                                post["bookName"],
                                 minFontSize: 8,
                                 maxFontSize: 14,
                                 maxLines: 1,
@@ -71,7 +72,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "BY  ${post["BookAuthor"]}",
+                                "BY  ${post["authorName"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -88,7 +89,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Editon:  ${post["BookEdition"]}",
+                                "Editon:  ${post["bookEdition"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -101,7 +102,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "Price:  ${post["FinalPrice"]}",
+                                "Price:  ${post["finalBookPrice"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -119,7 +120,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Stock:  ${post["Stock"]}",
+                                "Stock:  ${post["bookQuantity"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -136,7 +137,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Shelf:  ${post["Shelf"]}",
+                                "Shelf:  ${post["bookShelf"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -170,14 +171,17 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                       fontFamily: "Source Sans Pro"),
                                 ),
                                 onPressed: () {
-                                  if (post["Stock"] == 0) {
+                                  if (post["bookQuantity"] == 0) {
                                     BotToast.showText(text: "OUT OF STOCK");
                                   } else {
+                                    TextEditingController
+                                        textEditingController =
+                                        TextEditingController();
                                     showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
                                         title: Text(
-                                          "Check out ${post["BookName"]}",
+                                          "Check out ${post["bookName"]}",
                                         ),
                                         titlePadding: EdgeInsets.all(5),
                                         shape: RoundedRectangleBorder(
@@ -201,6 +205,10 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                                   child: Container(
                                                 width: 70,
                                                 child: TextField(
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  controller:
+                                                      textEditingController,
                                                   textAlign: TextAlign.center,
                                                   decoration: InputDecoration(
                                                     border: OutlineInputBorder(
@@ -224,7 +232,22 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                               child: Text(
                                                 "Check Out",
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                await book
+                                                    .checkoutBook(
+                                                        key: key,
+                                                        initialQuantity: post[
+                                                            "bookQuantity"],
+                                                        finalQuantity: int.parse(
+                                                            textEditingController
+                                                                .text))
+                                                    .then((status) {
+                                                  if (status == "Success") {
+                                                    getListViewItems();
+                                                    Navigator.pop(context);
+                                                  }
+                                                });
+                                              },
                                             ),
                                           )
                                         ],
@@ -246,20 +269,25 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
     );
   }
 
-  void getListViewItems() {
-    List<dynamic> responseList = booksInfo;
+  void getListViewItems() async {
     List<Widget> widgetItemsList = [];
-    responseList.forEach((post) {
-      searchString = searchString.toUpperCase();
-      String bookName = post["BookName"].toString().toUpperCase();
-      if (searchString.isNotEmpty) {
-        if (bookName.contains(searchString)) {
-          widgetItemsList.add(listItem(post));
+
+    await book.getAllBooksOfSeller().then((responseList) {
+      responseList.forEach((key, value) {
+        searchString = searchString.toUpperCase();
+        String bookName = value["bookName"].toString().toUpperCase();
+        if (searchString.isNotEmpty) {
+          if (bookName.contains(searchString)) {
+            widgetItemsList.add(listItem(key, value));
+          }
+        } else {
+          widgetItemsList.add(listItem(key, value));
         }
-      } else {
-        widgetItemsList.add(listItem(post));
-      }
+      });
+    }).catchError((Object error) {
+      print("-------- error at getListviewItems() BSCheckoutManaully.dar");
     });
+
     setState(() {
       items = widgetItemsList;
     });
@@ -269,6 +297,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    book = Book();
     getListViewItems();
     listViewController.addListener(() {
       double value = listViewController.offset / 170;

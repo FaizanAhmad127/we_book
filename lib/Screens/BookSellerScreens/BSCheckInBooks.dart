@@ -173,6 +173,7 @@ class _CheckInBooksState extends State<CheckInBooks> {
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Book Edition",
+                    keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.sortNumericDown,
                     textEditingController: _bookEditionTextEditingController,
                   ),
@@ -225,13 +226,13 @@ class _CheckInBooksState extends State<CheckInBooks> {
                                 authorName:
                                     _authorNameTextEditingController.text,
                                 bookEdition:
-                                    _bookEditionTextEditingController.text,
+                                int.parse(_bookEditionTextEditingController.text),
                                 initialBookPrice:
-                                    _initialBookPriceTextEditingController.text,
+                                    int.parse(_initialBookPriceTextEditingController.text),
                                 finalBookPrice:
-                                    _finalBookPriceTextEditingController.text,
+                                    int.parse(_finalBookPriceTextEditingController.text),
                                 bookQuantity:
-                                    _bookQuantityTextEditingController.text,
+                                    int.parse(_bookQuantityTextEditingController.text),
                                 bookShelf: _shelfNameTextEditingController.text)
                             .then((bookPushKey) {
                           if (bookPushKey != "Failure") {

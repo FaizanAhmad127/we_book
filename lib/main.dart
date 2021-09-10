@@ -16,13 +16,12 @@ import 'package:we_book/Screens/BookSellerScreens/BookSellerSignupScreen.dart';
 import 'package:we_book/Screens/CommonScreens/LoginSignupFragment.dart';
 import 'package:we_book/UIs/BSQRScanner.dart';
 import 'package:we_book/UIs/GetSellerLocation.dart';
-
 import 'UIs/GoogleMapsUI.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() {
-  WidgetsFlutterBinding
+  WidgetsFlutterBinding 
       .ensureInitialized(); //Returns an instance of the WidgetsBinding... you need it to access flutter engine from flutter framework. see flutter architecture for more.
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());

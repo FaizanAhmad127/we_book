@@ -5,17 +5,23 @@ import 'package:firebase_database/firebase_database.dart';
 class Book {
   var databaseReference = FirebaseDatabase().reference();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  Future<String> checkInBook(
-      {String bookName,
-      String authorName,
-      String bookEdition,
-      String initialBookPrice,
-      String finalBookPrice,
-      String bookQuantity,
-      String bookShelf,
-      String uid}) async {
-    String status;
+  String uid;
+
+  Book() {
     uid = firebaseAuth.currentUser.uid;
+  }
+
+  Future<String> checkInBook({
+    String bookName,
+    String authorName,
+    int bookEdition,
+    int initialBookPrice,
+    int finalBookPrice,
+    int bookQuantity,
+    String bookShelf,
+  }) async {
+    String status;
+
     BotToast.showLoading();
 
     DatabaseReference reference =
@@ -60,6 +66,40 @@ class Book {
       print("error at updateBookPictureURL in book.dart");
       status = "Failure";
     });
+    return status;
+  }
+
+  Future<Map<String, dynamic>> getAllBooksOfSeller() async {
+    DataSnapshot snapshot =
+        await databaseReference.child("Book Seller/$uid/Books").once();
+    Map<String, dynamic> booksMap = Map.from(snapshot.value);
+
+    return booksMap;
+  }
+
+  Future<String> checkoutBook(
+      {String key, int initialQuantity, int finalQuantity}) async {
+    BotToast.showLoading();
+    
+    String status = "Failure";
+    if (finalQuantity <= initialQuantity) {
+      int bookQuantity = initialQuantity - finalQuantity;
+      await databaseReference.child("Book Seller/$uid/Books/$key").update({
+        "bookQuantity": bookQuantity,
+      }).whenComplete(() {
+        status = "Success";
+        BotToast.closeAllLoading();
+      }).catchError((Object error) {
+        status = "Failure";
+        BotToast.closeAllLoading();
+      });
+    } else {
+      status = "Failure ";
+      BotToast.showText(
+          text: "Not enough books in stock, Try agian!",
+          duration: Duration(seconds: 5));
+          BotToast.closeAllLoading();
+    }
     return status;
   }
 
