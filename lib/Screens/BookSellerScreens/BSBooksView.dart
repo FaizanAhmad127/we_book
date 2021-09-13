@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:we_book/Models/Books%20Detail/Book.dart';
 import 'package:we_book/Screens/BookSellerScreens/BSBooksEdit.dart';
 import 'package:we_book/constants.dart';
 
@@ -18,8 +20,9 @@ class _BSBooksViewState extends State<BSBooksView> {
   double opacity;
   String searchString = "";
   TextEditingController searchTextFieldController = TextEditingController();
+  Book book;
 
-  Widget listItem(dynamic post) {
+  Widget listItem(String key, dynamic post) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Container(
@@ -39,11 +42,23 @@ class _BSBooksViewState extends State<BSBooksView> {
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: EdgeInsets.all(7),
-                  child: Image.asset(
-                    "images/${post["Image"]}",
-                  ),
-                ),
+                    padding: EdgeInsets.all(7),
+                    child: CachedNetworkImage(
+                      height: 100,
+                      width: 60,
+                      imageUrl: post["bookImage"],
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error,
+                      ),
+                    )),
               ),
               Expanded(
                   flex: 5,
@@ -56,7 +71,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                post["BookName"],
+                                post["bookName"],
                                 minFontSize: 8,
                                 maxFontSize: 14,
                                 maxLines: 1,
@@ -72,7 +87,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "BY  ${post["BookAuthor"]}",
+                                "BY  ${post["authorName"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -89,7 +104,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Editon:  ${post["BookEdition"]}",
+                                "Editon:  ${post["bookEdition"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -102,7 +117,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "Initial Price:  ${post["InitialPrice"]}",
+                                "Initial Price:  ${post["finalBookPrice"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -119,7 +134,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Stock:  ${post["Stock"]}",
+                                "Stock:  ${post["bookQuantity"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -132,7 +147,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "Final Price:  ${post["FinalPrice"]}",
+                                "Price:  ${post["finalBookPrice"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -150,7 +165,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Shelf:  ${post["Shelf"]}",
+                                "Shelf:  ${post["bookShelf"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -188,16 +203,22 @@ class _BSBooksViewState extends State<BSBooksView> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => BSBooksEdit(
-                                      imagePath: post["Image"],
-                                      BookName: post["BookName"],
-                                      AuthorName: post["BookAuthor"],
-                                      BookEdition: post["BookEdition"],
+                                      imagePath: post["bookImage"],
+                                      BookName: post["bookName"],
+                                      AuthorName: post["authorName"],
+                                      BookEdition:
+                                          post["bookEdition"].toString(),
                                       InitialPrice:
-                                          post["InitialPrice"].toString(),
-                                      FinalPrice: post["FinalPrice"].toString(),
-                                      ShelfName: post["Shelf"],
-                                      Quantity: post["Stock"].toString(),
-                                    )));
+                                          post["initialBookPrice"].toString(),
+                                      FinalPrice:
+                                          post["finalBookPrice"].toString(),
+                                      ShelfName: post["bookShelf"],
+                                      Quantity: post["bookQuantity"].toString(),
+                                      bookPushKey: key,
+                                    ))).then((_) => setState(() {
+                              getListViewItems(); // after editing on editing screen and when we come back to
+                              // book view screen we have to update or show the edited changes
+                            }));
                       },
                     )),
                     Expanded(
@@ -209,7 +230,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text(
-                              "Delete ${post["BookName"]}",
+                              "Delete ${post["bookName"]}",
                             ),
                             titlePadding: EdgeInsets.all(5),
                             shape: RoundedRectangleBorder(
@@ -230,11 +251,27 @@ class _BSBooksViewState extends State<BSBooksView> {
                                   style: ElevatedButton.styleFrom(
                                     primary: purpleColor,
                                   ),
-                          child: Text(
-                                  "Delete",
-                                ),
-                                  onPressed: (){
-
+                                  child: Text(
+                                    "Delete",
+                                  ),
+                                  onPressed: () async { 
+                                    String status = await book.deleteBook(key);// first we will delete the asked book node using it's unique key
+                                    if (status == "Success") {
+                                      status = await book
+                                          .deleteBookPictureFromFirebaseStorage(
+                                              key); // second we will delete the image of book from firebase storage.
+                                      if (status == "Success") {
+                                        BotToast.showText(
+                                            text:
+                                                "Book is successfully deleted");
+                                        getListViewItems();
+                                      }
+                                      
+                                    } else {
+                                      BotToast.showText(
+                                          text: "Unable to delete book");
+                                    }
+                                    Navigator.pop(context);
                                   },
                                 ),
                               )
@@ -253,18 +290,32 @@ class _BSBooksViewState extends State<BSBooksView> {
     );
   }
 
-  void getListViewItems() {
-    List<dynamic> responseList = booksInfo;
+  void getListViewItems() async {
     List<Widget> widgetItemsList = [];
-    responseList.forEach((post) {
-      searchString = searchString.toUpperCase();
-      String bookName = post["BookName"].toString().toUpperCase();
-      if (searchString.isNotEmpty) {
-        if (bookName.contains(searchString)) {
-          widgetItemsList.add(listItem(post));
-        }
+
+    await book.getAllBooksOfSeller().then((responseList) {
+      if (responseList.isNotEmpty) {
+        responseList.forEach((key, post) {
+          searchString = searchString.toUpperCase();
+          String bookName = post["bookName"].toString().toUpperCase();
+          if (searchString.isNotEmpty) {
+            if (bookName.contains(searchString)) {
+              widgetItemsList.add(listItem(key, post));
+            }
+          } else {
+            widgetItemsList.add(listItem(key, post));
+          }
+        });
       } else {
-        widgetItemsList.add(listItem(post));
+        //if there is nothing in the list of books or recently deleted all of the books from database
+        widgetItemsList.add(Container(
+          child: Center(
+            child: AutoSizeText(
+              "Nothing to show",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ));
       }
     });
     setState(() {
@@ -276,6 +327,7 @@ class _BSBooksViewState extends State<BSBooksView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    book = Book();
     getListViewItems();
     listViewController.addListener(() {
       double value = listViewController.offset / 170;

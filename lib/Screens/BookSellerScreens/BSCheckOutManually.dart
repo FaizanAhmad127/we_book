@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,9 +41,23 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                 flex: 2,
                 child: Padding(
                   padding: EdgeInsets.all(7),
-                  child: Image.network(
-                    post["bookImage"],
-                  ),
+                  child: CachedNetworkImage(
+                      height: 100,
+                      width: 60,
+                      imageUrl: post["bookImage"],
+                      
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error,
+                      ),
+                    ),
                 ),
               ),
               Expanded(
@@ -273,7 +288,9 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
     List<Widget> widgetItemsList = [];
 
     await book.getAllBooksOfSeller().then((responseList) {
-      responseList.forEach((key, value) {
+      if(responseList.isNotEmpty)
+      {
+          responseList.forEach((key, value) {
         searchString = searchString.toUpperCase();
         String bookName = value["bookName"].toString().toUpperCase();
         if (searchString.isNotEmpty) {
@@ -284,6 +301,19 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
           widgetItemsList.add(listItem(key, value));
         }
       });
+      }
+      else {
+        //if there is nothing in the list of books or recently deleted all of the books from database
+        widgetItemsList.add(Container(
+          child: Center(
+            child: AutoSizeText(
+              "Nothing to show",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ));
+      }
+      
     }).catchError((Object error) {
       print("-------- error at getListviewItems() BSCheckoutManaully.dar");
     });

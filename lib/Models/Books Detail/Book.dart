@@ -1,10 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:we_book/Models/PictureManagement/UploadDownloadImage.dart';
 
 class Book {
   var databaseReference = FirebaseDatabase().reference();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  UploadDownloadImage uploadDownloadImage = UploadDownloadImage();
   String uid;
 
   Book() {
@@ -19,13 +21,19 @@ class Book {
     int finalBookPrice,
     int bookQuantity,
     String bookShelf,
+    String editBookKey,
   }) async {
+    DatabaseReference reference;
     String status;
 
     BotToast.showLoading();
 
-    DatabaseReference reference =
-        databaseReference.child("Book Seller/$uid/Books").push();
+    if (editBookKey == null) {
+      reference = databaseReference.child("Book Seller/$uid/Books").push();
+    } else {
+      reference = //use when checkin is called from BSBookEdit.dart to edit the book
+          databaseReference.child("Book Seller/$uid/Books/$editBookKey");
+    }
 
     await reference.update({
       "bookName": bookName,
@@ -36,14 +44,32 @@ class Book {
       "bookQuantity": bookQuantity,
       "bookShelf": bookShelf,
     }).whenComplete(() {
-      status = reference.key;
+      editBookKey == null ? status = reference.key : status = editBookKey;
     }).catchError((error) {
       BotToast.showText(text: "Unable to upload data Book.dart");
       print("error at books.dart $error");
-      status = "Failure";
+      editBookKey == null ? status = "Failure" : status = editBookKey;
       BotToast.closeAllLoading();
     });
     BotToast.closeAllLoading();
+    return status;
+  }
+
+  Future<String> deleteBook(String key) async {
+    String status;
+    BotToast.showLoading();
+    await databaseReference
+        .child("Book Seller/$uid/Books/$key")
+        .remove()
+        .whenComplete(() {
+      status = "Success";
+      BotToast.closeAllLoading();
+    }).catchError((error) {
+      status = "Failure";
+      print("error at deleteBook Book.dart");
+      BotToast.closeAllLoading();
+    });
+
     return status;
   }
 
@@ -69,18 +95,27 @@ class Book {
     return status;
   }
 
-  Future<Map<String, dynamic>> getAllBooksOfSeller() async {
-    DataSnapshot snapshot =
-        await databaseReference.child("Book Seller/$uid/Books").once();
-    Map<String, dynamic> booksMap = Map.from(snapshot.value);
+  Future<String> deleteBookPictureFromFirebaseStorage(String key) async {
+    String status =
+        await uploadDownloadImage.deletePicture("Book Seller/$uid/Books/", key);
+    return status;
+  }
 
-    return booksMap;
+  Future<Map<String, dynamic>> getAllBooksOfSeller() async {
+    try {
+      DataSnapshot snapshot =
+          await databaseReference.child("Book Seller/$uid/Books").once();
+      Map<String, dynamic> booksMap = Map.from(snapshot.value);
+      return booksMap;
+    } catch (error) {
+      return Map();
+    }
   }
 
   Future<String> checkoutBook(
       {String key, int initialQuantity, int finalQuantity}) async {
     BotToast.showLoading();
-    
+
     String status = "Failure";
     if (finalQuantity <= initialQuantity) {
       int bookQuantity = initialQuantity - finalQuantity;
@@ -98,7 +133,7 @@ class Book {
       BotToast.showText(
           text: "Not enough books in stock, Try agian!",
           duration: Duration(seconds: 5));
-          BotToast.closeAllLoading();
+      BotToast.closeAllLoading();
     }
     return status;
   }

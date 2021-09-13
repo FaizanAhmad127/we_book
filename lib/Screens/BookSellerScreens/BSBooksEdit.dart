@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:we_book/Models/Books%20Detail/Book.dart';
+import 'package:we_book/Models/PictureManagement/UploadDownloadImage.dart';
 import 'package:we_book/UIs/PurpleRoundedButton.dart';
 import 'package:we_book/constants.dart';
 
@@ -13,7 +20,9 @@ class BSBooksEdit extends StatefulWidget {
       InitialPrice,
       FinalPrice,
       Quantity,
-      ShelfName;
+      ShelfName,
+      bookPushKey;
+
   BSBooksEdit(
       {this.imagePath,
       this.BookName,
@@ -22,7 +31,8 @@ class BSBooksEdit extends StatefulWidget {
       this.InitialPrice,
       this.FinalPrice,
       this.Quantity,
-      this.ShelfName});
+      this.ShelfName,
+      this.bookPushKey});
   @override
   _BSBooksEditState createState() => _BSBooksEditState();
 }
@@ -35,11 +45,14 @@ class _BSBooksEditState extends State<BSBooksEdit> {
       finalPriceController,
       quantityController,
       shelfNameController;
-  String imagePath;
+  File file;
+  Book bookClassObject;
+
+  FirebaseAuth firebaseAuth;
+  String uid;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     bookNameController = TextEditingController(text: widget.BookName);
     authorNameController = TextEditingController(text: widget.AuthorName);
@@ -48,7 +61,43 @@ class _BSBooksEditState extends State<BSBooksEdit> {
     finalPriceController = TextEditingController(text: widget.FinalPrice);
     quantityController = TextEditingController(text: widget.Quantity);
     shelfNameController = TextEditingController(text: widget.ShelfName);
-    imagePath = widget.imagePath;
+
+    bookClassObject = Book();
+    firebaseAuth = FirebaseAuth.instance;
+    uid = firebaseAuth.currentUser.uid;
+  }
+
+  Future uploadBookImage() async {
+    try {
+      file = await UploadDownloadImage()
+          .imagePicker()
+          .whenComplete(() => setState(() {}));
+    } catch (e) {
+      print("Don't worry it's just an error BSCheckInBooks.dart");
+    }
+  }
+
+  String checkForEmptyTextFields() {
+    String status;
+    if (file == null && widget.imagePath == null) {
+      BotToast.showText(
+          text: "Please upload the image", duration: Duration(seconds: 3));
+      return "Failure";
+    }
+    if (bookNameController.text.isEmpty ||
+        authorNameController.text.isEmpty ||
+        bookEditionController.text.isEmpty ||
+        initialPriceController.text.isEmpty ||
+        finalPriceController.text.isEmpty ||
+        quantityController.text.isEmpty ||
+        shelfNameController.text.isEmpty) {
+      BotToast.showText(
+          text: "One of the fields is empty", duration: Duration(seconds: 3));
+      status = "Failure";
+    } else {
+      status = "Success";
+    }
+    return status;
   }
 
   @override
@@ -74,9 +123,25 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                               ),
-                              child: Image.asset(
-                                "images/$imagePath",
-                              ),
+                              child: file == null
+                                  ? CachedNetworkImage(
+                                      imageUrl: widget.imagePath,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) =>
+                                          CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error,
+                                      ),
+                                    )
+                                  : Image.file(file),
                             ),
                           ),
                           Expanded(
@@ -109,7 +174,9 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                                         fontFamily: "Source Sans Pro",
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      uploadBookImage();
+                                    },
                                   ),
                                 ),
                                 Expanded(child: Container()),
@@ -136,6 +203,7 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                 Expanded(
                   child: MyCardTextField(
                     outsideText: "Book Edition",
+                    keyboardType: TextInputType.number,
                     prefixIcon: FontAwesomeIcons.sortNumericDown,
                     textEditingController: bookEditionController,
                   ),
@@ -179,8 +247,66 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                     buttonHeight: 0.2,
                     buttonWidth: 0.5,
                     buttonText: "SAVE",
-                    onPressed: () {
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      if (checkForEmptyTextFields() == "Success") {
+                        await bookClassObject
+                            .checkInBook(
+                                bookName: bookNameController.text,
+                                authorName: authorNameController.text,
+                                bookEdition:
+                                    int.parse(bookEditionController.text),
+                                initialBookPrice:
+                                    int.parse(initialPriceController.text),
+                                finalBookPrice:
+                                    int.parse(finalPriceController.text),
+                                bookQuantity:
+                                    int.parse(quantityController.text),
+                                bookShelf: shelfNameController.text,
+                                editBookKey: widget.bookPushKey)
+
+                            //now we will upload the edited image to firebase storage
+                            //and update the url to realtime database
+                            //if the image is not updated then we will use the previous image
+                            .then((bookPushkey) {
+                          if (bookPushkey != "Failure") {
+                            //checking if user edited the file or not
+                            if (file != null) {
+                              // this.bookPushKey = bookPushKey;
+                              return UploadDownloadImage() // upload book to firebase storage and return the link
+                                  .uploadImageToFirebaseStorage(file,
+                                      "Book Seller/$uid/Books", bookPushkey)
+                                  //we will now edit the image url in realtime database
+                                  .then((bookPictureUrl) {
+                                if (bookPictureUrl != "nothing") {
+                                  return bookClassObject.updateBookPictureURL(
+                                      // returned link will be saved in realtime database
+                                      url: bookPictureUrl,
+                                      uid: uid,
+                                      bookPushKey: bookPushkey);
+                                }
+                                // if the image link is edited successfully in realtimed database
+                              }).then((status) {
+                                if (status == "Success") {
+                                  BotToast.showText(text: "Book is edited");
+                                  
+                                } else {
+                                  BotToast.showText(
+                                      text:
+                                          "Unable to edit book image BSCheckInBooks.dart");
+                                  print(
+                                      "Unable to edit book image BSCheckInBooks.dart");
+                                }
+                              });
+                              
+                            }
+                          } else {
+                            BotToast.showText(
+                                text: "Unable to edit book details");
+                          }
+                          Navigator.pop(context);
+                        });
+            
+                      }
                     },
                   ),
                 ),

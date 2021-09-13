@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:we_book/Constants/Strings.dart';
 import 'package:we_book/Models/Books%20Detail/Book.dart';
 import 'package:we_book/constants.dart';
 
@@ -311,8 +313,8 @@ class _GreetingCardState extends State<GreetingCard> {
   String userName = "User Name";
   String pictureUrl =
       "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
-  String unKnownPictureUrl =
-      "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
+  
+
   Future getUserName() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     userName = sharedPreferences.getString("fullName");
@@ -327,7 +329,7 @@ class _GreetingCardState extends State<GreetingCard> {
     pictureUrl = sharedPreferences.getString("profilePictureURL");
     setState(() {
       pictureUrl = pictureUrl == null || pictureUrl == "nothing"
-          ? unKnownPictureUrl
+          ? unknownProfileIcon
           : pictureUrl;
     });
   }
@@ -393,9 +395,22 @@ class _GreetingCardState extends State<GreetingCard> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.1,
             ),
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(pictureUrl),
+            CachedNetworkImage(
+              imageUrl: pictureUrl,
+
+              imageBuilder: (context, imageProvider) => Container(
+                width: 80.0,
+                height: 80.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(
+                Icons.error,
+              ),
             )
           ],
         ),
