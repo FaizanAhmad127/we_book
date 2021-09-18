@@ -177,84 +177,74 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
         ),
         Expanded(
           flex: 12,
-          child: Container(
-              decoration: BoxDecoration(
-                //  color: Colors.orange,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 30, 20, 10),
-                child: Column(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 30, 20, 10),
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        DashBoardItem(
-                          text: "Check In",
-                          onTap: () {
-                            Navigator.pushNamed(context, "CheckInBooks");
-                          },
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        DashBoardItem(
-                          text: "Check Out",
-                          onTap: () {
-                            Navigator.pushNamed(context, "BSCheckOutManually");
-                          },
-                        ),
-                      ],
+                    DashBoardItem(
+                      text: "Check In",
+                      onTap: () {
+                        Navigator.pushNamed(context, "CheckInBooks");
+                      },
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Row(
-                      children: [
-                        DashBoardItem(
-                          text: "Books",
-                          onTap: () {
-                            Navigator.pushNamed(context, "BSBooksView");
-                          },
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        DashBoardItem(
-                          text: "Sales",
-                          onTap: () {
-                            Navigator.pushNamed(context, "BSSales");
-                          },
-                        ),
-                      ],
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    Row(
-                      children: [
-                        DashBoardItem(
-                          text: "Out Of Stock",
-                          onTap: () {
-                            Navigator.pushNamed(context, "BSOutOfStockBooks");
-                          },
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        DashBoardItem(
-                          text: "Reviews/Rating",
-                          onTap: () {
-                            Book().getParentKeyOfBook(
-                                uid: FirebaseAuth.instance.currentUser.uid,
-                                bookName: "rich");
-                          },
-                        ),
-                      ],
+                    DashBoardItem(
+                      text: "Check Out",
+                      onTap: () {
+                        Navigator.pushNamed(context, "BSCheckOutManually");
+                      },
                     ),
                   ],
                 ),
-              )),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Row(
+                  children: [
+                    DashBoardItem(
+                      text: "Books",
+                      onTap: () {
+                        Navigator.pushNamed(context, "BSBooksView");
+                      },
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                    DashBoardItem(
+                      text: "Sales",
+                      onTap: () {
+                        Navigator.pushNamed(context, "BSSales");
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Row(
+                  children: [
+                    DashBoardItem(
+                      text: "Out Of Stock",
+                      onTap: () {
+                        Navigator.pushNamed(context, "BSOutOfStockBooks");
+                      },
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                    DashBoardItem(
+                      text: "Reviews/Rating",
+                      onTap: () {
+                        Book().getParentKeyOfBook(
+                            uid: FirebaseAuth.instance.currentUser.uid,
+                            bookName: "rich");
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         )
       ],
     ));

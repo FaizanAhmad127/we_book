@@ -77,6 +77,21 @@ class _BSBooksEditState extends State<BSBooksEdit> {
     }
   }
 
+  String compareInitialFinalPrice() {
+    String status;
+    if (int.parse(initialPriceController.text) >=
+        int.parse(finalPriceController.text)) {
+      BotToast.showText(
+          text: "Final price is lower than initial price",
+          duration: Duration(seconds: 5));
+      status = "Failure";
+    } else {
+      status= "Success";
+    }
+
+    return status;
+  }
+
   String checkForEmptyTextFields() {
     String status;
     if (file == null && widget.imagePath == null) {
@@ -248,7 +263,7 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                     buttonWidth: 0.5,
                     buttonText: "SAVE",
                     onPressed: () async {
-                      if (checkForEmptyTextFields() == "Success") {
+                      if (checkForEmptyTextFields() == "Success" && compareInitialFinalPrice()=="Success") {
                         await bookClassObject
                             .checkInBook(
                                 bookName: bookNameController.text,
@@ -288,7 +303,6 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                               }).then((status) {
                                 if (status == "Success") {
                                   BotToast.showText(text: "Book is edited");
-                                  
                                 } else {
                                   BotToast.showText(
                                       text:
@@ -297,7 +311,6 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                                       "Unable to edit book image BSCheckInBooks.dart");
                                 }
                               });
-                              
                             }
                           } else {
                             BotToast.showText(
@@ -305,7 +318,6 @@ class _BSBooksEditState extends State<BSBooksEdit> {
                           }
                           Navigator.pop(context);
                         });
-            
                       }
                     },
                   ),

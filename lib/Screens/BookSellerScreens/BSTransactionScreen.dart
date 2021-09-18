@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:we_book/Models/Books%20Detail/Transactions.dart';
 
 import '../../constants.dart';
 
@@ -15,8 +16,9 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
   double topItem = 0;
   int pickedYear, pickedMonth, pickedDay;
   bool isPicked = false;
+  Transactions bookTransactions;
 
-  Widget listItem(dynamic post) {
+  Widget listItem(String key, dynamic post) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Container(
@@ -31,7 +33,6 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                   flex: 5,
@@ -41,10 +42,11 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Date: ${post["Year"]}-${post["Month"]}-${post["Day"]}   Time: ${post["Hour"]}:${post["Minute"]}:${post["Second"]} ",
+                                "Date:  ${post["day"]}-${post["month"]}-${post["year"]}  Time: ${post["hour"]}:${post["minute"]} ${post["amPm"]}",
                                 minFontSize: 8,
                                 maxFontSize: 14,
                                 maxLines: 1,
@@ -60,9 +62,9 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                             ),
                             Expanded(
                               child: Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.centerRight,
                                 child: AutoSizeText(
-                                  "ID#   ${post["TransactionId"]}",
+                                  "ID: $key",
                                   minFontSize: 8,
                                   maxFontSize: 12,
                                   maxLines: 1,
@@ -74,13 +76,16 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              width: 10,
+                            ),
                           ],
                         ),
                         Row(
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Book Name:  ${post["BookName"]}",
+                                "Book Name:  ${post["bookName"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -98,7 +103,33 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Sold Price:  ${post["SoldPrice"]}",
+                                "Unit Price:  ${post["unitPrice"]}",
+                                minFontSize: 8,
+                                maxFontSize: 12,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                    fontFamily: "Source Sans Pro"),
+                              ),
+                            ),
+                            Expanded(
+                              child: AutoSizeText(
+                                "Quantity: ${post["quantity"]}",
+                                minFontSize: 8,
+                                maxFontSize: 12,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                    fontFamily: "Source Sans Pro"),
+                              ),
+                            ),
+                            Expanded(
+                              child: AutoSizeText(
+                                "Total: ${post["total"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -115,7 +146,7 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "Buyer Name:  ${post["BuyerName"]}",
+                                "Buyer Name:  ${post["buyerName"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -138,20 +169,35 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
     );
   }
 
-  void getListViewItems() {
-    List<dynamic> responseList = transactions;
+  void getListViewItems() async {
     List<Widget> widgetItemsList = [];
-    responseList.forEach((post) {
-      if (isPicked == true) {
-        if (post["Year"] == pickedYear &&
-            post["Month"] == pickedMonth &&
-            post["Day"] == pickedDay) {
-          widgetItemsList.add(listItem(post));
-        }
+
+    await bookTransactions.getAllTransactions().then((responseList) {
+      if (responseList.isNotEmpty) {
+        responseList.forEach((key, post) {
+          if (isPicked == true) {
+            if (post["Year"] == pickedYear &&
+                post["Month"] == pickedMonth &&
+                post["Day"] == pickedDay) {
+              widgetItemsList.add(listItem(key, post));
+            }
+          } else {
+            widgetItemsList.add(listItem(key, post));
+          }
+        });
       } else {
-        widgetItemsList.add(listItem(post));
+        //if there is nothing in the list of books or recently deleted all of the books from database
+        widgetItemsList.add(Container(
+          child: Center(
+            child: AutoSizeText(
+              "Nothing to show",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ));
       }
     });
+
     setState(() {
       items = widgetItemsList;
     });
@@ -175,8 +221,8 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    bookTransactions = Transactions();
     getListViewItems();
     listViewController.addListener(() {
       double value = listViewController.offset / 170;

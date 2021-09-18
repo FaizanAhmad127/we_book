@@ -50,7 +50,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
+                              image: imageProvider, fit: BoxFit.contain),
                         ),
                       ),
                       placeholder: (context, url) =>
@@ -117,7 +117,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "Initial Price:  ${post["finalBookPrice"]}",
+                                "Initial Price:  ${post["initialBookPrice"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
@@ -147,7 +147,7 @@ class _BSBooksViewState extends State<BSBooksView> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                "Price:  ${post["finalBookPrice"]}",
+                                "Final Price:  ${post["finalBookPrice"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,

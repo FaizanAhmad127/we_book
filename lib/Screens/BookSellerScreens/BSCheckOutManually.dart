@@ -3,8 +3,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:we_book/Models/Books%20Detail/Book.dart';
+import 'package:we_book/Models/Books%20Detail/Transactions.dart';
+import 'package:we_book/Provider%20ChangeNotifiers/BSCheckOutCN.dart';
 import 'package:we_book/constants.dart';
 
 class BSCheckOutManually extends StatefulWidget {
@@ -19,6 +23,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
   String searchString = "";
   TextEditingController searchTextFieldController = TextEditingController();
   Book book;
+  Transactions transactions;
 
   Widget listItem(String key, dynamic post) {
     return Padding(
@@ -26,7 +31,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
       child: Container(
         height: 150,
         child: Card(
-          margin: EdgeInsets.all(10),
+          //margin: EdgeInsets.all(10),
           elevation: 10,
           color: Colors.white,
           shadowColor: Colors.black,
@@ -42,22 +47,20 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                 child: Padding(
                   padding: EdgeInsets.all(7),
                   child: CachedNetworkImage(
-                      height: 100,
-                      width: 60,
-                      imageUrl: post["bookImage"],
-                      
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
-                        ),
-                      ),
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.error,
+                    height: 100,
+                    width: 60,
+                    imageUrl: post["bookImage"],
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.contain),
                       ),
                     ),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -186,88 +189,237 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                       fontFamily: "Source Sans Pro"),
                                 ),
                                 onPressed: () {
+                                  TextEditingController textEditingController =
+                                      TextEditingController();
                                   if (post["bookQuantity"] == 0) {
                                     BotToast.showText(text: "OUT OF STOCK");
                                   } else {
-                                    TextEditingController
-                                        textEditingController =
-                                        TextEditingController();
                                     showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Text(
-                                          "Check out ${post["bookName"]}",
-                                        ),
-                                        titlePadding: EdgeInsets.all(5),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        content: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.6,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.07,
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                  child: AutoSizeText(
-                                                      "Enter the quantity")),
-                                              Expanded(
-                                                  child: Container(
-                                                width: 70,
-                                                child: TextField(
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  controller:
-                                                      textEditingController,
-                                                  textAlign: TextAlign.center,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.black,
-                                                        width: 3.0,
+                                        context: context,
+                                        builder:
+                                            (context) => ChangeNotifierProvider(
+                                                  create: (context) =>
+                                                      BSCheckOutCN(),
+                                                  child: Consumer<BSCheckOutCN>(
+                                                      builder: (context,
+                                                          checkOutCN, _) {
+                                                    return AlertDialog(
+                                                      title: Center(
+                                                        child: Text(
+                                                          "${post["bookName"]}",
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: [
-                                          Center(
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                primary: purpleColor,
-                                              ),
-                                              child: Text(
-                                                "Check Out",
-                                              ),
-                                              onPressed: () async {
-                                                await book
-                                                    .checkoutBook(
-                                                        key: key,
-                                                        initialQuantity: post[
-                                                            "bookQuantity"],
-                                                        finalQuantity: int.parse(
-                                                            textEditingController
-                                                                .text))
-                                                    .then((status) {
-                                                  if (status == "Success") {
-                                                    getListViewItems();
-                                                    Navigator.pop(context);
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    );
+                                                      titlePadding:
+                                                          EdgeInsets.all(5),
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                        left: 10,
+                                                        right: 10,
+                                                        bottom: 10,
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      content: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.15,
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Center(
+                                                                    child: AutoSizeText(
+                                                                        "Quantity"),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary:
+                                                                                purpleColor,
+                                                                            minimumSize:
+                                                                                Size(10, 15)),
+                                                                        child: Text(
+                                                                            "-"),
+                                                                        onPressed:
+                                                                            () {
+                                                                          if (checkOutCN.getQuantity >
+                                                                              1) {
+                                                                            setState(() {
+                                                                              checkOutCN.setQuanity = checkOutCN.getQuantity - 1;
+                                                                            });
+                                                                          }
+                                                                        },
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            5,
+                                                                      ),
+                                                                      AutoSizeText(
+                                                                          "${checkOutCN.getQuantity}"),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            5,
+                                                                      ),
+                                                                      ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary:
+                                                                                purpleColor,
+                                                                            minimumSize:
+                                                                                Size(10, 15)),
+                                                                        child: Text(
+                                                                            "+"),
+                                                                        onPressed:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            checkOutCN.setQuanity =
+                                                                                checkOutCN.getQuantity + 1;
+                                                                          });
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.05,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  AutoSizeText(
+                                                                      "Buyer Name: "),
+                                                                  SizedBox(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.05,
+                                                                  ),
+                                                                  Container(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.4,
+                                                                    height: 20,
+                                                                    child:
+                                                                        TextField(
+                                                                      controller:
+                                                                          textEditingController,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        hintText:
+                                                                            "Hamza Ali",
+                                                                        isDense:
+                                                                            true,
+                                                                        contentPadding: EdgeInsets.fromLTRB(
+                                                                            5.0,
+                                                                            1.0,
+                                                                            5.0,
+                                                                            1.0),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            ],
+                                                          )),
+                                                      actions: [
+                                                        Center(
+                                                          child: ElevatedButton(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              primary:
+                                                                  purpleColor,
+                                                            ),
+                                                            child: Text(
+                                                              "Check Out",
+                                                            ),
+                                                            onPressed:
+                                                                () async {
+                                                              await book
+                                                                  .checkoutBook(
+                                                                      key: key,
+                                                                      initialQuantity:
+                                                                          post[
+                                                                              "bookQuantity"],
+                                                                      finalQuantity:
+                                                                          checkOutCN
+                                                                              .getQuantity)
+                                                                  .then(
+                                                                      (status) {
+                                                                if (status ==
+                                                                    "Success") {
+                                                                  String
+                                                                      buyerName =
+                                                                      "Anonymous";
+                                                                  if (textEditingController
+                                                                      .text
+                                                                      .isNotEmpty) {
+                                                                    buyerName =
+                                                                        textEditingController
+                                                                            .text;
+                                                                  }
+                                                                  int total = post[
+                                                                          "finalBookPrice"] *
+                                                                      checkOutCN
+                                                                          .getQuantity;
+                                                                  int profit = (post[
+                                                                              "finalBookPrice"] -
+                                                                          post[
+                                                                              "initialBookPrice"]) *
+                                                                      checkOutCN
+                                                                          .getQuantity;
+                                                                  transactions
+                                                                      .makeTransaction(
+                                                                          buyerName,
+                                                                          post[
+                                                                              "bookName"],
+                                                                          post[
+                                                                              "finalBookPrice"],
+                                                                          checkOutCN
+                                                                              .getQuantity,
+                                                                          total,
+                                                                          profit)
+                                                                      .then(
+                                                                          (status) {
+                                                                    if (status ==
+                                                                        "Success") {
+                                                                      getListViewItems();
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    }
+                                                                  });
+                                                                }
+                                                              });
+                                                            },
+                                                          ),
+                                                        )
+                                                      ],
+                                                    );
+                                                  }),
+                                                ));
                                   }
                                 },
                               ),
@@ -288,21 +440,19 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
     List<Widget> widgetItemsList = [];
 
     await book.getAllBooksOfSeller().then((responseList) {
-      if(responseList.isNotEmpty)
-      {
-          responseList.forEach((key, value) {
-        searchString = searchString.toUpperCase();
-        String bookName = value["bookName"].toString().toUpperCase();
-        if (searchString.isNotEmpty) {
-          if (bookName.contains(searchString)) {
+      if (responseList.isNotEmpty) {
+        responseList.forEach((key, value) {
+          searchString = searchString.toUpperCase();
+          String bookName = value["bookName"].toString().toUpperCase();
+          if (searchString.isNotEmpty) {
+            if (bookName.contains(searchString)) {
+              widgetItemsList.add(listItem(key, value));
+            }
+          } else {
             widgetItemsList.add(listItem(key, value));
           }
-        } else {
-          widgetItemsList.add(listItem(key, value));
-        }
-      });
-      }
-      else {
+        });
+      } else {
         //if there is nothing in the list of books or recently deleted all of the books from database
         widgetItemsList.add(Container(
           child: Center(
@@ -313,7 +463,6 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
           ),
         ));
       }
-      
     }).catchError((Object error) {
       print("-------- error at getListviewItems() BSCheckoutManaully.dar");
     });
@@ -328,6 +477,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
     // TODO: implement initState
     super.initState();
     book = Book();
+    transactions = Transactions();
     getListViewItems();
     listViewController.addListener(() {
       double value = listViewController.offset / 170;

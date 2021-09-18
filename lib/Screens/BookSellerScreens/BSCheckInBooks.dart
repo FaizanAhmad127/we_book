@@ -46,6 +46,21 @@ class _CheckInBooksState extends State<CheckInBooks> {
     bookClassObject = Book();
   }
 
+ String compareInitialFinalPrice() {
+    String status;
+    if (int.parse(_initialBookPriceTextEditingController.text) >=
+        int.parse(_finalBookPriceTextEditingController.text)) {
+      BotToast.showText(
+          text: "Final price is lower than initial price",
+          duration: Duration(seconds: 5));
+      status = "Failure";
+    } else {
+      status= "Success";
+    }
+
+    return status;
+  }
+
   String checkForEmptyTextFields() {
     String status;
     if (file == null) {
@@ -219,7 +234,7 @@ class _CheckInBooksState extends State<CheckInBooks> {
                     buttonWidth: 0.5,
                     buttonText: "SAVE",
                     onPressed: () async {
-                      if (checkForEmptyTextFields() == "Success") {
+                      if (checkForEmptyTextFields() == "Success" && compareInitialFinalPrice()=="Success") {
                         await bookClassObject
                             .checkInBook(
                                 bookName: _bookNameTextEditingController.text,
