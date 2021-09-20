@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +39,6 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     var firebaseAuth = FirebaseAuth.instance;

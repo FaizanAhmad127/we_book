@@ -176,9 +176,9 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
       if (responseList.isNotEmpty) {
         responseList.forEach((key, post) {
           if (isPicked == true) {
-            if (post["Year"] == pickedYear &&
-                post["Month"] == pickedMonth &&
-                post["Day"] == pickedDay) {
+            if (post["year"] == pickedYear &&
+                post["month"] == pickedMonth &&
+                post["day"] == pickedDay) {
               widgetItemsList.add(listItem(key, post));
             }
           } else {

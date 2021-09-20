@@ -67,26 +67,34 @@ class FirebaseRetrieveShopDetails {
     }
   }
 
-  Future getShopLocation() async {
-    String lattitude, longitude;
+  Future<String> getShopLocation() async {
+    String status;
+    BotToast.showLoading();
+    double lattitude, longitude;
     sharedPreferences = await SharedPreferences.getInstance();
-    DataSnapshot snapshot = await firebaseDatabaseReference
+    await firebaseDatabaseReference
         .child("Book Seller/$uid/Shop Details")
         .once()
-        .whenComplete(() {})
-        .catchError((Object error) {
+        .then((snapshot) {
+      if (snapshot.value["lattitude"] == null ||
+          snapshot.value["longitude"] == null) {
+        sharedPreferences.setDouble("lattitude", 34.0060495);
+        sharedPreferences.setDouble("longitude", 71.5179581);
+      } else {
+        lattitude = snapshot.value["lattitude"];
+        longitude = snapshot.value["longitude"];
+        sharedPreferences.setDouble("lattitude", lattitude);
+        sharedPreferences.setDouble("longitude", longitude);
+      }
+    }).whenComplete(() {
+      status = "Success";
+      BotToast.closeAllLoading();
+    }).catchError((Object error) {
       print(error.toString());
+      BotToast.closeAllLoading();
+      status = "Failure";
     });
 
-    if (snapshot.value["lattitude"] == null ||
-        snapshot.value["longitude"] == null) {
-      sharedPreferences.setString("lattitude", "nothing");
-      sharedPreferences.setString("longitude", "nothing");
-    } else {
-      lattitude = snapshot.value["lattitude"];
-      longitude = snapshot.value["longitude"];
-      sharedPreferences.setString("lattitude", lattitude);
-      sharedPreferences.setString("longitude", longitude);
-    }
+    return status;
   }
 }

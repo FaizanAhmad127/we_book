@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Constants/Strings.dart';
+import 'package:we_book/Models/Authentications/FirebaseEmailPasswordLogin.dart';
 import 'package:we_book/Models/Authentications/FirebaseFacebookSignIn.dart';
 import 'package:we_book/Models/Authentications/FirebaseGoogleSignIn.dart';
 import 'package:we_book/Models/UserProfileDetails/RetrieveProfileData.dart';
@@ -91,6 +92,28 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double screenWidth = size.width;
+    // double screenHeight = size.height;
+    final snackBar = SnackBar(
+      backgroundColor: purpleColor,
+      elevation: 10,
+      padding: EdgeInsets.all(5),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      duration: Duration(seconds: 5),
+      content: Text(
+        "Check your email",
+      ),
+      action: SnackBarAction(
+        label: "OK",
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
     return SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height - 95,
@@ -111,6 +134,7 @@ class _UserProfileState extends State<UserProfile> {
                               .signOut()
                               .whenComplete(() {
                             sharedPreferences.clear();
+
                             Navigator.popAndPushNamed(
                                 context, "LoginSignupFragment");
                           });
@@ -177,70 +201,69 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
                                   placeholder: (context, url) =>
                                       CircularProgressIndicator(
-                                        color: purpleColor,
-                                      ),
+                                    color: purpleColor,
+                                  ),
                                   errorWidget: (context, url, error) => Icon(
                                     Icons.error,
                                   ),
                                 ),
-                              isAvatarTapped != true
-                                  ? Container()
-                                  : Center(
-                                    child: IconButton(
-                                      
-                                        alignment: Alignment.bottomCenter,
-                                        tooltip: "Change Profile Picture",
-                                        iconSize: 20,
-                                        color: Colors.white,
-                                        icon: Icon(Icons.cloud_upload_sharp),
-                                        onPressed: () async {
-                                          isAvatarTapped = false;
-                                          String saveUrl =
-                                              profilePictureURL; //save the url and use it if user don't select anything from gallery
-                                          if (uid == null) {
-                                            BotToast.showText(
-                                                text:
-                                                    "User is not registered/ Uid NULL");
-                                          } else {
-                                            print("${widget.category}/$uid");
-                                            try {
-                                              profilePictureURL =
-                                                  await uploadDownloadImage // user will pick the image now...
-                                                      .imagePicker()
-                                                      .then((file) {
-                                                return uploadDownloadImage
-                                                    .uploadImageToFirebaseStorage(
-                                                        file,
-                                                        "${widget.category}/$uid",
-                                                        "profilePicture");
-                                              }); //this method will also store the image in firebase storage and return the url of an image
-                                  
-                                            } catch (e) {
-                                              profilePictureURL = "nothing";
-                                            }
-                                  
-                                            if (profilePictureURL != "nothing") {
-                                              //if image is successfully picked
-                                              BotToast.showLoading();
-                                              await uploadProfileDataClassObject
-                                                  .updatePictureURL(
-                                                      url:
-                                                          profilePictureURL) // upload the image url to firebase realtime database
-                                                  .then((value) =>
-                                                      retrieveProfileDataClassObject //this method will now get the picture url and show image on defined part of a screen
-                                                          .getPictureURL());
-                                              BotToast.closeAllLoading();
+                                isAvatarTapped != true
+                                    ? Container()
+                                    : Center(
+                                        child: IconButton(
+                                          alignment: Alignment.bottomCenter,
+                                          tooltip: "Change Profile Picture",
+                                          iconSize: 20,
+                                          color: Colors.white,
+                                          icon: Icon(Icons.cloud_upload_sharp),
+                                          onPressed: () async {
+                                            isAvatarTapped = false;
+                                            String saveUrl =
+                                                profilePictureURL; //save the url and use it if user don't select anything from gallery
+                                            if (uid == null) {
+                                              BotToast.showText(
+                                                  text:
+                                                      "User is not registered/ Uid NULL");
                                             } else {
-                                              profilePictureURL = saveUrl;
+                                              print("${widget.category}/$uid");
+                                              try {
+                                                profilePictureURL =
+                                                    await uploadDownloadImage // user will pick the image now...
+                                                        .imagePicker()
+                                                        .then((file) {
+                                                  return uploadDownloadImage
+                                                      .uploadImageToFirebaseStorage(
+                                                          file,
+                                                          "${widget.category}/$uid",
+                                                          "profilePicture");
+                                                }); //this method will also store the image in firebase storage and return the url of an image
+
+                                              } catch (e) {
+                                                profilePictureURL = "nothing";
+                                              }
+
+                                              if (profilePictureURL !=
+                                                  "nothing") {
+                                                //if image is successfully picked
+                                                BotToast.showLoading();
+                                                await uploadProfileDataClassObject
+                                                    .updatePictureURL(
+                                                        url:
+                                                            profilePictureURL) // upload the image url to firebase realtime database
+                                                    .then((value) =>
+                                                        retrieveProfileDataClassObject //this method will now get the picture url and show image on defined part of a screen
+                                                            .getPictureURL());
+                                                BotToast.closeAllLoading();
+                                              } else {
+                                                profilePictureURL = saveUrl;
+                                              }
                                             }
-                                          }
-                                          setState(() {});
-                                        },
+                                            setState(() {});
+                                          },
+                                        ),
                                       ),
-                                  ),
                               ],
-                            )
-                            ),
+                            )),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.1,
@@ -342,19 +365,38 @@ class _UserProfileState extends State<UserProfile> {
                     setTextFieldData();
                   },
                 )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.008,
-            ),
             Expanded(
-                flex: 1,
-                child: AutoSizeText(
-                  "Want to change password?",
-                  style: TextStyle(
-                    color: Colors.blue,
+              flex: 1,
+              child: Container(
+                height: 20,
+                width: screenWidth,
+                child: GestureDetector(
+                  onTap: () async {
+                    String result = await FirebaseEmailPasswordLogin()
+                        .resetPassword(context: context, email: email.trim());
+
+                    if (result == "Success") {
+                      BotToast.showText(
+                          text: "Check your email please",
+                          contentColor: purpleColor,
+                          clickClose: true,
+                          duration: Duration(seconds: 5));
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      "Want to change password?",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: purpleColor,
+                      ),
+                    ),
                   ),
-                )),
+                ),
+              ),
+            ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01,
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
           ],
         ),

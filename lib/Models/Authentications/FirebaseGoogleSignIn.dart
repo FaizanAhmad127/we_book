@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:we_book/Models/ShopDetails/FirebaseUploadShopDetails.dart';
@@ -15,7 +14,10 @@ class FirebaseGoogleSignIn {
   Future<String> signIn({String userCategory}) async {
     String status;
     try {
-      GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+      googleSignIn.signOut();
+      GoogleSignInAccount googleSignInAccount;
+      googleSignInAccount = await googleSignIn.signIn();
+
       BotToast.showLoading();
       if (googleSignInAccount != null) {
         //check if book buyer and seller are already registered.
@@ -25,9 +27,10 @@ class FirebaseGoogleSignIn {
             await isBookSellerEmail(email: googleSignInAccount.email);
         //check whether user want to register as book buyer but the email is already registered with book seller
         if (userCategory == "Book Buyer" && bookSellerEmail) {
-          BotToast.showText(text: "Email used for Book Seller Registration");
-          await signOut().whenComplete(() async {
-            await FirebaseAuth.instance.signOut().whenComplete(() {
+          await FirebaseAuth.instance.signOut().whenComplete(() async {
+            await signOut().whenComplete(() {
+              BotToast.showText(
+                  text: "Email used for Book Seller Registration");
               BotToast.closeAllLoading();
               return "Failure";
             });
@@ -36,8 +39,8 @@ class FirebaseGoogleSignIn {
         //check whether user want to register as book seller but the email is already registered with book buyer
         else if (userCategory == "Book Seller" && bookBuyerEmail) {
           BotToast.showText(text: "Email used for Book Buyer Registration");
-          await signOut().whenComplete(() async {
-            await FirebaseAuth.instance.signOut().whenComplete(() {
+          await signOut().then((value) {
+            firebaseAuth.signOut().whenComplete(() {
               BotToast.closeAllLoading();
               return "Failure";
             });
@@ -88,15 +91,22 @@ class FirebaseGoogleSignIn {
     return status;
   }
 
+//
+// signing out
+//
   Future signOut() async {
+    BotToast.showLoading();
     try {
       if (firebaseAuth.currentUser != null) {
-        await googleSignIn.disconnect();
-        await googleSignIn.signOut();
+        await googleSignIn.disconnect().then((value) {
+          googleSignIn.signOut();
+        });
       }
     } catch (e) {
+      BotToast.closeAllLoading();
       print(e.toString());
     }
+    BotToast.closeAllLoading();
   }
 
   Future<String> populateDatabase(

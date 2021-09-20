@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:we_book/Models/Authentications/FirebaseEmailPasswordLogin.dart';
 import 'package:we_book/Models/Authentications/FirebaseFacebookSignIn.dart';
 import 'package:we_book/Models/Authentications/FirebaseGoogleSignIn.dart';
-import 'package:we_book/PreLoad/PreloadProfileData.dart';
+
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';
@@ -28,6 +28,7 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
   bool obscureText = true;
   Color color = Colors.grey;
   String email = "", password = "";
+  String forgotPasswordValue = "";
 
   @override
   void initState() {
@@ -57,6 +58,26 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
     Size size = MediaQuery.of(context).size;
     double screenWidth = size.width;
     double screenHeight = size.height;
+
+ final snackBar = SnackBar(
+      backgroundColor: purpleColor,
+      elevation: 10,
+      padding: EdgeInsets.all(5),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      duration: Duration(seconds: 5),
+      content: Text(
+        "Check your email",
+      ),
+      action: SnackBarAction(
+        label: "OK",
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
     return Scaffold(
       appBar: AppBarNormalUI().myAppBar(),
       body: SafeArea(
@@ -117,14 +138,80 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                         width: 0,
                         height: screenHeight * 0.01,
                       ),
-                      Container(
+                     Container(
                         height: 20,
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          "Forgot Password?",
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            color: purpleColor,
+                        width: screenWidth,
+                        child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    actionsPadding: EdgeInsets.all(10),
+                                    title: Text(
+                                      "Enter your registered EMAIL",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    titlePadding: EdgeInsets.all(5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    content: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                            hintText: "webook@gmail.com",
+                                            prefixIcon: Icon(
+                                              Icons.email,
+                                              color: purpleColor,
+                                            )),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        onChanged: (value) {
+                                          forgotPasswordValue = value;
+                                        },
+                                      ),
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          print(
+                                              "Value of TextEditingController is } $forgotPasswordValue");
+                                          if (forgotPasswordValue.isNotEmpty) {
+                                            String result =
+                                                await FirebaseEmailPasswordLogin()
+                                                    .resetPassword(
+                                                        context: context,
+                                                        email:
+                                                            forgotPasswordValue
+                                                                .trim());
+                                            Navigator.pop(context);
+                                            if (result == "Success") {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            }
+                                          }
+                                        },
+                                        child: Text(
+                                          "Send Email",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                });
+                          },
+                    
+                          child: Text(
+                            "Forgot Password?",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: purpleColor,
+                            ),
                           ),
                         ),
                       ),

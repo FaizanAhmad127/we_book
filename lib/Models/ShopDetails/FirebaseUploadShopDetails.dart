@@ -1,6 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 
 class FirebaseUploadShopDetails {
   var firebaseDatabaseReference = FirebaseDatabase().reference();
@@ -34,7 +33,8 @@ class FirebaseUploadShopDetails {
   }
 
   Future<String> insertShopLocation(
-      {String lattitude = "nothing", String longitude = "nothing"}) async {
+      {double lattitude = 34.0060495, double longitude = 71.5179581}) async {
+    BotToast.showLoading();
     String status = "";
     await firebaseDatabaseReference
         .child("Book Seller/$uid/Shop Details")
@@ -43,8 +43,11 @@ class FirebaseUploadShopDetails {
       "longitude": longitude,
     }).whenComplete(() {
       status = "Success";
+      BotToast.closeAllLoading();
     }).catchError((Object error) {
       status = "Failure";
+      print("error at insertShopLocation FirebaseUploadShopdetails.dart $error");
+      BotToast.closeAllLoading();
     });
     return status;
   }

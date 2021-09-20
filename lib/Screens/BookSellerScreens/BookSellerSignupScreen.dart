@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/Models/Authentications/FirebaseEmailPasswordSignup.dart';
-import 'package:we_book/Models/ShopDetails/FirebaseUploadShopDetails.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/TextFieldWidget.dart';

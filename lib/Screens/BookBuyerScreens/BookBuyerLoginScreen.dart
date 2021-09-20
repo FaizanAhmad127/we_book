@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -211,11 +212,6 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                                   );
                                 });
                           },
-                          // onTap: () async {
-                          //   await FirebaseEmailPasswordLogin().resetPassword(
-                          //       context: context,
-                          //       email: "faizanahmad.imsc@gmail.com");
-                          // },
                           child: Text(
                             "Forgot Password?",
                             textAlign: TextAlign.end,
@@ -312,6 +308,7 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
+                              
                               String status = await FirebaseGoogleSignIn()
                                   .signIn(userCategory: "Book Buyer");
                               if (status == "Success") {
