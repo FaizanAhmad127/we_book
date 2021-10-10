@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:we_book/Models/ShopDetails/FirebaseRetrieveShopDetails.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreenCN.dart';
 import 'package:we_book/UIs/GoogleMapsUI.dart';
@@ -17,9 +20,17 @@ class BookBuyerDashBoard extends StatefulWidget {
 }
 
 class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
+  String bookName;
+  FirebaseRetrieveShopDetails firebaseRetrieveShopDetails;
+  FirebaseAuth firebaseAuth;
+  String uid;
+
   @override
   void initState() {
     super.initState();
+    firebaseAuth = FirebaseAuth.instance;
+    uid = firebaseAuth.currentUser.uid;
+    firebaseRetrieveShopDetails = FirebaseRetrieveShopDetails(uid: uid);
   }
 
   void dispose() {
@@ -28,22 +39,8 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
 
   bool showPopUp = false;
   Set<Marker> myMarkers = {};
-  List<double> lat = [
-    34.0085425,
-    34.008916,
-    34.0081868,
-    34.0052696,
-    34.0048782,
-    34.0006267
-  ];
-  List<double> long = [
-    71.5072444,
-    71.5134671,
-    71.5203121,
-    71.5182737,
-    71.5280798,
-    71.5363196
-  ];
+  
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -78,6 +75,9 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
                   ),
                   child: TextField(
                     textInputAction: TextInputAction.search,
+                    onChanged: (value) {
+                      bookName = value;
+                    },
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -105,8 +105,20 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
                       )),
                       backgroundColor: MaterialStateProperty.all(purpleColor),
                     ),
-                    onPressed: () {
-                      updateMarker();
+                    onPressed: () async {
+                      setState(() {
+                        myMarkers.clear();
+                      });
+
+                      if (bookName != null && bookName != "") {
+                        await firebaseRetrieveShopDetails
+                            .getLocationsOfShops(bookName: bookName)
+                            .then((bookSellerLoc) {
+                          getMarker().then((markr) {
+                            updateMarker(bookSellerLoc, markr);
+                          });
+                        });
+                      }
                     },
                     child: Text(
                       "SEARCH",
@@ -146,28 +158,41 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
     );
   }
 
-  Future updateMarker() async {
-    BotToast.showLoading();
-    Uint8List imageData = await getMarker();
-
-    for (int i = 0; i < lat.length; i++) {
-      myMarkers.add(Marker(
-        markerId: MarkerId("bookicon $i"),
-        position: LatLng(lat[i], long[i]),
-        rotation: 0,
-        draggable: false,
-        zIndex: 2,
-        flat: true,
-        anchor: Offset(0.5, 0.5),
-        icon: BitmapDescriptor.fromBytes(imageData),
-        onTap: () {
-          setState(() {
-            showPopUp = true;
-          });
-        },
-      ));
+  Future updateMarker(List<Map<String, dynamic>> bookSellerLocations,
+      Uint8List imageData) async {
+    
+    if (bookSellerLocations != null) {
+      bookSellerLocations.forEach((element) {
+        String bookSellerKey;
+        
+        element.forEach((key, value) {
+          if (key == "bookSellerKey") {
+            bookSellerKey = value;
+          }
+          
+          if (key == "latlng") {
+            
+            myMarkers.add(Marker(
+              markerId: MarkerId("bookicon $bookSellerKey"),
+              position: LatLng(value.latitude, value.longitude),
+              rotation: 0,
+              draggable: false,
+              zIndex: 2,
+              flat: true,
+              anchor: Offset(0.5, 0.5),
+              icon: BitmapDescriptor.fromBytes(imageData),
+              onTap: () {
+                setState(() {
+                  showPopUp = true;
+                });
+              },
+            ));
+          }
+        });
+      });
+    } else {
+      BotToast.showText(text: "No book found", duration: Duration(seconds: 3));
     }
-    BotToast.closeAllLoading();
     setState(() {});
   }
 

@@ -1,5 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseRetrieveShopDetails {
@@ -96,5 +98,97 @@ class FirebaseRetrieveShopDetails {
     });
 
     return status;
+  }
+
+  Future<List<Map<String, dynamic>>> getLocationsOfShops(
+      {String bookName}) async {
+    BotToast.showLoading();
+    List<Map<String, dynamic>> bookSellerLocations = [];
+
+    await firebaseDatabaseReference
+        .child("Book Seller")
+        .once()
+        .then((dataSnapshot) async {
+
+          
+
+          for(var b in Map.from(dataSnapshot.value).entries)
+          {
+                dynamic bookSellerKey=b.key;
+                dynamic value=b.value;
+
+                List<String> myBookKeys = [];
+        print("Book seller uid is $bookSellerKey");
+
+        //children of Book Seller
+        for(var a in Map.from(value).entries){
+           // print("key is ${a.key}");
+
+          if (a.key == "Books") {
+
+            //childrens of Books
+            Map.from(a.value).forEach((bookKey, bookKeyValue) {
+
+              //children of specific book
+              Map.from(bookKeyValue).forEach((key, value) {
+                if (key == "bookName") {
+                  if (value
+                      .toString()
+                      .toLowerCase()
+                      .contains(bookName.toLowerCase())) {
+                   // print("yes this book is here and the bookKey is $bookKey");
+
+                    myBookKeys.add(bookKey);
+                  }
+                }
+              });
+            });
+          }
+         // print("myBookKeys are $myBookKeys");
+
+          if (myBookKeys.isNotEmpty) {
+           // print("Fetching shop details");
+
+             await firebaseDatabaseReference
+                .child("Book Seller/$bookSellerKey/Shop Details")
+                .once()
+                .then((dataSnapshot) {
+                  double latitude, longitude;
+                  Map.from(dataSnapshot.value).forEach((key, value) {
+                    if (key == "lattitude") {
+                      latitude = value;
+                    }
+                    if (key == "longitude") {
+                      longitude = value;
+                    }
+                  });
+                  if (latitude != null && longitude != null) {
+                   // print("lat is $latitude and longi is $longitude");
+                    LatLng latLngg = LatLng(latitude, longitude);
+                    bookSellerLocations.add({
+                      "bookSellerKey": bookSellerKey,
+                      "latlng": latLngg,
+                      "bookKeys": myBookKeys,
+                    });
+                  }
+                })
+                .whenComplete(() {})
+                .catchError((error) {
+                  print("getLocationOfShops $error");
+                });
+          }
+
+        }
+            
+          }
+      
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
+    }).catchError((error) {
+      BotToast.closeAllLoading();
+      print("error");
+    });
+   // print("about to return");
+    return bookSellerLocations;
   }
 }

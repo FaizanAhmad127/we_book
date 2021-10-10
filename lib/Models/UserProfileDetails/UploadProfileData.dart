@@ -10,13 +10,15 @@ class UploadProfileData {
   });
 
   Future<String> insertDataToDatabase(
-      {String fullName = "Full Name",
-      String emailAddress = "Enter email address..",
-      String physicalAddress = "Enter you address..",
-      String city = "Enter your city name",
-      String country = "Enter your country name",
-      String phoneNumber = "Enter your phone number"}) async {
+      {String fullName = "",
+      String emailAddress = "",
+      String physicalAddress = "",
+      String city = "",
+      String country = "",
+      String phoneNumber = ""}) async {
     String status = "";
+
+    BotToast.showLoading();
     await firebaseDatabaseReference
         .child("$userCategory/$uid/Profile Details")
         .update({
@@ -29,9 +31,11 @@ class UploadProfileData {
     }).whenComplete(() {
       print("user data is saved");
       status = "Success";
+      BotToast.closeAllLoading();
     }).catchError((Object error) {
       print("user Data not saved/Error");
       status = "Failure";
+      BotToast.closeAllLoading();
     });
     print("UploadProfileData.dart");
     return status;

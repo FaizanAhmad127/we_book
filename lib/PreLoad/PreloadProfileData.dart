@@ -1,9 +1,9 @@
-import 'package:bot_toast/bot_toast.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Models/ShopDetails/FirebaseRetrieveShopDetails.dart';
 import 'package:we_book/Models/UserProfileDetails/RetrieveProfileData.dart';
-import 'package:we_book/Services/LocationService.dart';
+
 
 class PreloadProfileData {
   SharedPreferences sharedPreferences;

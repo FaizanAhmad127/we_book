@@ -181,30 +181,30 @@ class _BookSellerSignupScreenState extends State<BookSellerSignupScreen> {
                         width: 0,
                         height: screenHeight * 0.05,
                       ),
-                      Center(
-                        child: Container(
-                          height: screenHeight * 0.065,
-                          width: screenWidth * 0.8,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 3,
-                              primary: purpleColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, "GetSellerLocation");
-                            },
-                            child: Text(
-                              "Fetch Location (Optional)",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Source Sans Pro"),
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Center(
+                      //   child: Container(
+                      //     height: screenHeight * 0.065,
+                      //     width: screenWidth * 0.8,
+                      //     child: ElevatedButton(
+                      //       style: ElevatedButton.styleFrom(
+                      //         elevation: 3,
+                      //         primary: purpleColor,
+                      //         shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(20),
+                      //         ),
+                      //       ),
+                      //       onPressed: () {
+                      //         Navigator.pushNamed(context, "GetSellerLocation");
+                      //       },
+                      //       child: Text(
+                      //         "Fetch Location (Optional)",
+                      //         style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontFamily: "Source Sans Pro"),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: screenHeight * 0.03,
                       ),

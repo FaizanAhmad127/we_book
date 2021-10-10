@@ -1,5 +1,4 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +6,7 @@ import 'package:we_book/PreLoad/PreloadProfileData.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BBBottomNavBarCN.dart';
 import 'package:we_book/Screens/BookBuyerScreens/BookBuyerDashBoard.dart';
 import 'package:we_book/Screens/BookBuyerScreens/BookBuyerProfile.dart';
-import 'package:we_book/Screens/CommonScreens/UserProfile.dart';
+
 
 import 'BookBuyerBottomNavigationBar.dart';
 
@@ -21,7 +20,7 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   SharedPreferences sharedPreferences;
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
   }
 
