@@ -109,66 +109,112 @@ class FirebaseRetrieveShopDetails {
         .child("Book Seller")
         .once()
         .then((dataSnapshot) async {
+      for (var b in Map.from(dataSnapshot.value).entries) {
+        dynamic bookSellerKey = b.key;
+        dynamic value = b.value;
 
-          
-
-          for(var b in Map.from(dataSnapshot.value).entries)
-          {
-                dynamic bookSellerKey=b.key;
-                dynamic value=b.value;
-
-                List<String> myBookKeys = [];
-        print("Book seller uid is $bookSellerKey");
+        
+        String authorName = "";
+        String bookImage = "";
+        int bookEdition;
+        int finalBookPrice;
+        String bookName2 = "";
+        //print("Book seller uid is $bookSellerKey");
 
         //children of Book Seller
-        for(var a in Map.from(value).entries){
-           // print("key is ${a.key}");
+        for (var a in Map.from(value).entries) {
+          //print("key is ${a.key}");
+          Map<String, dynamic> bookMap = {};
 
           if (a.key == "Books") {
-
             //childrens of Books
             Map.from(a.value).forEach((bookKey, bookKeyValue) {
-
+              bool isBookFound = false;
+              String myBookKey = "";
               //children of specific book
               Map.from(bookKeyValue).forEach((key, value) {
+               // print("key is $key");
+                if (key == "authorName") {
+                  authorName = value;
+                }
+                if (key == "bookEdition") {
+                  bookEdition = value;
+                }
+                if (key == "bookImage") {
+                  bookImage = value;
+                }
                 if (key == "bookName") {
+                  bookName2 = value;
+                }
+                if (key == "finalBookPrice") {
+                  finalBookPrice = value;
+                }
+                if (key == "bookName") {
+                 
                   if (value
                       .toString()
                       .toLowerCase()
                       .contains(bookName.toLowerCase())) {
-                   // print("yes this book is here and the bookKey is $bookKey");
-
-                    myBookKeys.add(bookKey);
+                    // print("yes this book is here and the bookKey is $bookKey");
+                    isBookFound = true;
+                    myBookKey = bookKey;
+                    
                   }
                 }
               });
+             
+              if(isBookFound==true)
+              {
+                   bookMap.addAll({
+                myBookKey: {
+                  "bookImage": bookImage,
+                  "bookName": bookName2,
+                  "bookEdition":bookEdition,
+                  "authorName": authorName,
+                  "finalBookPrice": finalBookPrice,
+                }
+              });
+              }
+              
             });
           }
-         // print("myBookKeys are $myBookKeys");
+         // print("bookMap  is $bookMap and ${bookMap.isNotEmpty}");
 
-          if (myBookKeys.isNotEmpty) {
-           // print("Fetching shop details");
+          if (bookMap.isNotEmpty) {
+            //print("Fetching shop details");
 
-             await firebaseDatabaseReference
+            await firebaseDatabaseReference
                 .child("Book Seller/$bookSellerKey/Shop Details")
                 .once()
                 .then((dataSnapshot) {
-                  double latitude, longitude;
+                  double latitude = 1, longitude = 1;
+                  String shopName = "";
+                  String shopAddress = "";
+                  String shopPhoneNumber = "";
                   Map.from(dataSnapshot.value).forEach((key, value) {
                     if (key == "lattitude") {
                       latitude = value;
-                    }
-                    if (key == "longitude") {
+                    } if (key == "longitude") {
                       longitude = value;
+                    } if (key == "shopName") {
+                      shopName = value;
+                    } if (key == "shopAddress") {
+                      shopAddress = value;
+                    } if (key == "shopPhoneNumber") {
+                      shopPhoneNumber = value;
                     }
                   });
                   if (latitude != null && longitude != null) {
-                   // print("lat is $latitude and longi is $longitude");
+                    // print("lat is $latitude and longi is $longitude");
                     LatLng latLngg = LatLng(latitude, longitude);
+
                     bookSellerLocations.add({
                       "bookSellerKey": bookSellerKey,
+                      "bookMap": bookMap,
+                      "shopName": shopName,
+                      "shopAddress": shopAddress,
+                      "shopPhoneNumber": shopPhoneNumber,
                       "latlng": latLngg,
-                      "bookKeys": myBookKeys,
                     });
                   }
                 })
@@ -177,18 +223,15 @@ class FirebaseRetrieveShopDetails {
                   print("getLocationOfShops $error");
                 });
           }
-
         }
-            
-          }
-      
+      }
     }).whenComplete(() {
       BotToast.closeAllLoading();
     }).catchError((error) {
       BotToast.closeAllLoading();
       print("error");
     });
-   // print("about to return");
+    // print("about to return");
     return bookSellerLocations;
   }
 }

@@ -25,6 +25,10 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
   FirebaseAuth firebaseAuth;
   String uid;
 
+  List<Map<String, dynamic>> booksDataMap = [];
+  bool showPopUp = false;
+  Set<Marker> myMarkers = {};
+
   @override
   void initState() {
     super.initState();
@@ -36,10 +40,6 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
   void dispose() {
     super.dispose();
   }
-
-  bool showPopUp = false;
-  Set<Marker> myMarkers = {};
-  
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +141,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
               bottom: 20,
               right: 20,
               left: 20,
-              child: BookPopUpUI(), //_controller),
+              child: BookPopUpUI(booksDataMap: booksDataMap), //_controller),
             );
           } else {
             return Container();
@@ -160,18 +160,35 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
 
   Future updateMarker(List<Map<String, dynamic>> bookSellerLocations,
       Uint8List imageData) async {
-    
-    if (bookSellerLocations != null) {
+   
+    if (bookSellerLocations.isNotEmpty) {
       bookSellerLocations.forEach((element) {
         String bookSellerKey;
-        
+        Map<String, dynamic> bookMap;
+        String shopName;
+        String shopAddress;
+        String shopPhoneNumber;
+        int editionCount;
+
         element.forEach((key, value) {
           if (key == "bookSellerKey") {
             bookSellerKey = value;
           }
-          
+          if (key == "bookMap") {
+            editionCount = Map.from(value).length;
+            bookMap = Map.from(value);
+          }
+          if (key == "shopName") {
+            shopName = value;
+          }
+          if (key == "shopAddress") {
+            shopAddress = value;
+          }
+          if (key == "shopPhoneNumber") {
+            shopPhoneNumber = value;
+          }
+
           if (key == "latlng") {
-            
             myMarkers.add(Marker(
               markerId: MarkerId("bookicon $bookSellerKey"),
               position: LatLng(value.latitude, value.longitude),
@@ -179,13 +196,23 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
               draggable: false,
               zIndex: 2,
               flat: true,
+              infoWindow: InfoWindow(
+                  onTap: () {
+                    booksDataMap.clear();
+                    populateBooksMapData(
+                        bookMap: bookMap,
+                        bookSellerKey: bookSellerKey,
+                        shopName: shopName,
+                        shopAddress: shopAddress,
+                        shopPhoneNumber: shopPhoneNumber);
+                    setState(() {
+                      showPopUp = true;
+                    });
+                  },
+                  title: "$editionCount edition found",
+                  snippet: "Tap me to find more"),
               anchor: Offset(0.5, 0.5),
               icon: BitmapDescriptor.fromBytes(imageData),
-              onTap: () {
-                setState(() {
-                  showPopUp = true;
-                });
-              },
             ));
           }
         });
@@ -200,5 +227,50 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
     ByteData byteData =
         await DefaultAssetBundle.of(context).load("images/bookicon.png");
     return byteData.buffer.asUint8List();
+  }
+
+  void populateBooksMapData(
+      {String bookSellerKey,
+      Map<String, dynamic> bookMap,
+      String shopName,
+      shopAddress,
+      shopPhoneNumber}) {
+    bookMap.forEach((bookKey, value) {
+      String qrCodeKey, bookName2, bookImage, authorName;
+      qrCodeKey = bookSellerKey + " " + bookKey;
+
+      int bookEdition, finalBookPrice;
+      Map.from(value).forEach((key, value) {
+        if (key == "bookImage") {
+          bookImage = value;
+        }
+        if (key == "bookName") {
+          bookName2 = value;
+        }
+        if (key == "bookEdition") {
+          bookEdition = value;
+        }
+        if (key == "authorName") {
+          authorName = value;
+        }
+        if (key == "finalBookPrice") {
+          finalBookPrice = value;
+        }
+      });
+      booksDataMap.add({
+        "qrCodeKey": qrCodeKey,
+        "bookSellerKey": bookSellerKey,
+        "shopName": shopName,
+        "shopAddress": shopAddress,
+        "shopPhoneNumber": shopPhoneNumber,
+        "bookImage": bookImage,
+        "bookName": bookName2,
+        "bookEdition": bookEdition,
+        "authorName": authorName,
+        "finalBookPrice": finalBookPrice,
+      });
+    });
+
+    // print("booksDataMap is $booksDataMap");
   }
 }
