@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:we_book/Provider%20ChangeNotifiers/BBBottomNavBarCN.dart';
 import 'package:we_book/constants.dart';
 
@@ -43,6 +43,10 @@ class _BookBuyerBottomNavigationBarState
           ;
         } else if (selectedIndex == 0) {
           Provider.of<BBBottomNavBarCN>(context, listen: false).setHomeScreen =
+              true;
+        }
+        else if(selectedIndex==1){
+Provider.of<BBBottomNavBarCN>(context, listen: false).setMyQRCodesScreen =
               true;
         }
       },

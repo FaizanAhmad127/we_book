@@ -1,0 +1,386 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:we_book/Models/QrManagement/FirebaseQr.dart';
+import 'package:we_book/UIs/AppBarNormalUI.dart';
+import 'package:we_book/constants.dart';
+
+class BookBuyerMyQRCodes extends StatefulWidget {
+  @override
+  _BookBuyerMyQRCodesState createState() => _BookBuyerMyQRCodesState();
+}
+
+class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
+  List<dynamic> wholeItems = [];
+  bool showQr = false;
+  String qrKey = "";
+  Widget booksListViewItem(String bookKey, Map<String, dynamic> bookMap) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width * 0.7,
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3),
+            side: BorderSide(
+              color: purpleColor,
+            )),
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Expanded(
+                    child: Row(
+                  
+                  children: [
+                    AutoSizeText(
+                      "${bookMap["bookName"]}",
+                      minFontSize: 10,
+                      maxFontSize: 18,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ],
+                )),
+                SizedBox(
+                  height: height * 0.01,
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      AutoSizeText(
+                        "Author: ",
+                        maxFontSize: 14,
+                        minFontSize: 8,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: width * 0.05,
+                      ),
+                      //author name
+                      AutoSizeText(
+                        "${bookMap["authorName"]}",
+                        maxFontSize: 14,
+                        minFontSize: 8,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                    //for edition and price
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //for edition
+                    Row(
+                      children: [
+                        AutoSizeText(
+                          "Edition: ",
+                          maxFontSize: 14,
+                          minFontSize: 8,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        SizedBox(
+                          width: width * 0.05,
+                        ),
+                        AutoSizeText(
+                          "${bookMap["bookEdition"]}",
+                          maxFontSize: 14,
+                          minFontSize: 8,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        AutoSizeText(
+                          "Price: ",
+                          maxFontSize: 14,
+                          minFontSize: 8,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        SizedBox(
+                          width: width * 0.05,
+                        ),
+                        AutoSizeText(
+                          "${bookMap["finalBookPrice"]}",
+                          maxFontSize: 14,
+                          minFontSize: 8,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget wholeListViewItem(Map<String, dynamic> post) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.4,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(),
+      child: Card(
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.black, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            //for shpname,phoneno and address
+            Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      //for shop name and address
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //for shopname
+                            Row(
+                              children: [
+                                Icon(FontAwesomeIcons.building),
+                                SizedBox(
+                                  width: width * 0.02,
+                                ),
+                                AutoSizeText(
+                                  "${post["shopName"]}",
+                                  maxFontSize: 14,
+                                  minFontSize: 8,
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: width * 0.03),
+                            //for phone number
+                            Row(
+                              children: [
+                                Icon(FontAwesomeIcons.phone),
+                                SizedBox(
+                                  width: width * 0.02,
+                                ),
+                                AutoSizeText(
+                                  "${post["shopPhoneNumber"]}",
+                                  maxFontSize: 14,
+                                  minFontSize: 8,
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: height * 0.04),
+                      //for address
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(FontAwesomeIcons.mapMarker),
+                            SizedBox(
+                              width: width * 0.02,
+                            ),
+                            AutoSizeText(
+                              "${post["shopAddress"]}",
+                              maxFontSize: 14,
+                              minFontSize: 8,
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            Divider(
+              color: purpleColor,
+            ),
+
+            //for our book details listview
+            Expanded(
+                flex: 2,
+                child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: Map.from(post["bookMap"]).length,
+                        itemBuilder: (context, index) {
+                          return getBooksListViewItems(
+                              Map.from(post["bookMap"]))[index];
+                        }))),
+            Expanded(
+                child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print("qrkey is ${post["qrKey"]}");
+                        setState(() {
+                          showQr = true;
+                          qrKey = post["qrKey"];
+                        });
+                      },
+                      child: AutoSizeText(
+                        "View QR Code",
+                        maxFontSize: 14,
+                        minFontSize: 8,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getWholeListViewItems();
+  }
+
+  Future getWholeListViewItems() async {
+    BotToast.showLoading();
+    List<Widget> widgetList = [];
+    List<Map<String, dynamic>> bookSellerQRCodes =
+        await FirebaseQr().retieveQrCode();
+    if (bookSellerQRCodes != []) {
+      bookSellerQRCodes.forEach((element) {
+        getBooksListViewItems(element["bookMap"]);
+        widgetList.add(wholeListViewItem(element));
+      });
+    } else {
+      widgetList.add(Center(
+        child: Container(
+          child: Text("Nothing to show"),
+        ),
+      ));
+    }
+    BotToast.closeAllLoading();
+    setState(() {
+      wholeItems = widgetList;
+    });
+  }
+
+  List<Widget> getBooksListViewItems(Map<String, dynamic> booksMap) {
+    List<Widget> widgetList = [];
+    // print(booksMap);
+    if (booksMap != {}) {
+      booksMap.forEach((key, value) {
+        widgetList.add(booksListViewItem(key, value));
+      });
+    } else {
+      widgetList.add(Center(
+        child: Container(
+          child: Text("Nothing to show"),
+        ),
+      ));
+    }
+    return widgetList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBarNormalUI().myAppBar(),
+        body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Stack(
+              children: [
+                ListView.builder(
+                    itemCount: wholeItems.length,
+                    itemBuilder: (context, index) {
+                      return wholeItems[index];
+                    }),
+                showQr == true
+                    ? Positioned(
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        right: MediaQuery.of(context).size.width * 0.05,
+                        bottom: MediaQuery.of(context).size.height * 0.05,
+                        top: MediaQuery.of(context).size.height * 0.05,
+                        child: Card(
+                          elevation: 20,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(color: purpleColor, width: 4)),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showQr = false;
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Icon(
+                                        Icons.cancel,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                              ),
+                              Container(
+                                child: Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: QrImage(
+                                    data: qrKey,
+                                    version: QrVersions.auto,
+                                    errorCorrectionLevel: QrErrorCorrectLevel.L,
+                                    padding: EdgeInsets.all(10),
+                                    constrainErrorBounds: true,
+                                    backgroundColor: Colors.white,
+                                    errorStateBuilder: (cxt, err) {
+                                      return Container(
+                                        child: Center(
+                                          child: Text(
+                                            "Uh oh! Something went wrong...",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),)
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ],
+            )));
+  }
+}

@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/PreLoad/PreloadProfileData.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BBBottomNavBarCN.dart';
 import 'package:we_book/Screens/BookBuyerScreens/BookBuyerDashBoard.dart';
+import 'package:we_book/Screens/BookBuyerScreens/BookBuyerMyQRCodes.dart';
 import 'package:we_book/Screens/BookBuyerScreens/BookBuyerProfile.dart';
-
 
 import 'BookBuyerBottomNavigationBar.dart';
 
@@ -20,7 +19,6 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
   SharedPreferences sharedPreferences;
   @override
   void initState() {
-    
     super.initState();
   }
 
@@ -47,6 +45,8 @@ class _BookBuyerHomeScreenState extends State<BookBuyerHomeScreen> {
                   return BookBuyerDashBoard();
                 } else if (bottomNavBarCN.getProfileScreen == true) {
                   return BookBuyerProfile();
+                } else if (bottomNavBarCN.getMyQRCodesScreen == true) {
+                  return BookBuyerMyQRCodes();
                 } else {
                   return Container();
                 }

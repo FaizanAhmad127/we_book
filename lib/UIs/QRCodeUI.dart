@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:we_book/Models/QrManagement/FirebaseQr.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenPopUpBookCN.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/OpenQRCodeScreenCN.dart';
 import 'package:we_book/constants.dart';
@@ -31,7 +33,10 @@ class QRCodeUI extends StatelessWidget {
                   // Navigator.popAndPushNamed(context, "BookBuyerHomeScreen");
                 },
                 child: Container(
-                  child: Icon(Icons.cancel),
+                  child: Icon(
+                    Icons.cancel,
+                    size: 30,
+                  ),
                 ),
               ),
               Expanded(
@@ -44,11 +49,15 @@ class QRCodeUI extends StatelessWidget {
                 flex: 4,
                 child: Center(
                   child: QrImage(
-                    data: '12h34j5k6l8jd8jd8dj8h43l3l39',
-                    version: 3,
+                    data:
+                        Provider.of<OpenQRCodeScreenCN>(context, listen: false)
+                            .myBookMap["qrCodeKey"],
+                    version: QrVersions.auto,
                     errorCorrectionLevel: QrErrorCorrectLevel.L,
+
                     padding: EdgeInsets.all(10),
                     constrainErrorBounds: true,
+                    //embeddedImage: AssetImage('images/webooklogo.jpg'),
                     backgroundColor: Colors.white,
                     errorStateBuilder: (cxt, err) {
                       return Container(
@@ -81,7 +90,22 @@ class QRCodeUI extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await FirebaseQr()
+                            .uploadQrCode(Provider.of<OpenQRCodeScreenCN>(
+                                    context,
+                                    listen: false)
+                                .myBookMap)
+                            .then((status) {
+                          if (status == "Success") {
+                            BotToast.showText(text: "QR Code Saved");
+                            Provider.of<OpenQRCodeScreenCN>(context, listen: false)
+                      .qrStatus = false;
+                  Provider.of<OpenPopUpBookCN>(context, listen: false)
+                      .popUpStatus = false;
+                          }
+                        });
+                      },
                       child: AutoSizeText(
                         "Save QR Code",
                         style: TextStyle(

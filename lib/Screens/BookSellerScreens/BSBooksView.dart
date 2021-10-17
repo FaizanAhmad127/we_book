@@ -325,7 +325,7 @@ class _BSBooksViewState extends State<BSBooksView> {
 
   @override
   void initState() {
-    // TODO: implement initState
+  
     super.initState();
     book = Book();
     getListViewItems();

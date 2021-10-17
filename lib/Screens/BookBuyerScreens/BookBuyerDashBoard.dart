@@ -237,7 +237,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
       shopPhoneNumber}) {
     bookMap.forEach((bookKey, value) {
       String qrCodeKey, bookName2, bookImage, authorName;
-      qrCodeKey = bookSellerKey + " " + bookKey;
+      qrCodeKey = bookSellerKey + " " +uid+" "+ bookKey;
 
       int bookEdition, finalBookPrice;
       Map.from(value).forEach((key, value) {
@@ -260,6 +260,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
       booksDataMap.add({
         "qrCodeKey": qrCodeKey,
         "bookSellerKey": bookSellerKey,
+        "bookKey":bookKey,
         "shopName": shopName,
         "shopAddress": shopAddress,
         "shopPhoneNumber": shopPhoneNumber,

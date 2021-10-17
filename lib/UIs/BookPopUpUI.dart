@@ -322,6 +322,8 @@ class _BookPopUpUIState extends State<BookPopUpUI> {
               ),
             ),
             onPressed: () {
+              Provider.of<OpenQRCodeScreenCN>(context, listen: false).myBookMap =
+                  element;
               Provider.of<OpenQRCodeScreenCN>(context, listen: false).qrStatus =
                   true;
               //_controller.add(true);
@@ -396,7 +398,7 @@ class _BookPopUpUIState extends State<BookPopUpUI> {
                             .popUpStatus = false;
                       },
                       child: Container(
-                        child: Icon(Icons.cancel),
+                        child: Icon(Icons.cancel,size: 30,),
                       ),
                     )
                   ],
