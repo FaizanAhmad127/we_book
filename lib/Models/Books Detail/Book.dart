@@ -138,7 +138,22 @@ class Book {
     return status;
   }
 
-
+  Future<Map<String, dynamic>> getBooksDetailsUsingBookKey(
+      String bookSellerKey, List<String> bookKeys) async {
+    Map<String, dynamic> booksMap = {};
+    for (String currentBookKey in bookKeys) {
+      DataSnapshot snapshot = await databaseReference
+          .child("Book Seller/$bookSellerKey/Books/$currentBookKey")
+          .once()
+          .catchError((error) {
+        print(error);
+      });
+      if (snapshot.value != null) {
+        booksMap.addAll({currentBookKey: Map.from(snapshot.value)});
+      }
+    }
+    return booksMap;
+  }
 
   Future getParentKeyOfBook({String uid, String bookName}) async {
     //String status = "The book doesn't exist";

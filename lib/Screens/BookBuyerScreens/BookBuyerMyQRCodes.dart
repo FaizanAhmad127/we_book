@@ -17,9 +17,13 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
   List<dynamic> wholeItems = [];
   bool showQr = false;
   String qrKey = "";
-  Widget booksListViewItem(String bookKey, Map<String, dynamic> bookMap) {
+  FirebaseQr firebaseQr;
+  Widget booksListViewItem(
+      String qrKey, String bookKey, Map<String, dynamic> bookMap) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    String deleteQrKey = qrKey + " " + bookKey;
+
     return Container(
       width: width * 0.7,
       child: Card(
@@ -37,7 +41,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
               children: [
                 Expanded(
                     child: Row(
-                  
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
                       "${bookMap["bookName"]}",
@@ -45,6 +49,41 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                       maxFontSize: 18,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await firebaseQr
+                            .deleteBookQR(deleteQrKey)
+                            .then((status) {
+                          if (status == "Success") {
+                            setState(() {
+                              getWholeListViewItems();
+                            });
+                          }
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AutoSizeText(
+                            "Delete",
+                            minFontSize: 8,
+                            maxFontSize: 18,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            width: width * 0.01,
+                          ),
+                          Icon(
+                            Icons.delete_forever,
+                            size: 20,
+                            color: Colors.red,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 )),
@@ -110,7 +149,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                           width: width * 0.05,
                         ),
                         AutoSizeText(
-                          "${bookMap["finalBookPrice"]}",
+                          "${bookMap["finalBookPrice"]}/-",
                           maxFontSize: 14,
                           minFontSize: 8,
                           style: TextStyle(fontSize: 14),
@@ -142,6 +181,50 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
         ),
         child: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.only(left: 5, top: 5),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10)))),
+                      elevation: MaterialStateProperty.all(10),
+                      fixedSize: MaterialStateProperty.all(
+                          Size(width * 0.3, height * 0.04))),
+                  onPressed: () async{
+                    await firebaseQr.deleteSellerQR(post["bookSellerKey"]).then((status) {
+                      if (status == "Success") {
+                        setState(() {
+                          getWholeListViewItems();
+                        });
+                      }
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AutoSizeText(
+                        "Delete",
+                        minFontSize: 8,
+                        maxFontSize: 18,
+                        style: TextStyle(color: Colors.amber, fontSize: 18),
+                      ),
+                      SizedBox(
+                        width: width * 0.01,
+                      ),
+                      Icon(
+                        Icons.delete_forever,
+                        size: 20,
+                        color: Colors.amber,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             //for shpname,phoneno and address
             Expanded(
                 flex: 2,
@@ -223,7 +306,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                         itemCount: Map.from(post["bookMap"]).length,
                         itemBuilder: (context, index) {
                           return getBooksListViewItems(
-                              Map.from(post["bookMap"]))[index];
+                              post["qrKey"], Map.from(post["bookMap"]))[index];
                         }))),
             Expanded(
                 child: Row(
@@ -233,7 +316,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                     padding: EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
-                        print("qrkey is ${post["qrKey"]}");
+                        //print("qrkey is ${post["qrKey"]}");
                         setState(() {
                           showQr = true;
                           qrKey = post["qrKey"];
@@ -259,6 +342,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
   @override
   void initState() {
     super.initState();
+    firebaseQr = FirebaseQr();
     getWholeListViewItems();
   }
 
@@ -266,18 +350,22 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
     BotToast.showLoading();
     List<Widget> widgetList = [];
     List<Map<String, dynamic>> bookSellerQRCodes =
-        await FirebaseQr().retieveQrCode();
-    if (bookSellerQRCodes != []) {
+        await firebaseQr.retieveQrCode();
+
+    if (bookSellerQRCodes.isNotEmpty) {
       bookSellerQRCodes.forEach((element) {
-        getBooksListViewItems(element["bookMap"]);
         widgetList.add(wholeListViewItem(element));
       });
     } else {
       widgetList.add(Center(
-        child: Container(
-          child: Text("Nothing to show"),
+          child: Container(
+        child: Center(
+          child: AutoSizeText(
+            "Nothing to show",
+            style: TextStyle(fontSize: 20),
+          ),
         ),
-      ));
+      )));
     }
     BotToast.closeAllLoading();
     setState(() {
@@ -285,12 +373,13 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
     });
   }
 
-  List<Widget> getBooksListViewItems(Map<String, dynamic> booksMap) {
+  List<Widget> getBooksListViewItems(
+      String qrKey, Map<String, dynamic> booksMap) {
     List<Widget> widgetList = [];
-    // print(booksMap);
+
     if (booksMap != {}) {
       booksMap.forEach((key, value) {
-        widgetList.add(booksListViewItem(key, value));
+        widgetList.add(booksListViewItem(qrKey, key, value));
       });
     } else {
       widgetList.add(Center(
@@ -353,9 +442,9 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                               ),
                               Container(
                                 child: Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: QrImage(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: QrImage(
                                     data: qrKey,
                                     version: QrVersions.auto,
                                     errorCorrectionLevel: QrErrorCorrectLevel.L,
@@ -372,8 +461,8 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                                         ),
                                       );
                                     },
-                                  ),)
-                                ),
+                                  ),
+                                )),
                               )
                             ],
                           ),

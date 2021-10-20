@@ -437,6 +437,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
   }
 
   void getListViewItems() async {
+    BotToast.showLoading();
     List<Widget> widgetItemsList = [];
 
     await book.getAllBooksOfSeller().then((responseList) {
@@ -463,7 +464,10 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
           ),
         ));
       }
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
     }).catchError((Object error) {
+      BotToast.closeAllLoading();
       print("-------- error at getListviewItems() BSCheckoutManaully.dar");
     });
 
@@ -474,7 +478,6 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     book = Book();
     transactions = Transactions();

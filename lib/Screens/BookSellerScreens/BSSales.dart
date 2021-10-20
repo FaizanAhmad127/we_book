@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/Models/Books%20Detail/Transactions.dart';
@@ -10,9 +11,7 @@ class BSSales extends StatefulWidget {
 }
 
 class _BSSalesState extends State<BSSales> {
-  int todayProfitValue = 0,
-      monthlyProfitValue = 0,
-      yearlyProfitValue = 0;
+  int todayProfitValue = 0, monthlyProfitValue = 0, yearlyProfitValue = 0;
   Transactions transactions;
 
   @override
@@ -23,6 +22,7 @@ class _BSSalesState extends State<BSSales> {
   }
 
   void profit() async {
+    BotToast.showLoading();
     await transactions.todayProfit().then((value) {
       todayProfitValue = value;
       return transactions.monthProfit();
@@ -31,9 +31,12 @@ class _BSSalesState extends State<BSSales> {
       return transactions.yearProfit();
     }).then((value) {
       yearlyProfitValue = value;
-      setState(() {
-        
-      });
+      setState(() {});
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
+    }).catchError((Object error) {
+      BotToast.closeAllLoading();
+      print("-------- error at profit() BSSales.dar");
     });
   }
 
@@ -310,6 +313,4 @@ class _BSSalesState extends State<BSSales> {
       ),
     ));
   }
-
-
 }

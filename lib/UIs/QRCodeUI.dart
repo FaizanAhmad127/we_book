@@ -101,8 +101,7 @@ class QRCodeUI extends StatelessWidget {
                             BotToast.showText(text: "QR Code Saved");
                             Provider.of<OpenQRCodeScreenCN>(context, listen: false)
                       .qrStatus = false;
-                  Provider.of<OpenPopUpBookCN>(context, listen: false)
-                      .popUpStatus = false;
+                 
                           }
                         });
                       },

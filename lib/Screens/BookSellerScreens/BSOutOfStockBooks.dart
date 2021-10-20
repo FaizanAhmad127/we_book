@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -39,8 +40,8 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: EdgeInsets.all(7),
-                  child: CachedNetworkImage(
+                    padding: EdgeInsets.all(7),
+                    child: CachedNetworkImage(
                       height: 100,
                       width: 60,
                       imageUrl: post["bookImage"],
@@ -55,8 +56,7 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
                       errorWidget: (context, url, error) => Icon(
                         Icons.error,
                       ),
-                    )
-                ),
+                    )),
               ),
               Expanded(
                   flex: 5,
@@ -170,6 +170,7 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
   }
 
   void getListViewItems() async {
+    BotToast.showLoading();
     List<Widget> widgetItemsList = [];
     bool isAnyBookFound = false;
     await book.getAllBooksOfSeller().then((responseList) {
@@ -188,7 +189,8 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
             }
           }
         });
-      } if(responseList.isEmpty || isAnyBookFound==false){
+      }
+      if (responseList.isEmpty || isAnyBookFound == false) {
         //if there is nothing in the list of books or recently deleted all of the books from database
         widgetItemsList.add(Container(
           child: Center(
@@ -199,7 +201,13 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
           ),
         ));
       }
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
+    }).catchError((Object error) {
+      BotToast.closeAllLoading();
+      print("-------- error at getListviewItems() BSOutOfStockBooks.dar");
     });
+    ;
     setState(() {
       items = widgetItemsList;
     });

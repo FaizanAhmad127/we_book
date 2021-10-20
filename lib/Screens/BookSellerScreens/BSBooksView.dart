@@ -254,8 +254,9 @@ class _BSBooksViewState extends State<BSBooksView> {
                                   child: Text(
                                     "Delete",
                                   ),
-                                  onPressed: () async { 
-                                    String status = await book.deleteBook(key);// first we will delete the asked book node using it's unique key
+                                  onPressed: () async {
+                                    String status = await book.deleteBook(
+                                        key); // first we will delete the asked book node using it's unique key
                                     if (status == "Success") {
                                       status = await book
                                           .deleteBookPictureFromFirebaseStorage(
@@ -266,7 +267,6 @@ class _BSBooksViewState extends State<BSBooksView> {
                                                 "Book is successfully deleted");
                                         getListViewItems();
                                       }
-                                      
                                     } else {
                                       BotToast.showText(
                                           text: "Unable to delete book");
@@ -291,6 +291,7 @@ class _BSBooksViewState extends State<BSBooksView> {
   }
 
   void getListViewItems() async {
+    BotToast.showLoading();
     List<Widget> widgetItemsList = [];
 
     await book.getAllBooksOfSeller().then((responseList) {
@@ -317,6 +318,11 @@ class _BSBooksViewState extends State<BSBooksView> {
           ),
         ));
       }
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
+    }).catchError((Object error) {
+      BotToast.closeAllLoading();
+      print("-------- error at getListviewItems() BSBooksView.dart");
     });
     setState(() {
       items = widgetItemsList;
@@ -325,7 +331,6 @@ class _BSBooksViewState extends State<BSBooksView> {
 
   @override
   void initState() {
-  
     super.initState();
     book = Book();
     getListViewItems();

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:we_book/Models/Books%20Detail/Transactions.dart';
@@ -170,6 +171,7 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
   }
 
   void getListViewItems() async {
+    BotToast.showLoading();
     List<Widget> widgetItemsList = [];
 
     await bookTransactions.getAllTransactions().then((responseList) {
@@ -196,7 +198,13 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
           ),
         ));
       }
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
+    }).catchError((Object error) {
+      BotToast.closeAllLoading();
+      print("-------- error at getListviewItems() BSTransactionScreen.dart");
     });
+    ;
 
     setState(() {
       items = widgetItemsList;
