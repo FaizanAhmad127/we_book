@@ -30,6 +30,12 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
   String email = "", password = "";
   String forgotPasswordValue = "";
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

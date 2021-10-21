@@ -14,6 +14,12 @@ class _BSSalesState extends State<BSSales> {
   int todayProfitValue = 0, monthlyProfitValue = 0, yearlyProfitValue = 0;
   Transactions transactions;
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();
@@ -36,7 +42,7 @@ class _BSSalesState extends State<BSSales> {
       BotToast.closeAllLoading();
     }).catchError((Object error) {
       BotToast.closeAllLoading();
-      print("-------- error at profit() BSSales.dar");
+      print("-------- error at profit() BSSales.dart and error is $error");
     });
   }
 

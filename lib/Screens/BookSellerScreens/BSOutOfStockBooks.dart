@@ -212,7 +212,11 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
       items = widgetItemsList;
     });
   }
-
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

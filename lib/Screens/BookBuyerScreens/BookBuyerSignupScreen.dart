@@ -32,6 +32,12 @@ class _BookBuyerSignupScreenState extends State<BookBuyerSignupScreen> {
       password = "",
       confirmPassword = "";
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   void initState() {
     super.initState();
     fullNameStreamController.stream.listen((value) {

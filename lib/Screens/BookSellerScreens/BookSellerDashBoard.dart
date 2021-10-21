@@ -324,9 +324,11 @@ class _GreetingCardState extends State<GreetingCard> {
     });
   }
 
+
+
   @override
   void initState() {
-    // TODO: implement initState
+   
     super.initState();
     getUserName();
     getPictureUrl();

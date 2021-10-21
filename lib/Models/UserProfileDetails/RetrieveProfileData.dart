@@ -60,4 +60,26 @@ class RetrieveProfileData {
       sharedPreferences.setString("profilePictureURL", snapshot.value);
     }
   }
+
+  Future<String> getBookBuyerNameUsingUID(String uid) async {
+    BotToast.showLoading();
+    String fullName = "anonymous user";
+    DataSnapshot snapshot = await firebaseDatabaseReference
+        .child("Book Buyer/$uid/Profile Details")
+        .once()
+        .catchError((error) {
+      print("error at getBookBuyerNameUsingUID and error is $error");
+      BotToast.closeAllLoading();
+    }).whenComplete(() {
+      BotToast.closeAllLoading();
+    });
+    if (snapshot.value != null) {
+      Map.from(snapshot.value).forEach((key, value) {
+        if (key == "fullName") {
+          fullName = value;
+        }
+      });
+    }
+    return fullName;
+  }
 }

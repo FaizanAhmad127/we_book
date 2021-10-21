@@ -19,70 +19,30 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
   bool isPicked = false;
   Transactions bookTransactions;
 
-  Widget listItem(String key, dynamic post) {
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: Container(
-        height: 150,
-        child: Card(
-          margin: EdgeInsets.all(10),
-          elevation: 10,
-          color: Colors.white,
-          shadowColor: Colors.green,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.green, width: 1),
+
+
+Widget booksListViewItem(String bookKey, dynamic post) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    
+
+    return Container(
+      width: width * 0.6,
+      child: Card(
+        shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 5,
-                  child: Padding(
-                    padding: EdgeInsets.all(7),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: AutoSizeText(
-                                "Date:  ${post["day"]}-${post["month"]}-${post["year"]}  Time: ${post["hour"]}:${post["minute"]} ${post["amPm"]}",
-                                minFontSize: 8,
-                                maxFontSize: 14,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1,
-                                    fontFamily: "Source Sans Pro"),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: AutoSizeText(
-                                  "ID: $key",
-                                  minFontSize: 8,
-                                  maxFontSize: 12,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1,
-                                      fontFamily: "Source Sans Pro"),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                        Row(
+            side: BorderSide(
+              color: purpleColor,
+            )),
+        elevation: 10,
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Expanded(
+                    child: Row(
                           children: [
                             Expanded(
                               child: AutoSizeText(
@@ -98,24 +58,26 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                               ),
                             ),
                           ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: AutoSizeText(
+                        ),),
+                SizedBox(
+                  height: height * 0.01,
+                ),
+                Row(
+                  children: [
+                        Expanded(
+                  child: AutoSizeText(
                                 "Unit Price:  ${post["unitPrice"]}",
                                 minFontSize: 8,
                                 maxFontSize: 12,
                                 maxLines: 1,
                                 style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w400,
                                     letterSpacing: 1,
                                     fontFamily: "Source Sans Pro"),
                               ),
-                            ),
-                            Expanded(
+                ),
+                Expanded(
                               child: AutoSizeText(
                                 "Quantity: ${post["quantity"]}",
                                 minFontSize: 8,
@@ -123,43 +85,156 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
                                 maxLines: 1,
                                 style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w400,
                                     letterSpacing: 1,
                                     fontFamily: "Source Sans Pro"),
                               ),
                             ),
-                            Expanded(
-                              child: AutoSizeText(
-                                "Total: ${post["total"]}",
-                                minFontSize: 8,
-                                maxFontSize: 12,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1,
-                                    fontFamily: "Source Sans Pro"),
+                  ],
+                ),
+                Expanded(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: AutoSizeText(
+                                  "Total: ${post["total"]}",
+                                  minFontSize: 8,
+                                  maxFontSize: 12,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1,
+                                      fontFamily: "Source Sans Pro"),
+                                ),
                               ),
                             ),
-                          ],
+               
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+  Widget listItem(String transactionKey, dynamic post) {
+   
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Container(
+        height: 170,
+        child: Card(
+          margin: EdgeInsets.all(10),
+          elevation: 10,
+          color: Colors.white,
+          shadowColor: Colors.green,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.green, width: 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                  
+                  child: Padding(
+                    padding: EdgeInsets.all(7),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: AutoSizeText(
+                                  "Date:  ${post["day"]}-${post["month"]}-${post["year"]}  Time: ${post["hour"]}:${post["minute"]} ${post["amPm"]}",
+                                  minFontSize: 8,
+                                  maxFontSize: 14,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      fontFamily: "Source Sans Pro"),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: AutoSizeText(
+                                    "ID: $transactionKey",
+                                    minFontSize: 8,
+                                    maxFontSize: 12,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1,
+                                        fontFamily: "Source Sans Pro"),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: AutoSizeText(
-                                "Buyer Name:  ${post["buyerName"]}",
-                                minFontSize: 8,
-                                maxFontSize: 12,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1,
-                                    fontFamily: "Source Sans Pro"),
+                        Expanded(
+                          child: Row(
+                            
+                            children: [
+                              Expanded(
+                                child: AutoSizeText(
+                                  "Buyer Name:  ${post["buyerName"]}",
+                                  minFontSize: 8,
+                                  maxFontSize: 12,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      fontFamily: "Source Sans Pro"),
+                                ),
                               ),
-                            ),
-                          ],
+                               Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: AutoSizeText(
+                                    "Total: ${post["total"]}/-",
+                                    minFontSize: 8,
+                                    maxFontSize: 14,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1,
+                                        fontFamily: "Source Sans Pro"),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        //for our book details listview
+            Expanded(
+                flex: 5,
+                child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: Map.from(post["books"]).length,
+                        itemBuilder: (context, index) {
+                          return getBooksListViewItems(
+                              Map.from(post["books"]))[index];
+                        }))),
+                       
+                        
                       ],
                     ),
                   )),
@@ -210,6 +285,23 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
       items = widgetItemsList;
     });
   }
+   List<Widget> getBooksListViewItems(
+       Map<String, dynamic> booksMap) {
+    List<Widget> widgetList = [];
+
+    if (booksMap.isNotEmpty) {
+      booksMap.forEach((bookKey, value) {
+        widgetList.add(booksListViewItem(bookKey, value));
+      });
+    } else {
+      widgetList.add(Center(
+        child: Container(
+          child: Text("Nothing to show"),
+        ),
+      ));
+    }
+    return widgetList;
+  }
 
   void pickDate() async {
     var pickedDateTime = await showDatePicker(
@@ -227,6 +319,12 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
     }
   }
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

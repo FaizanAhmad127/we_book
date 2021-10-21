@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:we_book/Models/Books%20Detail/Book.dart';
 import 'package:we_book/Models/QrManagement/FirebaseQr.dart';
+import 'package:we_book/Models/UserProfileDetails/RetrieveProfileData.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BSCheckOutCN.dart';
 import 'package:we_book/Screens/BookSellerScreens/BSCheckOutQR.dart';
 
@@ -81,25 +82,34 @@ class _BSQRScannerState extends State<BSQRScanner> {
         bookBuyerKey = s[1];
         bookKeysList.add(bookKey);
         if (uid == bookSellerKey) {
-         bookKeysList= await FirebaseQr()
+          String buyerName = await RetrieveProfileData()
+              .getBookBuyerNameUsingUID(bookBuyerKey);
+          bookKeysList = await FirebaseQr()
               .getListOfBookKeysFromQRCodes(bookBuyerKey, bookSellerKey);
-           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-            return BSCheckOutQR(bookSellerKey: bookSellerKey,booksMap: bookKeysList,);
-           }));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return BSCheckOutQR(
+              buyerName:buyerName,
+              bookSellerKey: bookSellerKey,
+              booksMap: bookKeysList,
+            );
+          }));
         }
-      }
-      else if (s.length == 3) {
+      } else if (s.length == 3) {
         controller.stopCamera();
         bookSellerKey = s[0];
         bookBuyerKey = s[1];
         bookKey = s[2];
         bookKeysList.add(bookKey);
         if (uid == bookSellerKey) {
+          String buyerName = await RetrieveProfileData()
+              .getBookBuyerNameUsingUID(bookBuyerKey);
           await Book().getBooksDetailsUsingBookKey(bookSellerKey, bookKeysList);
 
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return BSCheckOutQR(
+              buyerName:buyerName,
               bookSellerKey: bookSellerKey,
               booksMap: bookKeysList,
             );

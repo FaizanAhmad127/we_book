@@ -29,6 +29,12 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
   bool showPopUp = false;
   Set<Marker> myMarkers = {};
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();
@@ -37,9 +43,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
     firebaseRetrieveShopDetails = FirebaseRetrieveShopDetails(uid: uid);
   }
 
-  void dispose() {
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {

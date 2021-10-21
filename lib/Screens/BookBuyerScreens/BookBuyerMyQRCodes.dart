@@ -339,6 +339,12 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
     );
   }
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

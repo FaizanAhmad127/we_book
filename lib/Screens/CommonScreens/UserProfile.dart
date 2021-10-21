@@ -51,6 +51,12 @@ class _UserProfileState extends State<UserProfile> {
       phoneNumberController;
 
   @override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
+
+  @override
   void initState() {
     super.initState();
     var firebaseAuth = FirebaseAuth.instance;

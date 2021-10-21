@@ -31,6 +31,12 @@ class _GetSellerLocationState extends State<GetSellerLocation> {
   Set<Marker> marker = {};
   Marker shopMarker;
   FirebaseAuth firebaseAuth;
+
+  @override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

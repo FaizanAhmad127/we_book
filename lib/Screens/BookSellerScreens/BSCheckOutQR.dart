@@ -6,6 +6,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:we_book/Models/Books%20Detail/Book.dart';
+import 'package:we_book/Models/Books%20Detail/Transactions.dart';
 import 'package:we_book/Provider%20ChangeNotifiers/BSCheckOutCN.dart';
 
 import '../../constants.dart';
@@ -13,7 +14,8 @@ import '../../constants.dart';
 class BSCheckOutQR extends StatefulWidget {
   final List<String> booksMap;
   final String bookSellerKey;
-  BSCheckOutQR({this.booksMap, this.bookSellerKey});
+  final String buyerName;
+  BSCheckOutQR({this.buyerName, this.booksMap, this.bookSellerKey});
   @override
   _BSCheckOutQRState createState() => _BSCheckOutQRState();
 }
@@ -165,8 +167,10 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
                             Expanded(
                                 flex: 3,
                                 child: IncrementDecrementWidget(
+                                  bookName: post["bookName"],
                                   stock: post["bookQuantity"],
-                                  price: post["finalBookPrice"],
+                                  finalBookPrice: post["finalBookPrice"],
+                                  initialBookPrice: post["initialBookPrice"],
                                   bookKey: bookKey,
                                   count: 0,
                                 )),
@@ -377,10 +381,9 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
                                               fontFamily: "Source Sans Pro"),
                                         ),
                                         onPressed: () async {
-                                          print(Provider.of<BSCheckOutCN>(
-                                                  context,
-                                                  listen: false)
-                                              .getBookKeysToCheckOutMap);
+                                          Map<String, dynamic> bookDetailsMap =
+                                              {};
+                                          
                                           String status;
 
                                           for (var i
@@ -409,6 +412,24 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
 
                                                 print(
                                                     "book key at the time was $bookKey and error is $error");
+                                              }).whenComplete(() {
+                                                bookDetailsMap.addAll({
+                                                  bookKey: {
+                                                    "bookName":
+                                                        i.value["bookName"],
+                                                    "quantity": finalQuantity,
+                                                    "unitPrice": i.value[
+                                                        "finalBookPrice"],
+                                                    "total": finalQuantity *
+                                                        i.value[
+                                                            "finalBookPrice"],
+                                                    "profit": (i.value[
+                                                                "finalBookPrice"] -
+                                                            i.value[
+                                                                "initialBookPrice"]) *
+                                                        finalQuantity,
+                                                  }
+                                                });
                                               });
                                               if (status == "Failure") {
                                                 print("status is Failure");
@@ -419,6 +440,15 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
                                           }
                                           if (status == "Success") {
                                             print("All books are checkedOUT");
+                                            status = await Transactions()
+                                                .makeTransaction(bookDetailsMap,
+                                                    widget.buyerName);
+                                            if (status == "Success") {
+                                              print(
+                                                  "Transaction is successful");
+                                            } else {
+                                              print("Transaction Failed!");
+                                            }
                                           } else {
                                             print(
                                                 "All books are not checkedOUT");
@@ -442,19 +472,23 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
 }
 
 class IncrementDecrementWidget extends StatefulWidget {
-  final int price, stock;
+  final int finalBookPrice, initialBookPrice, stock;
   final bookKey;
-   int count;
-  IncrementDecrementWidget({this.price, this.stock, this.bookKey,this.count});
+  final String bookName;
+  int count;
+  IncrementDecrementWidget(
+      {this.bookName,
+      this.initialBookPrice,
+      this.finalBookPrice,
+      this.stock,
+      this.bookKey,
+      this.count});
   @override
   _IncrementDecrementWidgetState createState() =>
       _IncrementDecrementWidgetState();
 }
 
 class _IncrementDecrementWidgetState extends State<IncrementDecrementWidget> {
-  
-  
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -463,7 +497,13 @@ class _IncrementDecrementWidgetState extends State<IncrementDecrementWidget> {
     //setting map of book keys , would use it to checkout books one by one
     Provider.of<BSCheckOutCN>(context, listen: false).setBooKKeysToCheckOutMap =
         {
-      widget.bookKey: {"initialQuantity": widget.stock, "finalQuantity": widget.count}
+      widget.bookKey: {
+        "bookName": widget.bookName,
+        "initialQuantity": widget.stock,
+        "finalQuantity": widget.count,
+        "initialBookPrice": widget.initialBookPrice,
+        "finalBookPrice": widget.finalBookPrice,
+      }
     };
     return Row(
       children: [
@@ -485,7 +525,7 @@ class _IncrementDecrementWidgetState extends State<IncrementDecrementWidget> {
                 widget.count++;
                 //for total price without discount
                 Provider.of<BSCheckOutCN>(context, listen: false).setSubTotal =
-                    widget.price;
+                    widget.finalBookPrice;
                 //for discount price
                 Provider.of<BSCheckOutCN>(context, listen: false).setDiscount =
                     Provider.of<BSCheckOutCN>(context, listen: false)
@@ -521,7 +561,7 @@ class _IncrementDecrementWidgetState extends State<IncrementDecrementWidget> {
                 widget.count--;
 
                 Provider.of<BSCheckOutCN>(context, listen: false).setSubTotal =
-                    -widget.price;
+                    -widget.finalBookPrice;
                 Provider.of<BSCheckOutCN>(context, listen: false).setDiscount =
                     Provider.of<BSCheckOutCN>(context, listen: false)
                         .getSubTotal;

@@ -30,6 +30,8 @@ class _GoogleMapsUIState extends State<GoogleMapsUI> {
   GoogleMapController _controller;
   static double latitude, longitude;
 
+
+
   @override
   void initState() {
     super.initState();

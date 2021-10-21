@@ -30,9 +30,15 @@ class _CheckInBooksState extends State<CheckInBooks> {
       _bookQuantityTextEditingController,
       _shelfNameTextEditingController;
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     _bookNameTextEditingController = TextEditingController();
     _authorNameTextEditingController = TextEditingController();

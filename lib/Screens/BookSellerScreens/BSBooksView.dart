@@ -329,6 +329,12 @@ class _BSBooksViewState extends State<BSBooksView> {
     });
   }
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

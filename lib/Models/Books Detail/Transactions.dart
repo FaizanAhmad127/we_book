@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:we_book/Services/MyDateTime.dart';
 
 class Transactions {
@@ -15,17 +16,21 @@ class Transactions {
   }
 
   Future<String> makeTransaction(
+    Map<String, dynamic> booksDetailMap,
     String buyerName,
-    String bookName,
-    int unitPrice,
-    int quantity,
-    int total,
-    int profit,
   ) async {
     BotToast.showLoading();
     MyDateTime myDateTime = MyDateTime();
     String status;
     DatabaseReference dr;
+    int totalOfAllBooks=0, totalProfitOfAllBooks=0;
+
+    booksDetailMap.forEach((bookKey, value) {
+      
+       totalOfAllBooks = totalOfAllBooks + value["total"];
+      totalProfitOfAllBooks = totalProfitOfAllBooks + value["profit"];
+    });
+
     dr = databaseReference.child("Book Seller/$uid/Transactions").push();
     await dr.update({
       "year": myDateTime.getCurrentYear(),
@@ -34,12 +39,10 @@ class Transactions {
       "hour": myDateTime.getCurrentHour12(),
       "minute": myDateTime.getCurrentMinute(),
       "amPm": myDateTime.getAmPm(),
-      "bookName": bookName,
+      "books": booksDetailMap,
       "buyerName": buyerName,
-      "unitPrice": unitPrice,
-      "quantity": quantity,
-      "total": total,
-      "profit": profit,
+      "total": totalOfAllBooks,
+      "profit": totalProfitOfAllBooks,
     }).whenComplete(() {
       BotToast.closeAllLoading();
       status = "Success";
@@ -88,7 +91,7 @@ class Transactions {
     return profit;
   }
 
-Future<int> monthProfit() async {
+  Future<int> monthProfit() async {
     BotToast.showLoading();
     int profit = 0;
     DataSnapshot snapshot;
@@ -101,8 +104,7 @@ Future<int> monthProfit() async {
     });
     Map<String, dynamic> transactions = Map.from(snapshot.value);
     transactions.forEach((key, value) {
-      if (
-          value["month"] == myDateTime.getCurrentMonth() &&
+      if (value["month"] == myDateTime.getCurrentMonth() &&
           value["year"] == myDateTime.getCurrentYear()) {
         print(value["profit"]);
         profit = profit + value["profit"];
@@ -113,7 +115,7 @@ Future<int> monthProfit() async {
     return profit;
   }
 
-Future<int> yearProfit() async {
+  Future<int> yearProfit() async {
     BotToast.showLoading();
     int profit = 0;
     DataSnapshot snapshot;
@@ -126,8 +128,7 @@ Future<int> yearProfit() async {
     });
     Map<String, dynamic> transactions = Map.from(snapshot.value);
     transactions.forEach((key, value) {
-      if (
-          value["year"] == myDateTime.getCurrentYear()) {
+      if (value["year"] == myDateTime.getCurrentYear()) {
         print(value["profit"]);
         profit = profit + value["profit"];
       }
@@ -136,7 +137,4 @@ Future<int> yearProfit() async {
 
     return profit;
   }
-
-
-
 }

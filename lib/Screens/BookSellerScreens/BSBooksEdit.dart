@@ -51,6 +51,12 @@ class _BSBooksEditState extends State<BSBooksEdit> {
   FirebaseAuth firebaseAuth;
   String uid;
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();

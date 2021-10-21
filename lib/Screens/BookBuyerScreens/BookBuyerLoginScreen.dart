@@ -30,6 +30,12 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
   Color color = Colors.grey;
   String forgotPasswordValue = "";
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();
@@ -41,12 +47,7 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    // emailStreamController.close();
-    // passwordStreamController.close();
-  }
+ 
 
   String validateTextFields({String email, String password}) {
     String status = "";

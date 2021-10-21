@@ -37,6 +37,12 @@ class _BSShopDetailsScreenState extends State<BSShopDetailsScreen> {
       shopCountryController,
       shopPhoneNumberController;
 
+
+@override
+  void dispose() {
+    super.dispose();
+    BotToast.closeAllLoading();
+  }
   @override
   void initState() {
     super.initState();
