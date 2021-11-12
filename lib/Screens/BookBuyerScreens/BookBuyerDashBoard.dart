@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:bot_toast/bot_toast.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:we_book/Models/ShopDetails/FirebaseRetrieveShopDetails.dart';
@@ -110,6 +111,7 @@ class _BookBuyerDashBoardState extends State<BookBuyerDashBoard> {
                       backgroundColor: MaterialStateProperty.all(purpleColor),
                     ),
                     onPressed: () async {
+                    
                       setState(() {
                         myMarkers.clear();
                       });

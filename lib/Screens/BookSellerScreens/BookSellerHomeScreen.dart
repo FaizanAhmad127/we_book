@@ -17,10 +17,10 @@ class BookSellerHomeScreen extends StatefulWidget {
 
 class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
   bool isPreLoadComplete = false;
+  List<Map<String, String>> recommendationData = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     setSharedPreferences();
@@ -30,7 +30,9 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
     BotToast.showLoading();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("userCategory", "Book Seller");
-    await PreloadProfileData().getReadyProfileData().then((value) {
+    await PreloadProfileData().getReadyProfileData().then((recData) {
+      
+      recommendationData = recData;
       setState(() {
         BotToast.closeAllLoading();
         isPreLoadComplete = true;
@@ -51,7 +53,7 @@ class _BookSellerHomeScreenState extends State<BookSellerHomeScreen> {
             body: Consumer<BSBottomNavBarCN>(
                 builder: (context, bottomNavBarCN, _) {
               if (bottomNavBarCN.getHomeScreen == true && isPreLoadComplete) {
-                return BookSellerDashBoard();
+                return BookSellerDashBoard(recommendationData);
               } else if (bottomNavBarCN.getProfileScreen == true) {
                 return BookSellerProfile();
               } else if (bottomNavBarCN.getShopScreen == true) {

@@ -9,6 +9,9 @@ import 'package:we_book/Models/Books%20Detail/Book.dart';
 import 'package:we_book/constants.dart';
 
 class BookSellerDashBoard extends StatefulWidget {
+  final List<Map<String, String>> recommendationData;
+  BookSellerDashBoard(this.recommendationData);
+
   @override
   _BookSellerDashBoardState createState() => _BookSellerDashBoardState();
 }
@@ -20,7 +23,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
 
   void getListViewItems() {
     List<dynamic> responseList =
-        booksRecomendationData; //list of maps and each map contains key value pairs
+        widget.recommendationData; //list of maps and each map contains key value pairs
     List<Widget> widgetItemsList = [];
     responseList.forEach((post) {
       widgetItemsList.add(Padding(
@@ -41,9 +44,22 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Image.asset(
-                    "images/${post["Image"]}",
-                  ),
+                  child: CachedNetworkImage(
+                      height: 100,
+                      width: 60,
+                      imageUrl: post["Image"],
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.contain),
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error,
+                      ),
+                    )
                 ),
                 Expanded(
                     flex: 2,
@@ -100,7 +116,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
           320; //320 is the width of each item/widget
       // in the list, so this formula will give the width of each upcoming item when scrolling.
 
-      //TODO implement consumer here
+    
 
       setState(() {
         topItem = value;
@@ -303,7 +319,6 @@ class _GreetingCardState extends State<GreetingCard> {
   String userName = "User Name";
   String pictureUrl =
       "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
-  
 
   Future getUserName() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -324,11 +339,8 @@ class _GreetingCardState extends State<GreetingCard> {
     });
   }
 
-
-
   @override
   void initState() {
-   
     super.initState();
     getUserName();
     getPictureUrl();
@@ -389,7 +401,6 @@ class _GreetingCardState extends State<GreetingCard> {
             ),
             CachedNetworkImage(
               imageUrl: pictureUrl,
-
               imageBuilder: (context, imageProvider) => Container(
                 width: 80.0,
                 height: 80.0,
