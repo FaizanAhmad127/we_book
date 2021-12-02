@@ -14,6 +14,7 @@ import 'package:we_book/Screens/BookSellerScreens/BookSellerHomeScreen.dart';
 import 'package:we_book/Screens/BookSellerScreens/BookSellerLoginScreen.dart';
 import 'package:we_book/Screens/BookSellerScreens/BookSellerSignupScreen.dart';
 import 'package:we_book/Screens/CommonScreens/LoginSignupFragment.dart';
+import 'package:we_book/Screens/CommonScreens/SplashScreen.dart';
 import 'package:we_book/UIs/BSQRScanner.dart';
 import 'package:we_book/UIs/GetSellerLocation.dart';
 import 'UIs/GoogleMapsUI.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
               print(" You have an error ${snapshot.error.toString()}");
               return Text("Something went Wrong!");
             } else if (snapshot.hasData) {
-              return LoginSignUpFragment();
+              return SplashScreen();
             } else {
               return Center(
                 child:
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
           },
         ),
         routes: {
+          "SplashScreen":(context)=>SplashScreen(),
           "LoginSignupFragment": (context) => LoginSignUpFragment(),
           "BookBuyerLoginScreen": (context) => BookBuyerLoginScreen(),
           "BookBuyerSignupScreen": (context) => BookBuyerSignupScreen(),

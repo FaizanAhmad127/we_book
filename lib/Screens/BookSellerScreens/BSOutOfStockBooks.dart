@@ -205,6 +205,14 @@ class _BSOutOfStockBooksState extends State<BSOutOfStockBooks> {
       BotToast.closeAllLoading();
     }).catchError((Object error) {
       BotToast.closeAllLoading();
+      widgetItemsList.add(Container(
+          child: Center(
+            child: AutoSizeText(
+              "Nothing to show",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ));
       print("-------- error at getListviewItems() BSOutOfStockBooks.dar");
     });
     ;

@@ -349,6 +349,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
   void initState() {
     super.initState();
     firebaseQr = FirebaseQr();
+    
     getWholeListViewItems();
   }
 
@@ -405,6 +406,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
             padding: EdgeInsets.all(10),
             child: Stack(
               children: [
+               
                 ListView.builder(
                     itemCount: wholeItems.length,
                     itemBuilder: (context, index) {

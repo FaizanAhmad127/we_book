@@ -322,6 +322,14 @@ class _BSBooksViewState extends State<BSBooksView> {
       BotToast.closeAllLoading();
     }).catchError((Object error) {
       BotToast.closeAllLoading();
+      widgetItemsList.add(Container(
+          child: Center(
+            child: AutoSizeText(
+              "Nothing to show",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ));
       print("-------- error at getListviewItems() BSBooksView.dart");
     });
     setState(() {

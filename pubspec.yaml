@@ -47,6 +47,7 @@ dependencies:
   flutter_native_splash: ^1.2.0 #https://www.youtube.com/watch?v=8ME8Czqc-Oc do watch it first
   cached_network_image: ^3.1.0
   dotted_line: ^3.0.0
+  
   #firebase_analytics: ^8.3.4
   #intl: ^0.17.0
 

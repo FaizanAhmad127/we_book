@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,12 +29,12 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
   Color color = Colors.grey;
   String forgotPasswordValue = "";
 
-
-@override
+  @override
   void dispose() {
     super.dispose();
     BotToast.closeAllLoading();
   }
+
   @override
   void initState() {
     super.initState();
@@ -46,8 +45,6 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
       password = value;
     });
   }
-
- 
 
   String validateTextFields({String email, String password}) {
     String status = "";
@@ -243,8 +240,9 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                                         password: password,
                                         userCategory: "Book Buyer");
                                 if (result == "Success") {
-                                  Navigator.pushReplacementNamed(
-                                      context, "BookBuyerHomeScreen");
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "BookBuyerHomeScreen",
+                                    (Route<dynamic> route) => false);
                                 } else if (result == "Failure") {
                                   BotToast.showText(
                                       text: "Invalid Credentials");
@@ -294,8 +292,9 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                                   .signInWithFacebook(
                                       userCategory: "Book Buyer");
                               if (status == "Success") {
-                                Navigator.pushNamed(
-                                    context, "BookBuyerHomeScreen");
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "BookBuyerHomeScreen",
+                                    (Route<dynamic> route) => false);
                               }
                             },
                             child: CircleAvatar(
@@ -309,12 +308,13 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              
                               String status = await FirebaseGoogleSignIn()
                                   .signIn(userCategory: "Book Buyer");
                               if (status == "Success") {
-                                Navigator.popAndPushNamed(
-                                    context, "BookBuyerHomeScreen");
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "BookBuyerHomeScreen",
+                                    (Route<dynamic> route) => false);
+                                
                               }
                             },
                             child: CircleAvatar(
@@ -341,7 +341,7 @@ class _BookBuyerLoginScreenState extends State<BookBuyerLoginScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.popAndPushNamed(
+                              Navigator.pushNamed(
                                   context, "BookBuyerSignupScreen");
                             },
                             child: Text(

@@ -250,56 +250,56 @@ class _BookSellerSignupScreenState extends State<BookSellerSignupScreen> {
                           },
                         ),
                       ),
-                      SizedBox(
-                        width: 0,
-                        height: screenHeight * 0.04,
-                      ),
-                      Stack(
-                        children: <Widget>[
-                          Divider(
-                            height: 50,
-                            color: purpleColor,
-                          ),
-                          Center(
-                            heightFactor: 3,
-                            child: Text(
-                              "OR",
-                              style: TextStyle(
-                                  color: purpleColor,
-                                  backgroundColor: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
-                      Center(
-                        child: Text(
-                          "Sign Up with",
-                          style: TextStyle(color: purpleColor),
-                        ),
-                      ),
-                      SizedBox(
-                        height: screenWidth * 0.05,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircleAvatar(
-                            child: GestureDetector(),
-                            backgroundImage:
-                                AssetImage("images/facebookicon.png"),
-                            backgroundColor: Colors.white,
-                          ),
-                          SizedBox(
-                            width: screenWidth * 0.1,
-                          ),
-                          CircleAvatar(
-                            child: GestureDetector(),
-                            backgroundImage:
-                                AssetImage("images/googleicon.png"),
-                            backgroundColor: Colors.white,
-                          ),
-                        ],
-                      ),
+                      // SizedBox(
+                      //   width: 0,
+                      //   height: screenHeight * 0.04,
+                      // ),
+                      // Stack(
+                      //   children: <Widget>[
+                      //     Divider(
+                      //       height: 50,
+                      //       color: purpleColor,
+                      //     ),
+                      //     Center(
+                      //       heightFactor: 3,
+                      //       child: Text(
+                      //         "OR",
+                      //         style: TextStyle(
+                      //             color: purpleColor,
+                      //             backgroundColor: Colors.white),
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
+                      // Center(
+                      //   child: Text(
+                      //     "Sign Up with",
+                      //     style: TextStyle(color: purpleColor),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: screenWidth * 0.05,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: <Widget>[
+                      //     CircleAvatar(
+                      //       child: GestureDetector(),
+                      //       backgroundImage:
+                      //           AssetImage("images/facebookicon.png"),
+                      //       backgroundColor: Colors.white,
+                      //     ),
+                      //     SizedBox(
+                      //       width: screenWidth * 0.1,
+                      //     ),
+                      //     CircleAvatar(
+                      //       child: GestureDetector(),
+                      //       backgroundImage:
+                      //           AssetImage("images/googleicon.png"),
+                      //       backgroundColor: Colors.white,
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(
                         height: screenHeight * 0.05,
                       ),
@@ -316,7 +316,7 @@ class _BookSellerSignupScreenState extends State<BookSellerSignupScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(
+                              Navigator.popAndPushNamed(
                                   context, 'BookSellerLoginScreen');
                             },
                             child: Text(

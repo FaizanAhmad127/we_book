@@ -22,15 +22,16 @@ class Transactions {
     MyDateTime myDateTime = MyDateTime();
     String status;
     DatabaseReference dr;
-    int totalOfAllBooks=0, totalProfitOfAllBooks=0;
+    int totalOfAllBooks = 0, totalProfitOfAllBooks = 0;
 
     booksDetailMap.forEach((bookKey, value) {
-      
-       totalOfAllBooks = totalOfAllBooks + value["total"];
+      totalOfAllBooks = totalOfAllBooks + value["total"];
       totalProfitOfAllBooks = totalProfitOfAllBooks + value["profit"];
     });
 
-    dr = databaseReference.child("Book Seller/$uid/Transactions").push();
+    dr = databaseReference.child(
+        "Book Seller/$uid/Transactions/${(myDateTime.getDateTime().millisecondsSinceEpoch / 1000).round()}");
+
     await dr.update({
       "year": myDateTime.getCurrentYear(),
       "month": myDateTime.getCurrentMonth(),
@@ -57,12 +58,37 @@ class Transactions {
     DataSnapshot dataSnapshot;
     dataSnapshot = await databaseReference
         .child("Book Seller/$uid/Transactions")
+        .startAt("0")
+        .orderByKey()
         .once()
         .catchError((onError) {
       print("Error at getAllTransactions Transactions.dart $onError");
     });
     Map<String, dynamic> transactions = Map.from(dataSnapshot.value);
-    return transactions;
+
+    //let's sorted out the transaction in descending order so the new transaction gets on top of listview
+    List<int> listOfTransactionKeys = [];
+    //collecting all the transaction keys
+    transactions.forEach((key, value) {
+      int transactionKey = int.parse(key);
+      listOfTransactionKeys.add(transactionKey);
+    });
+    
+    //sort it, by default it is in ascending order
+    listOfTransactionKeys.sort();
+    //coverting to decending order
+    listOfTransactionKeys = listOfTransactionKeys.reversed.toList();
+    //now comapare the keys with whole key value pairs. using the decending keys we will retrieve decenting key value from map.
+    Map<String, dynamic> sortedTransactions = {};
+    listOfTransactionKeys.forEach((element) {
+      transactions.forEach((key, value) {
+        if (element.toString() == key) {
+          sortedTransactions.addAll({key: value});
+        }
+      });
+    });
+    
+    return sortedTransactions;
   }
 
   Future<int> todayProfit() async {

@@ -1,6 +1,8 @@
 class MyDateTime {
   DateTime dateTime = DateTime.now();
 
+ 
+
   DateTime getDateTime() {
     return dateTime;
   }
@@ -57,5 +59,18 @@ class MyDateTime {
     }
 
     return time;
+  }
+
+  String getMorningNoonEvening() {
+    int currentHour = dateTime.hour;
+    if (currentHour >= 12 && currentHour <= 18) {
+      return "Good Afternoon";
+    } else if (currentHour >=0 && currentHour <12) {
+      return "Good Morning";
+    } else if (currentHour >18 && currentHour <= 23) {
+      return "Good Evening";
+    } else {
+      return "Good Day";
+    }
   }
 }

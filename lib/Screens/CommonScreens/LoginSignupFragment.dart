@@ -1,15 +1,43 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/constants.dart';
 import 'package:we_book/UIs/AppBarNormalUI.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginSignUpFragment extends StatelessWidget {
-  final User user = FirebaseAuth.instance.currentUser;
+class LoginSignUpFragment extends StatefulWidget {
+  @override
+  State<LoginSignUpFragment> createState() => _LoginSignUpFragmentState();
+}
+
+class _LoginSignUpFragmentState extends State<LoginSignUpFragment> {
+  User user;
 
   Future<String> findUserCategory() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("userCategory");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+    checkIfUserIsAlreadyLoggedin();
+  }
+
+  Future checkIfUserIsAlreadyLoggedin() async {
+    BotToast.showLoading();
+    if (user != null) {
+      if (await findUserCategory() == "Book Buyer") {
+        BotToast.closeAllLoading();
+        Navigator.pushReplacementNamed(context, 'BookBuyerHomeScreen');
+      } else if (await findUserCategory() == "Book Seller") {
+        BotToast.closeAllLoading();
+        Navigator.pushReplacementNamed(context, 'BookSellerHomeScreen');
+      }
+    } else {
+      BotToast.closeAllLoading();
+    }
   }
 
   @override
@@ -19,7 +47,7 @@ class LoginSignUpFragment extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double screenWitdh = size.width;
     double screenHeight = size.height;
-    return Scaffold(
+    return user==null?Scaffold(
         appBar: AppBarNormalUI().myAppBar(),
         body: SafeArea(
           child: Padding(
@@ -62,12 +90,7 @@ class LoginSignUpFragment extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
-                        if (user != null &&
-                            await findUserCategory() == "Book Buyer") {
-                          Navigator.pushNamed(context, 'BookBuyerHomeScreen');
-                        } else {
-                          Navigator.pushNamed(context, 'BookBuyerLoginScreen');
-                        }
+                        Navigator.pushNamed(context, 'BookBuyerLoginScreen');
                       },
                       child: Text(
                         "BOOK BUYER",
@@ -99,12 +122,7 @@ class LoginSignUpFragment extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
-                        if (user != null &&
-                            await findUserCategory() == "Book Seller") {
-                          Navigator.pushNamed(context, 'BookSellerHomeScreen');
-                        } else {
-                          Navigator.pushNamed(context, 'BookSellerLoginScreen');
-                        }
+                        Navigator.pushNamed(context, 'BookSellerLoginScreen');
                       },
                       child: Text(
                         "BOOK SELLER",
@@ -119,6 +137,9 @@ class LoginSignUpFragment extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        )):Center(
+                child:
+                    CircularProgressIndicator(), 
+              );
   }
 }

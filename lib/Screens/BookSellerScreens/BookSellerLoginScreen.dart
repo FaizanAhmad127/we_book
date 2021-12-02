@@ -243,8 +243,9 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                                       password: password,
                                       userCategory: "Book Seller");
                               if (result == "Success") {
-                                Navigator.popAndPushNamed(
-                                    context, "BookSellerHomeScreen");
+                               Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "BookSellerHomeScreen",
+                                    (Route<dynamic> route) => false);
                               } else if (result == "Failure") {
                                 BotToast.showText(text: "Invalid Credentials");
                                 print("Failed to login");
@@ -296,8 +297,9 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                                   .signInWithFacebook(
                                       userCategory: "Book Seller");
                               if (status == "Success") {
-                                Navigator.pushNamed(
-                                    context, "BookSellerHomeScreen");
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "BookSellerHomeScreen",
+                                    (Route<dynamic> route) => false);
                               }
                             },
                             child: CircleAvatar(
@@ -314,8 +316,10 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                               String status = await FirebaseGoogleSignIn()
                                   .signIn(userCategory: "Book Seller");
                               if (status == "Success") {
-                                Navigator.popAndPushNamed(
-                                    context, "BookSellerHomeScreen");
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "BookSellerHomeScreen",
+                                    (Route<dynamic> route) => false);
+                               
                               }
                             },
                             child: CircleAvatar(
@@ -342,7 +346,7 @@ class _BookSellerLoginScreenState extends State<BookSellerLoginScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.popAndPushNamed(
+                              Navigator.pushNamed(
                                   context, "BookSellerSignupScreen");
                             },
                             child: Text(

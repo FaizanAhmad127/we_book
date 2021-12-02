@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_book/Constants/Strings.dart';
 import 'package:we_book/Models/Books%20Detail/Book.dart';
+import 'package:we_book/Services/MyDateTime.dart';
 import 'package:we_book/constants.dart';
 
 class BookSellerDashBoard extends StatefulWidget {
@@ -238,6 +239,7 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     DashBoardItem(
                       text: "Out Of Stock",
@@ -245,17 +247,17 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
                         Navigator.pushNamed(context, "BSOutOfStockBooks");
                       },
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    DashBoardItem(
-                      text: "Reviews/Rating",
-                      onTap: () {
-                        Book().getParentKeyOfBook(
-                            uid: FirebaseAuth.instance.currentUser.uid,
-                            bookName: "rich");
-                      },
-                    ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width * 0.1,
+                    // ),
+                    // DashBoardItem(
+                    //   text: "Reviews/Rating",
+                    //   onTap: () {
+                    //     Book().getParentKeyOfBook(
+                    //         uid: FirebaseAuth.instance.currentUser.uid,
+                    //         bookName: "rich");
+                    //   },
+                    // ),
                   ],
                 ),
               ],
@@ -318,7 +320,8 @@ class GreetingCard extends StatefulWidget {
 class _GreetingCardState extends State<GreetingCard> {
   String userName = "User Name";
   String pictureUrl =
-      "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
+      "https://firebasestorage.googleapis.com/v0/b/we-book-304011.appspot.com/o/unknownPic.jpeg?alt=media&token=79632193-d27f-420f-9f50-d117fd74f6df";
+      
 
   Future getUserName() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -367,7 +370,7 @@ class _GreetingCardState extends State<GreetingCard> {
               children: [
                 Flexible(
                   child: AutoSizeText(
-                    "GOOD EVENING",
+                    MyDateTime().getMorningNoonEvening(),
                     maxFontSize: 20,
                     minFontSize: 12,
                     textAlign: TextAlign.start,

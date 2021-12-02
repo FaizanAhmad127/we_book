@@ -1,2 +1,2 @@
 const String unknownProfileIcon =
-    "https://bookz2.com/storage/media/qKSTh7BcKl1V3usJwLAX32tJLTGTM4f6cHUuv8WM.jpeg";
+    "https://firebasestorage.googleapis.com/v0/b/we-book-304011.appspot.com/o/unknownPic.jpeg?alt=media&token=79632193-d27f-420f-9f50-d117fd74f6df";

@@ -19,12 +19,9 @@ class _BSTransactionScreenState extends State<BSTransactionScreen> {
   bool isPicked = false;
   Transactions bookTransactions;
 
-
-
-Widget booksListViewItem(String bookKey, dynamic post) {
+  Widget booksListViewItem(String bookKey, dynamic post) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    
 
     return Container(
       width: width * 0.6,
@@ -42,73 +39,73 @@ Widget booksListViewItem(String bookKey, dynamic post) {
             child: Column(
               children: [
                 Expanded(
-                    child: Row(
-                          children: [
-                            Expanded(
-                              child: AutoSizeText(
-                                "Book Name:  ${post["bookName"]}",
-                                minFontSize: 8,
-                                maxFontSize: 12,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1,
-                                    fontFamily: "Source Sans Pro"),
-                              ),
-                            ),
-                          ],
-                        ),),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AutoSizeText(
+                          "Book Name:  ${post["bookName"]}",
+                          minFontSize: 8,
+                          maxFontSize: 12,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              fontFamily: "Source Sans Pro"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(
                   height: height * 0.01,
                 ),
                 Row(
                   children: [
-                        Expanded(
-                  child: AutoSizeText(
-                                "Unit Price:  ${post["unitPrice"]}",
-                                minFontSize: 8,
-                                maxFontSize: 12,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 1,
-                                    fontFamily: "Source Sans Pro"),
-                              ),
-                ),
-                Expanded(
-                              child: AutoSizeText(
-                                "Quantity: ${post["quantity"]}",
-                                minFontSize: 8,
-                                maxFontSize: 12,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 1,
-                                    fontFamily: "Source Sans Pro"),
-                              ),
-                            ),
+                    Expanded(
+                      child: AutoSizeText(
+                        "Unit Price:  ${post["unitPrice"]}",
+                        minFontSize: 8,
+                        maxFontSize: 12,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1,
+                            fontFamily: "Source Sans Pro"),
+                      ),
+                    ),
+                    Expanded(
+                      child: AutoSizeText(
+                        "Quantity: ${post["quantity"]}",
+                        minFontSize: 8,
+                        maxFontSize: 12,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1,
+                            fontFamily: "Source Sans Pro"),
+                      ),
+                    ),
                   ],
                 ),
                 Expanded(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: AutoSizeText(
-                                  "Total: ${post["total"]}",
-                                  minFontSize: 8,
-                                  maxFontSize: 12,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 1,
-                                      fontFamily: "Source Sans Pro"),
-                                ),
-                              ),
-                            ),
-               
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: AutoSizeText(
+                      "Total: ${post["total"]}",
+                      minFontSize: 8,
+                      maxFontSize: 12,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 1,
+                          fontFamily: "Source Sans Pro"),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -117,10 +114,7 @@ Widget booksListViewItem(String bookKey, dynamic post) {
     );
   }
 
-
-
   Widget listItem(String transactionKey, dynamic post) {
-   
     return Padding(
       padding: EdgeInsets.all(10),
       child: Container(
@@ -137,107 +131,103 @@ Widget booksListViewItem(String bookKey, dynamic post) {
           child: Row(
             children: [
               Expanded(
-                  
                   child: Padding(
-                    padding: EdgeInsets.all(7),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: AutoSizeText(
-                                  "Date:  ${post["day"]}-${post["month"]}-${post["year"]}  Time: ${post["hour"]}:${post["minute"]} ${post["amPm"]}",
-                                  minFontSize: 8,
-                                  maxFontSize: 14,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1,
-                                      fontFamily: "Source Sans Pro"),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: AutoSizeText(
-                                    "ID: $transactionKey",
-                                    minFontSize: 8,
-                                    maxFontSize: 12,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1,
-                                        fontFamily: "Source Sans Pro"),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                            ],
+                padding: EdgeInsets.all(7),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              "Date:  ${post["day"]}-${post["month"]}-${post["year"]}  Time: ${post["hour"]}:${post["minute"]} ${post["amPm"]}",
+                              minFontSize: 8,
+                              maxFontSize: 14,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                  fontFamily: "Source Sans Pro"),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            
-                            children: [
-                              Expanded(
-                                child: AutoSizeText(
-                                  "Buyer Name:  ${post["buyerName"]}",
-                                  minFontSize: 8,
-                                  maxFontSize: 12,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1,
-                                      fontFamily: "Source Sans Pro"),
-                                ),
-                              ),
-                               Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: AutoSizeText(
-                                    "Total: ${post["total"]}/-",
-                                    minFontSize: 8,
-                                    maxFontSize: 14,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1,
-                                        fontFamily: "Source Sans Pro"),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            width: 10,
                           ),
-                        ),
-                        //for our book details listview
-            Expanded(
-                flex: 5,
-                child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: Map.from(post["books"]).length,
-                        itemBuilder: (context, index) {
-                          return getBooksListViewItems(
-                              Map.from(post["books"]))[index];
-                        }))),
-                       
-                        
-                      ],
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: AutoSizeText(
+                                "ID: $transactionKey",
+                                minFontSize: 8,
+                                maxFontSize: 12,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                    fontFamily: "Source Sans Pro"),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                      ),
                     ),
-                  )),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              "Buyer Name:  ${post["buyerName"]}",
+                              minFontSize: 8,
+                              maxFontSize: 12,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                  fontFamily: "Source Sans Pro"),
+                            ),
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: AutoSizeText(
+                                "Total: ${post["total"]}/-",
+                                minFontSize: 8,
+                                maxFontSize: 14,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                    fontFamily: "Source Sans Pro"),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    //for our book details listview
+                    Expanded(
+                        flex: 5,
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: Map.from(post["books"]).length,
+                                itemBuilder: (context, index) {
+                                  return getBooksListViewItems(
+                                      Map.from(post["books"]))[index];
+                                }))),
+                  ],
+                ),
+              )),
             ],
           ),
         ),
@@ -251,6 +241,7 @@ Widget booksListViewItem(String bookKey, dynamic post) {
 
     await bookTransactions.getAllTransactions().then((responseList) {
       if (responseList.isNotEmpty) {
+        
         responseList.forEach((key, post) {
           if (isPicked == true) {
             if (post["year"] == pickedYear &&
@@ -277,6 +268,14 @@ Widget booksListViewItem(String bookKey, dynamic post) {
       BotToast.closeAllLoading();
     }).catchError((Object error) {
       BotToast.closeAllLoading();
+      widgetItemsList.add(Container(
+        child: Center(
+          child: AutoSizeText(
+            "Nothing to show",
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      ));
       print("-------- error at getListviewItems() BSTransactionScreen.dart");
     });
     ;
@@ -285,8 +284,8 @@ Widget booksListViewItem(String bookKey, dynamic post) {
       items = widgetItemsList;
     });
   }
-   List<Widget> getBooksListViewItems(
-       Map<String, dynamic> booksMap) {
+
+  List<Widget> getBooksListViewItems(Map<String, dynamic> booksMap) {
     List<Widget> widgetList = [];
 
     if (booksMap.isNotEmpty) {
@@ -319,12 +318,12 @@ Widget booksListViewItem(String bookKey, dynamic post) {
     }
   }
 
-
-@override
+  @override
   void dispose() {
     super.dispose();
     BotToast.closeAllLoading();
   }
+
   @override
   void initState() {
     super.initState();

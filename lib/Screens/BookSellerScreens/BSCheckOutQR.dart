@@ -383,7 +383,7 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
                                         onPressed: () async {
                                           Map<String, dynamic> bookDetailsMap =
                                               {};
-                                          
+
                                           String status;
 
                                           for (var i
@@ -444,6 +444,11 @@ class _BSCheckOutQRState extends State<BSCheckOutQR> {
                                                 .makeTransaction(bookDetailsMap,
                                                     widget.buyerName);
                                             if (status == "Success") {
+                                              BotToast.showText(
+                                                                  contentColor: purpleColor,
+                                                                    text:
+                                                                      "Book is checked out");
+                                              Navigator.pop(context);
                                               print(
                                                   "Transaction is successful");
                                             } else {

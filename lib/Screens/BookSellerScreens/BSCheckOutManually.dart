@@ -419,6 +419,10 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                                                       (status) {
                                                                 if (status ==
                                                                     "Success") {
+                                                                  BotToast.showText(
+                                                                  contentColor: purpleColor,
+                                                                    text:
+                                                                      "Book is checked out");
                                                                   getListViewItems();
                                                                   Navigator.pop(
                                                                       context);
@@ -487,6 +491,14 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
       BotToast.closeAllLoading();
     }).catchError((Object error) {
       BotToast.closeAllLoading();
+      widgetItemsList.add(Container(
+        child: Center(
+          child: AutoSizeText(
+            "Nothing to show",
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      ));
       print("-------- error at getListviewItems() BSCheckoutManaully.dar");
     });
 

@@ -1,6 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -153,8 +153,8 @@ class FirebaseRetrieveShopDetails {
                  
                   if (value
                       .toString()
-                      .toLowerCase()
-                      .contains(bookName.toLowerCase())) {
+                      .toLowerCase()==
+                    (bookName.toLowerCase())) {
                     // print("yes this book is here and the bookKey is $bookKey");
                     isBookFound = true;
                     myBookKey = bookKey;
