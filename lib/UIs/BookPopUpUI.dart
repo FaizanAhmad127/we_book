@@ -19,41 +19,48 @@ class _BookPopUpUIState extends State<BookPopUpUI> {
   Widget booksListItems(Map<String, dynamic> element) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.14,
-                child: Image(
-                  image: NetworkImage(element["bookImage"]),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.58,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Row(
+                        children: [
+                          Expanded(
+                flex: 1,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.14,
+                  child: Image(
+                    image: NetworkImage(element["bookImage"]),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                child: Center(
-                  child: AutoSizeText(
-                    element["bookName"],
-                    maxFontSize: 24,
-                    minFontSize: 12,
-                    style: TextStyle(
-                      color: purpleColor,
-                      fontFamily: "Source Sans Pro",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                          ),
+                          SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                          Expanded(
+                flex: 3,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: Center(
+                    child: AutoSizeText(
+                      element["bookName"],
+                      maxFontSize: 24,
+                      minFontSize: 12,
+                      style: TextStyle(
+                        color: purpleColor,
+                        fontFamily: "Source Sans Pro",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                 ),
+                          ),
+                        ],
+                      ),
               ),
-            ),
-          ],
-        ),
         Divider(
           indent: 0,
           endIndent: 0,
@@ -62,13 +69,61 @@ class _BookPopUpUIState extends State<BookPopUpUI> {
           color: purpleColor,
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
+        Expanded(
+          flex: 1,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: AutoSizeText(
+                    "Author Name:",
+                    maxFontSize: 19,
+                    minFontSize: 12,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: purpleColor,
+                      fontFamily: "Source Sans Pro",
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  //height: MediaQuery.of(context).size.height * 0.07,
+                  // width: MediaQuery.of(context).size.width * 0.46,
+                  child: Center(
+                    child: AutoSizeText(
+                      element["authorName"],
+                      maxFontSize: 20,
+                      minFontSize: 12,
+                      //maxLines: 1,
+                      style: TextStyle(
+                        color: purpleColor,
+                        fontFamily: "Source Sans Pro",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+        Expanded(
+          flex: 1,
+          child: Row(
+            children: [
+              Container(
                 child: AutoSizeText(
-                  "Author Name:",
+                  "Book Edition:",
                   maxFontSize: 19,
                   minFontSize: 12,
                   maxLines: 1,
@@ -80,234 +135,205 @@ class _BookPopUpUIState extends State<BookPopUpUI> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                //height: MediaQuery.of(context).size.height * 0.07,
-                // width: MediaQuery.of(context).size.width * 0.46,
-                child: Center(
-                  child: AutoSizeText(
-                    element["authorName"],
-                    maxFontSize: 20,
-                    minFontSize: 12,
-                    //maxLines: 1,
-                    style: TextStyle(
-                      color: purpleColor,
-                      fontFamily: "Source Sans Pro",
-                      fontSize: 20,
-                    ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Container(
+                child: AutoSizeText(
+                  "${element["bookEdition"]}",
+                  maxFontSize: 20,
+                  minFontSize: 12,
+                  //maxLines: 1,
+                  style: TextStyle(
+                    color: purpleColor,
+                    fontFamily: "Source Sans Pro",
+                    fontSize: 20,
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        Row(
-          children: [
-            Container(
-              child: AutoSizeText(
-                "Book Edition:",
-                maxFontSize: 19,
-                minFontSize: 12,
-                maxLines: 1,
-                style: TextStyle(
-                  color: purpleColor,
-                  fontFamily: "Source Sans Pro",
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
+        Expanded(
+          flex: 1,
+          child: Row(
+            children: [
+              Container(
+                child: AutoSizeText(
+                  "Price:",
+                  maxFontSize: 19,
+                  minFontSize: 12,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: purpleColor,
+                    fontFamily: "Source Sans Pro",
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Container(
-              child: AutoSizeText(
-                "${element["bookEdition"]}",
-                maxFontSize: 20,
-                minFontSize: 12,
-                //maxLines: 1,
-                style: TextStyle(
-                  color: purpleColor,
-                  fontFamily: "Source Sans Pro",
-                  fontSize: 20,
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Container(
+                child: AutoSizeText(
+                  "${element["finalBookPrice"]}",
+                  maxFontSize: 19,
+                  minFontSize: 12,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: purpleColor,
+                    fontFamily: "Source Sans Pro",
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        Row(
-          children: [
-            Container(
-              child: AutoSizeText(
-                "Price:",
-                maxFontSize: 19,
-                minFontSize: 12,
-                maxLines: 1,
-                style: TextStyle(
-                  color: purpleColor,
-                  fontFamily: "Source Sans Pro",
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Container(
-              child: AutoSizeText(
-                "${element["finalBookPrice"]}",
-                maxFontSize: 19,
-                minFontSize: 12,
-                maxLines: 1,
-                style: TextStyle(
-                  color: purpleColor,
-                  fontFamily: "Source Sans Pro",
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: AutoSizeText(
-                  "Shop Name:",
-                  maxFontSize: 19,
-                  minFontSize: 12,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: purpleColor,
-                    fontFamily: "Source Sans Pro",
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.07,
-                width: MediaQuery.of(context).size.width * 0.49,
-                child: Center(
+        Expanded(flex: 1,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
                   child: AutoSizeText(
-                    element["shopName"],
-                    maxFontSize: 20,
+                    "Shop Name:",
+                    maxFontSize: 19,
                     minFontSize: 12,
+                    maxLines: 1,
                     style: TextStyle(
                       color: purpleColor,
                       fontFamily: "Source Sans Pro",
-                      fontSize: 20,
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  width: MediaQuery.of(context).size.width * 0.49,
+                  child: Center(
+                    child: AutoSizeText(
+                      element["shopName"],
+                      maxFontSize: 20,
+                      minFontSize: 12,
+                      style: TextStyle(
+                        color: purpleColor,
+                        fontFamily: "Source Sans Pro",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: AutoSizeText(
-                  "Shop Address:",
-                  maxFontSize: 19,
-                  minFontSize: 12,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: purpleColor,
-                    fontFamily: "Source Sans Pro",
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.1,
-                width: MediaQuery.of(context).size.width * 0.45,
-                child: Center(
+        Expanded(flex: 1,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
                   child: AutoSizeText(
-                    element["shopAddress"],
-                    maxFontSize: 20,
+                    "Shop Address:",
+                    maxFontSize: 19,
                     minFontSize: 12,
+                    maxLines: 1,
                     style: TextStyle(
                       color: purpleColor,
                       fontFamily: "Source Sans Pro",
-                      fontSize: 20,
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Center(
+                    child: AutoSizeText(
+                      element["shopAddress"],
+                      maxFontSize: 20,
+                      minFontSize: 12,
+                      style: TextStyle(
+                        color: purpleColor,
+                        fontFamily: "Source Sans Pro",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: AutoSizeText(
-                  "Shop Phone No:",
-                  maxFontSize: 19,
-                  minFontSize: 12,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: purpleColor,
-                    fontFamily: "Source Sans Pro",
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.02,
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.1,
-                width: MediaQuery.of(context).size.width * 0.45,
-                child: Center(
+        Expanded(
+          flex: 1,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
                   child: AutoSizeText(
-                    element["shopPhoneNumber"],
-                    maxFontSize: 20,
+                    "Shop Phone No:",
+                    maxFontSize: 19,
                     minFontSize: 12,
+                    maxLines: 1,
                     style: TextStyle(
                       color: purpleColor,
                       fontFamily: "Source Sans Pro",
-                      fontSize: 20,
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Center(
+                    child: AutoSizeText(
+                      element["shopPhoneNumber"],
+                      maxFontSize: 20,
+                      minFontSize: 12,
+                      style: TextStyle(
+                        color: purpleColor,
+                        fontFamily: "Source Sans Pro",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+            ],
+          ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.05),
         Container(
@@ -405,9 +431,7 @@ class _BookPopUpUIState extends State<BookPopUpUI> {
                   ],
                 ),
                 Container(
-                  
-
-                  height: MediaQuery.of(context).size.height*0.76,
+                  height: MediaQuery.of(context).size.height*76,
                   child: ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                       itemCount: items.length,

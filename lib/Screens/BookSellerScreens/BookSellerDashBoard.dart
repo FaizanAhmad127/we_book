@@ -159,38 +159,42 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
             ),
           ),
         ),
-        Expanded(
-          flex: 4,
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.2,
-              decoration: BoxDecoration(
-                color: purpleColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    bottomRight: Radius.circular(5)),
-              ),
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: items.length,
-                  controller: listViewController,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    double scale = 1.0;
-                    if (topItem > 0) {
-                      scale = index + 1 - topItem;
-                      if (scale < 0) {
-                        scale = 0;
-                      } else if (scale > 1) {
-                        scale = 1;
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.17,
+          child: Expanded(
+            flex: 4,
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.2,
+                decoration: BoxDecoration(
+                  color: purpleColor,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(5),
+                      bottomRight: Radius.circular(5)),
+                ),
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: items.length,
+                    controller: listViewController,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      double scale = 1.0;
+                      if (topItem > 0) {
+                        scale = index + 1 - topItem;
+                        if (scale < 0) {
+                          scale = 0;
+                        } else if (scale > 1) {
+                          scale = 1;
+                        }
                       }
-                    }
-                    return Transform(
-                      transform: Matrix4.identity()..scale(scale, scale),
-                      alignment: Alignment.centerRight,
-                      child: items[index],
-                    );
-                  })),
+                      return Transform(
+                        transform: Matrix4.identity()..scale(scale, scale),
+                        alignment: Alignment.centerRight,
+                        child: items[index],
+                      );
+                    })),
+          ),
         ),
         Expanded(
           flex: 12,
@@ -198,67 +202,73 @@ class _BookSellerDashBoardState extends State<BookSellerDashBoard> {
             padding: EdgeInsets.fromLTRB(20, 30, 20, 10),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    DashBoardItem(
-                      text: "Check In",
-                      onTap: () {
-                        Navigator.pushNamed(context, "CheckInBooks");
-                      },
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    DashBoardItem(
-                      text: "Check Out",
-                      onTap: () {
-                        Navigator.pushNamed(context, "BSCheckOutManually");
-                      },
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    children: [
+                      DashBoardItem(
+                        text: "Check In",
+                        onTap: () {
+                          Navigator.pushNamed(context, "CheckInBooks");
+                        },
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      DashBoardItem(
+                        text: "Check Out",
+                        onTap: () {
+                          Navigator.pushNamed(context, "BSCheckOutManually");
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                Row(
-                  children: [
-                    DashBoardItem(
-                      text: "Books",
-                      onTap: () {
-                        Navigator.pushNamed(context, "BSBooksView");
-                      },
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    DashBoardItem(
-                      text: "Sales",
-                      onTap: () {
-                        Navigator.pushNamed(context, "BSSales");
-                      },
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    children: [
+                      DashBoardItem(
+                        text: "Books",
+                        onTap: () {
+                          Navigator.pushNamed(context, "BSBooksView");
+                        },
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      DashBoardItem(
+                        text: "Sales",
+                        onTap: () {
+                          Navigator.pushNamed(context, "BSSales");
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DashBoardItem(
-                      text: "Out Of Stock",
-                      onTap: () {
-                        Navigator.pushNamed(context, "BSOutOfStockBooks");
-                      },
-                    ),
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width * 0.1,
-                    // ),
-                    // DashBoardItem(
-                    //   text: "Reviews/Rating",
-                    //   onTap: () {
-                    //     Book().getParentKeyOfBook(
-                    //         uid: FirebaseAuth.instance.currentUser.uid,
-                    //         bookName: "rich");
-                    //   },
-                    // ),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DashBoardItem(
+                        text: "Out Of Stock",
+                        onTap: () {
+                          Navigator.pushNamed(context, "BSOutOfStockBooks");
+                        },
+                      ),
+                      // SizedBox(
+                      //   width: MediaQuery.of(context).size.width * 0.1,
+                      // ),
+                      // DashBoardItem(
+                      //   text: "Reviews/Rating",
+                      //   onTap: () {
+                      //     Book().getParentKeyOfBook(
+                      //         uid: FirebaseAuth.instance.currentUser.uid,
+                      //         bookName: "rich");
+                      //   },
+                      // ),
+                    ],
+                  ),
                 ),
               ],
             ),

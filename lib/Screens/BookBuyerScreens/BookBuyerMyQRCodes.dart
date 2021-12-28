@@ -45,7 +45,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                   children: [
                     AutoSizeText(
                       "${bookMap["bookName"]}",
-                      minFontSize: 10,
+                      minFontSize: 8,
                       maxFontSize: 18,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -67,7 +67,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                         children: [
                           AutoSizeText(
                             "Delete",
-                            minFontSize: 8,
+                            minFontSize: 6,
                             maxFontSize: 18,
                             style: TextStyle(
                                 color: Colors.red,
@@ -96,7 +96,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                       AutoSizeText(
                         "Author: ",
                         maxFontSize: 14,
-                        minFontSize: 8,
+                        minFontSize: 6,
                         style: TextStyle(fontSize: 14),
                       ),
                       SizedBox(
@@ -106,7 +106,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                       AutoSizeText(
                         "${bookMap["authorName"]}",
                         maxFontSize: 14,
-                        minFontSize: 8,
+                        minFontSize: 6,
                         style: TextStyle(fontSize: 14),
                       ),
                     ],
@@ -123,7 +123,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                         AutoSizeText(
                           "Edition: ",
                           maxFontSize: 14,
-                          minFontSize: 8,
+                          minFontSize: 6,
                           style: TextStyle(fontSize: 14),
                         ),
                         SizedBox(
@@ -132,7 +132,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                         AutoSizeText(
                           "${bookMap["bookEdition"]}",
                           maxFontSize: 14,
-                          minFontSize: 8,
+                          minFontSize: 6,
                           style: TextStyle(fontSize: 14),
                         ),
                       ],
@@ -142,7 +142,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                         AutoSizeText(
                           "Price: ",
                           maxFontSize: 14,
-                          minFontSize: 8,
+                          minFontSize: 6,
                           style: TextStyle(fontSize: 14),
                         ),
                         SizedBox(
@@ -151,7 +151,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                         AutoSizeText(
                           "${bookMap["finalBookPrice"]}/-",
                           maxFontSize: 14,
-                          minFontSize: 8,
+                          minFontSize: 6,
                           style: TextStyle(fontSize: 14),
                         ),
                       ],
@@ -181,46 +181,49 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 5, top: 5),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10)))),
-                      elevation: MaterialStateProperty.all(10),
-                      fixedSize: MaterialStateProperty.all(
-                          Size(width * 0.3, height * 0.04))),
-                  onPressed: () async{
-                    await firebaseQr.deleteSellerQR(post["bookSellerKey"]).then((status) {
-                      if (status == "Success") {
-                        setState(() {
-                          getWholeListViewItems();
-                        });
-                      }
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      AutoSizeText(
-                        "Delete",
-                        minFontSize: 8,
-                        maxFontSize: 18,
-                        style: TextStyle(color: Colors.amber, fontSize: 18),
-                      ),
-                      SizedBox(
-                        width: width * 0.01,
-                      ),
-                      Icon(
-                        Icons.delete_forever,
-                        size: 20,
-                        color: Colors.amber,
-                      ),
-                    ],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.only(left: 5, top: 5),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10)))),
+                        elevation: MaterialStateProperty.all(10),
+                        fixedSize: MaterialStateProperty.all(
+                            Size(width * 0.3, height * 0.04))),
+                    onPressed: () async{
+                      await firebaseQr.deleteSellerQR(post["bookSellerKey"]).then((status) {
+                        if (status == "Success") {
+                          setState(() {
+                            getWholeListViewItems();
+                          });
+                        }
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AutoSizeText(
+                          "Delete",
+                          minFontSize: 8,
+                          maxFontSize: 18,
+                          style: TextStyle(color: Colors.amber, fontSize: 18),
+                        ),
+                        SizedBox(
+                          width: width * 0.01,
+                        ),
+                        Icon(
+                          Icons.delete_forever,
+                          size: 20,
+                          color: Colors.amber,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -453,6 +456,7 @@ class _BookBuyerMyQRCodesState extends State<BookBuyerMyQRCodes> {
                                     child: Padding(
                                   padding: EdgeInsets.all(10),
                                   child: QrImage(
+                                    size:  MediaQuery.of(context).size.width * 0.6,
                                     data: qrKey,
                                     version: QrVersions.auto,
                                     errorCorrectionLevel: QrErrorCorrectLevel.L,

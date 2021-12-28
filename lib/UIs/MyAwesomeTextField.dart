@@ -73,18 +73,18 @@ class _MyAwesomeTextFieldState extends State<MyAwesomeTextField> {
                     }
                   },
                 )),
-            Positioned(
-                top: 30,
-                right: 20,
-                bottom: 6,
-                child: IconButton(
-                  alignment: Alignment.centerRight,
-                  iconSize: 15,
-                  icon: Icon(FontAwesomeIcons.undo),
-                  onPressed: () {
-                    widget.shopNameController.text = insideText;
-                  },
-                ))
+            // Positioned(
+            //     top: 30,
+            //     right: 20,
+            //     bottom: 6,
+            //     child: IconButton(
+            //       alignment: Alignment.centerRight,
+            //       iconSize: 15,
+            //       icon: Icon(FontAwesomeIcons.undo),
+            //       onPressed: () {
+            //         widget.shopNameController.text = insideText;
+            //       },
+            //     ))
           ],
         )),
       ],

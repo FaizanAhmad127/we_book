@@ -46,7 +46,7 @@ class QRCodeUI extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 4,
+                flex: 3,
                 child: Center(
                   child: QrImage(
                     data:
@@ -72,10 +72,8 @@ class QRCodeUI extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                  flex: 1,
-                  child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.08)),
+             SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.01),
               Expanded(
                 flex: 2,
                 child: Center(

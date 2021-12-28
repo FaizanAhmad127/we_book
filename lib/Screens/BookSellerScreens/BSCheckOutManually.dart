@@ -232,7 +232,7 @@ class _BSCheckOutManuallyState extends State<BSCheckOutManually> {
                                                           MediaQuery.of(context)
                                                                   .size
                                                                   .height *
-                                                              0.15,
+                                                              0.2,
                                                       child: Column(
                                                         children: [
                                                           Row(
